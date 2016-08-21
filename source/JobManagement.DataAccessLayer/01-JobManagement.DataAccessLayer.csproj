@@ -76,7 +76,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JobProfitability.EFDataModel\03-JobManagement.EFDataModel.csproj">
+    <ProjectReference Include="..\JobManagement.EFDataModel\03-JobManagement.EFDataModel.csproj">
       <Project>{ec1b02d2-9c61-47b2-9618-18972b39b994}</Project>
       <Name>03-JobManagement.EFDataModel</Name>
     </ProjectReference>

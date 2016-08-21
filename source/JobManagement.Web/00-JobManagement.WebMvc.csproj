@@ -1643,15 +1643,15 @@
     <Content Include="Views\TravelExpense\GLPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\JobProfitability.Code\04-JobManagement.Code.csproj">
+    <ProjectReference Include="..\JobManagement.Code\04-JobManagement.Code.csproj">
       <Project>{b4e5d9fd-9d8a-49b9-9e4b-e3556aad61f9}</Project>
       <Name>04-JobManagement.Code</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JobProfitability.DataAccessLayer\01-JobManagement.DataAccessLayer.csproj">
+    <ProjectReference Include="..\JobManagement.DataAccessLayer\01-JobManagement.DataAccessLayer.csproj">
       <Project>{01f70f70-8507-44d5-9a57-07a3086d7e22}</Project>
       <Name>01-JobManagement.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JobProfitability.EFDataModel\03-JobManagement.EFDataModel.csproj">
+    <ProjectReference Include="..\JobManagement.EFDataModel\03-JobManagement.EFDataModel.csproj">
       <Project>{ec1b02d2-9c61-47b2-9618-18972b39b994}</Project>
       <Name>03-JobManagement.EFDataModel</Name>
     </ProjectReference>
