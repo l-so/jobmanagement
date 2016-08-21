@@ -1,0 +1,100 @@
+﻿@model JobManagement.WebMvc.Models.ModalEditNoWorkHour
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#dialogModalNoWorkHourInsert').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+        $('#dialogModalNoWorkHourInsert').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+        });
+        $('#data').datepicker({
+            firstDay: 1,
+            dateFormat: 'dd/mm/yy'
+        }).datepicker('setDate','@Html.Raw(string.Format("{0:dd/MM/yyyy}", System.DateTime.Now.Date))');
+    });
+    function dialogModalNoWorkHourInsert_save() {
+        var sendData = new Object();
+        sendData.jobWorkJournalId = $('#dialogEditWorkLogJobWorkJournalId').val();
+        sendData.jobId = @Html.Raw(Model.NoWorkJob.JobId);
+        sendData.resourceId = $('#resourceId').val();
+        sendData.date = zzsDateToISOString($('#data').datepicker('getDate'));
+        sendData.jobTaskId = $('#noworktask').val();
+        sendData.workedHours = $('#durata').val();
+        sendData.taskWhere = null;
+        sendData.annotation = $('#note').val();
+        // Check data
+        if (sendData.date == null) {
+            alert("La data è obbligatoria");
+            return false;
+        }
+        // Worked Hours
+        // 1. Intero
+        // 2. InteroD = n giorni
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("ModalEditJobWorkJournal", "Jobs")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ErrorResult == "OK") || (result.ErrorResult == undefined))
+                {
+                    $('#dialogModalEditJobWorkJournal').modal('hide');
+                    window.location.reload(false);
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+
+</script>
+<style>
+    .row-margin-6top {
+        margin-top: 6px;
+    }
+</style>
+<div id="dialogModalNoWorkHourInsert" class="modal fade" role="dialog" aria-labelledby="label_DialogModalNoWorkHourInsert" aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+            <a data-dismiss="modal" class="close"><i class="fa fa-close"></i></a>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Risorsa:</div>
+                <div class="col-xs-10">@Html.DropDownList("resourceId", Model.DDLPeopleList, new { @class = "form-control" })</div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Motivo:</div>
+                <div class="col-xs-10">@Html.DropDownList("noworktask", Model.DDLJobNoWorkTask, new { @class = "form-control" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Data:</div>
+                <div class="col-xs-2"><input type="text" id="data" name="data" /></div>
+                <div class="col-xs-1">Durata:</div>
+                <div class="col-xs-1"><input type="text" id="durata" name="durata" /></div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Note:</div>
+                <div class="col-xs-10"><textarea id="note" name="note"></textarea></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btn-group">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button class="btn btn-success" id="dialogModalNoWorkHourInsert_confirm" type="button" onclick="dialogModalNoWorkHourInsert_save();">
+                    <i class="fa fa-check"></i> Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

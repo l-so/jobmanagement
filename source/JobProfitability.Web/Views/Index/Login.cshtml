@@ -1,0 +1,79 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ZZ Soft Space</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+        .login-logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 15px;
+        }
+        .img-responsive {
+            vertical-align: middle;
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+
+        <div id="login"
+             class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
+
+            <div class="row">
+
+
+            </div>
+            <img src="~/assets/image/logo3.png" class="login-logo img-responsive">
+
+            <form class="form-horizontal" method="post"
+                  action="~/index/login">
+                  <input type="hidden" value="@Html.Raw(ViewBag.ReturnUrl)" id="returnurl" name="returnurl" />
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3">
+                        <label for="email" class="control-label">Email</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="text" name="email" id="email" class="form-control"
+                               placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-3">
+                        <label for="password" class="control-label">Password</label>
+                    </div>
+                    <div class="col-xs-12 col-sm-9">
+                        <input type="password" name="password" id="password" class="form-control"
+                               placeholder="Password">
+                    </div>
+                </div>
+                <div class="text-left">
+                    <small>
+                        @Html.CheckBox("remember", false) Ricordami trmite il biscottino!
+                    </small>
+                </div>
+                <input type="submit" name="btn_login" class="btn btn-block btn-primary"
+                       value="Login">
+
+            </form>
+
+
+        </div>
+    </div>
+
+
+</body>
+</html>

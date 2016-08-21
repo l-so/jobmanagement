@@ -1,0 +1,509 @@
+﻿@model JobManagement.WebMvc.Models.TravelExpense.TravelExpenseEditModel
+@{
+    ViewBag.Title = "Rimborsi spese";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+@section sectionHeader {
+    <script type="text/javascript">
+    var TRAVEL_EXPENSE_CODE = '@Html.Raw(Model.TravelExpense.TravelExpenseCode)';
+    var CAR_PLATE = '@Html.Raw(Model.TravelExpense.Person.CarPlate)';
+    var CAR_DESCRIPTION = '@Html.Raw(Model.TravelExpense.Person.CarDescription)';
+    var CAR_KM_COST = @Html.Raw(Model.TravelExpense.Person.CarKmCost);
+    var CAR_CATEGORY = parseInt(@Html.Raw(Model.CarLineCategory.TravelExpenseLineCategoryId));
+    $(function () {
+        var dd = zzsDateToItalianString(new Date());
+        $('#dialogEditLineModal').dialog({
+            autoOpen: false,
+            width: 800,
+            resizable: false,
+            title: 'Modifica/Crea riga',
+            modal: true,
+            buttons: {
+                "Salva": updateDialogEditLineModal,
+                "Annulla": cancelDialogEditLineModal
+            }
+        });
+        $('#dialogAssignJob').dialog({
+            autoOpen: false,
+            width: 800,
+            resizable: false,
+            title: 'Assegna il costo alla commessa',
+            modal: true,
+            buttons: {
+                "Conferma": confirmJobAssign,
+                "Annulla": cancelJobAssign
+            }
+        });
+        
+        $('#dialogEditLineModalDate').datepicker({
+            firstDay: 1,
+            dateFormat: 'dd/mm/yy'
+        }).datepicker('setDate', dd);
+        $('#dialogAssignJobSelJob').select2({
+            placeholder: 'Seleziona la commessa...'
+        }).on("change", function(e) {
+            calcJobAmount();
+        });
+        loadPageData();
+    });
+    function add_TravelExpenseLine() {
+        $('#dialogEditLineModalId').val(-1);
+        $('#dialogEditLineModalDescription').val('');
+        $('#dialogEditLineModalAmount').val(0);
+        $('#dialogEditLineModalCarPlate').val(CAR_PLATE);
+        $('#dialogEditLineModalCarDescription').val(CAR_DESCRIPTION);
+        $('#dialogEditLineModalCarKmCost').val(CAR_KM_COST);
+        $('#dialogEditLineModalKm').val(0);
+        $('#dialogEditLineModalCategory').val(-1);
+        ShowHideCarRow();
+        $('#dialogEditLineModal').dialog('open');
+    }
+    function edit_TravelExpenseLine(lineId) {
+        $('#dialogEditLineModalId').val(-1);
+        $('#dialogEditLineModalDescription').val('');
+        $('#dialogEditLineModalNote').val('');
+        $('#dialogEditLineModalAmount').val(0);
+        $('#dialogEditLineModalCarPlate').val(CAR_PLATE);
+        $('#dialogEditLineModalCarDescription').val(CAR_DESCRIPTION);
+        $('#dialogEditLineModalCarKmCost').val(CAR_KM_COST);
+        $('#dialogEditLineModalKm').val(0);
+        $.ajax({
+            method: "GET",
+            url: '@Url.Content("~/api/TravelExpenseLineSvc")/'+lineId.toString(),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ErrorResult == "OK") || (result.ErrorResult == undefined)) {
+                    if (result.Data != null) {
+                        var dd = JSON.parse(result.Data);
+                        $('#dialogEditLineModalId').val(dd.TravelExpenseLineId);
+                        $('#dialogEditLineModalCategory').val(dd.TravelExpenseLineCategoryId);
+                        ShowHideCarRow();
+                        $('#dialogEditLineModalDescription').val(dd.Description);
+                        $('#dialogEditLineModalNote').val(dd.Note);
+                        $('#dialogEditLineModalAmount').val(dd.Amount);
+                        $('#dialogEditLineModalCarPlate').val(dd.CarPlate);
+                        $('#dialogEditLineModalCarDescription').val(dd.CarDescription);
+                        $('#dialogEditLineModalCarKmCost').val(dd.CarKmCost);
+                        $('#dialogEditLineModalKm').val(dd.CarKm);
+                        $('#dialogEditLineModalDate').datepicker('setDate', zzsDateToItalianString(new Date(dd.Date)));
+
+                    }
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+        $('#dialogEditLineModal').dialog('open');
+    }
+    function updateDialogEditLineModal() {
+        var sendData = new Object();
+        sendData.TravelExpenseLineId = $('#dialogEditLineModalId').val();
+        sendData.TravelExpenseCode = TRAVEL_EXPENSE_CODE;
+        var d = $('#dialogEditLineModalDate').datepicker('getDate');
+        if (d == null) {
+            alert('La data è obbligatoria!');
+            return;
+        }
+        sendData.Date = zzsDateToISOString(d);
+        sendData.CategoryId = $('#dialogEditLineModalCategory').val();
+        if (sendData.CategoryId < 0) {
+            alert('Devi impostare la categoria!');
+            return;
+        }
+        sendData.Amount = $('#dialogEditLineModalAmount').val();
+        sendData.CarPlate = $('#dialogEditLineModalCarPlate').val();
+        sendData.CarDescription = $('#dialogEditLineModalCarDescription').val();
+        sendData.CarKmCost = $('#dialogEditLineModalCarKmCost').val();
+        sendData.CarKm = $('#dialogEditLineModalKm').val();
+        sendData.Description = $('#dialogEditLineModalDescription').val();
+        sendData.Note = $('#dialogEditLineModalNote').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/TravelExpenseLineSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ErrorResult == "OK") || (result.ErrorResult == undefined)) {
+                    if (result.Data != null) {
+                        var dd = JSON.parse(result.Data);
+                        $("#spanTravelExpenseTotal").text('&#8364; ' + dd.Total);
+                        if (dd.Rows != null) {
+                            if (dd.Rows.length > 0) {
+                                buildRowtable(dd.Rows);
+                            } else {
+                                $("#tbodyTravelExpenseLine").empty();
+                                $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">Nessun valore trovato</td></tr>');
+                            }
+                        } else {
+                            $("#tbodyTravelExpenseLine").empty();
+                            $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">Nessun valore trovato</td></tr>');
+                        }
+                    }
+                    cancelDialogEditLineModal();
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+    function cancelDialogEditLineModal() {
+        $('#dialogEditLineModalId').val(-1);
+        $('#dialogEditLineModalNote').val('');
+        $('#dialogEditLineModalDescription').val('');
+        $("#dialogEditLineModalDate").datepicker('hide');
+        $('#dialogEditLineModal').dialog('close');
+        loadPageData();
+    }
+    function loadPageData() 
+    {
+        $("#tbodyTravelExpenseLine").empty();
+        $("#tbodyTravelExpenseJobs").empty();
+        loadTravelExpenseLines();
+        loadTravelExpenseJobs();
+    }
+    function loadTravelExpenseLines() {
+        var sendData = new Object();
+        sendData.Operation = "RetrieveLines";
+        sendData.TravelExpenseCode = TRAVEL_EXPENSE_CODE;
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/TravelExpenseSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if (result.ResultStatus == "OK") {
+                    if (result.Data != null) {
+                        var dd = JSON.parse(result.Data);
+                        if (dd.length > 0) {
+                            buildRowtable(dd);
+                        } else {
+                            $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">Nessun valore trovato</td></tr>');
+                        }
+                    } else {
+                        $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">Nessun valore trovato</td></tr>');
+                    }
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage);
+                    $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">' + result.Error + '</td></tr>');
+                    $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">' + result.ErrorMessage + '</td></tr>');
+                }
+            }
+        });
+    }
+    function buildRowtable(rowValues)
+    {
+        var teTotal = 0;
+        rowValues.sort(function (o1, o2) {
+            var od1 = new Date(o1.Date);
+            var od2 = new Date(o2.Date);
+            if (od1 < od2) return 1;
+            else if (od1 > od2) return -1;
+            else return 0;
+        });
+        for (var i = 0; i < rowValues.length; i++) {
+            var r= '<tr>';
+            r += '<td><a href="#" onclick="edit_TravelExpenseLine(' + rowValues[i].TravelExpenseLineId + ')">' + zzsDateToItalianString(new Date(rowValues[i].Date)) + '</a></td>';
+            r += '<td style="padding-left:12px;">' + rowValues[i].TravelExpenseLineCategories.Description + '</td>';
+            r += '<td style="text-align:right; padding-left:12px;">&#8364; ' + rowValues[i].Amount.toFixed(2) + '</td>';
+            r += '</tr>';
+            $("#tbodyTravelExpenseLine").append(r);
+            teTotal += rowValues[i].Amount;
+            if ( rowValues[i].TravelExpenseLineCategories.UsePersonalCar) {
+                r= '<tr>';
+                r += '<td></td>';
+                r += '<td  style="padding-left:12px;">';
+                r += '<span>' + rowValues[i].CarPlate + '</span>';
+                r += '<span style="padding-left:12px;">' + rowValues[i].CarDescription + '</span>';
+                r += '<span style="padding-left:12px;text-align:right;">' + rowValues[i].CarKmCost.toFixed(2) + ' €/Km</span>';
+                r += '<span style="padding-left:12px;">' + rowValues[i].CarKm + ' Km</span>';
+                r += '</td>';
+                r += '<td></td>';
+                r += '</tr>';
+                $("#tbodyTravelExpenseLine").append(r);
+            }
+            if ( rowValues[i].Description != null) {
+                r= '<tr>';
+                r += '<td></td>';
+                r += '<td style="padding-left:12px;">' + rowValues[i].Description + '</td>';
+                r += '<td></td>';
+                r += '</tr>';
+                $("#tbodyTravelExpenseLine").append(r);
+            }
+        }
+        $('#hiddenTravelExpenseTotal').val(teTotal.toFixed(2));
+        $("#spanTravelExpenseTotal").text(teTotal.toFixed(2));
+    }
+    function ShowHideCarRow() {
+        var catId = parseInt($('#dialogEditLineModalCategory').val());
+        if (catId != CAR_CATEGORY) {
+            $("#dialogEditLineModalCarTr").hide();
+            $("#dialogEditLineModalDescription").empty();
+        } else {
+            $("#dialogEditLineModalCarTr").show();
+            $("#dialogEditLineModalDescription").val("Uso autovettura personale");
+        }
+    }
+    function assign_ToJobs()
+    {
+        $('#dialogAssignJob').dialog('open');
+        calcJobAmount();
+    }
+    function loadTravelExpenseJobs() 
+    {
+        var sendData = new Object();
+        sendData.Operation = "LoadJobs";
+        sendData.TravelExpenseCode = TRAVEL_EXPENSE_CODE;
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/TravelExpenseSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                $("#tbodyTravelExpenseJobs").empty();
+                if (result.ResultStatus == "OK") {
+                    if (result.Data != null) {
+                        var dd = JSON.parse(result.Data);
+                        if (dd.length > 0) {
+                            buildJobstable(dd);
+                        } else {
+                            $("#tbodyTravelExpenseJobs").append('<tr><td colspan="3">Nessuna commessa associata</td></tr>');
+                        }
+                    } else {
+                        $("#tbodyTravelExpenseJobs").append('<tr><td colspan="3">Nessuna commessa associata</td></tr>');
+                    }
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage);
+                    $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">' + result.Error + '</td></tr>');
+                    $("#tbodyTravelExpenseLine").append('<tr><td colspan="3">' + result.ErrorMessage + '</td></tr>');
+                }
+            }
+        });
+    }
+    function confirmJobAssign() {
+        var sendData = new Object();
+        sendData.Operation = "AssignJob";
+        sendData.TravelExpenseCode = TRAVEL_EXPENSE_CODE;
+        sendData.JobsId = $('#dialogAssignJobSelJob').val();
+        if (sendData.JobsId < 1) {
+            alert("Non correre...seleziona la commessa!");
+            return;
+        }
+        sendData.TotalPercent = $('#dialogAssignJobSelJobAmountPercent').val();
+        if (sendData.TotalPercent < 1) {
+            alert("Non correre...inserisci la percentuale!");
+            return;
+        }
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/TravelExpenseSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus != "OK") {
+                        alert(result.Error);
+                        alert(result.ErrorMessage);
+                    } else {
+                        cancelJobAssign();
+                    }
+                }
+            });
+
+        }
+        function buildJobstable(jobs)
+        {
+            var jTotal = 0;
+            for (var i = 0; i < jobs.length; i++) {
+                //"[{\"TravelExpenseCode\":\"RS2016-LSO-0011\",\"JobId\":36,\"Code\":\"2016-000029\",\"Description\":\"Prova nuova commessa\",\"Amount\":279.00}]"
+                var r= '<tr>';
+                r += '<td style="padding-left:12px;padding-right:12px;><button type="button" class="btn btn-xs" data-id="' + jobs[i].JobId + '" onclick="remove_TravelExpenseJob(this);"><span class="fa fa-times"></span></button></td>'
+                r += '<td><a href="#" onclick="assign_ToJobs(' + jobs[i].JobId + ')">[' + jobs[i].Code + '] ' + jobs[i].Description + '</a></td>';
+                r += '<td style="text-align:rigth;padding-left:12px;">&#8364; ' + jobs[i].Amount.toFixed(2) + '</td>';
+                r += '</tr>';
+                $("#tbodyTravelExpenseJobs").append(r);
+                jTotal += jobs[i].Amount
+           }
+            var r= '<tr>';
+            if (jTotal != $('#hiddenTravelExpenseTotal').val()) {
+                r = '<tr style="color:red;">'
+            }
+            r += '<td colspan="2" style="padding-top:6px;text-align:right;">Totale associotato:</td>';
+            r += '<td style="text-align:rigth;padding-top:6px;padding-left:12px;">&#8364; ' + jTotal.toFixed(2) + '</td>';
+            r += '</tr>';
+            $("#tbodyTravelExpenseJobs").append(r);
+        }
+        function cancelJobAssign() {
+            $('#dialogAssignJob').dialog('close');
+            loadPageData();
+        }
+        function remove_TravelExpenseJob(btn) 
+        {
+            var id = btn.getAttribute("data-id");
+            if (id != null) {
+                if (id.trim() == '') {
+                    id = null;
+                }
+            }
+            if (id == null) {
+                alert('Non sono stato in grado di capire il codice commessa. Non posso rimuoverla!');
+                return;
+            }
+            var sendData = new Object();
+            sendData.Operation = "RemoveJob";
+            sendData.TravelExpenseCode = TRAVEL_EXPENSE_CODE;
+            sendData.JobsId = id;
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/TravelExpenseSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus != "OK") {
+                        alert(result.Error);
+                        alert(result.ErrorMessage);
+                    } else {
+                        loadPageData();
+                    }
+                }
+            });
+        }
+        function calcJobAmount() {
+            var p = $('#dialogAssignJobSelJobAmountPercent').val();
+            var jt =  $('#hiddenTravelExpenseTotal').val();
+            var r = (p / 100) * jt;
+            $('#dialogAssignJobSelJobAmount').val(r.toFixed(2));
+        }
+        function calcRimbKm() {
+            var rk = $('#dialogEditLineModalKm').val();
+            if (rk == null) rk = 0;
+            var k = $('#dialogEditLineModalCarKmCost').val();
+            if (k == null) k = 0;
+            var r = rk * k;
+            $('#dialogEditLineModalAmount').val(r.toFixed(2));
+        }
+        function add_TravelExpensePurchaseInvoice () {
+        
+        }
+    </script>
+}
+<div id="dialogEditLineModal" title="Crea/modifica linea nota spese">
+    <input type="hidden" value="" id="dialogEditLineModalId" name="dialogEditLineModalId" />
+    <span class="ui-helper-hidden-accessible"><input type="text" />Prevents autofocus from opening start datepicker on dialog load</span>
+    <table style="width:100%;">
+        <tr><td>DATA</td><td>CATEGORIA</td><td>IMPORTO</td></tr>
+        <tr><td><input id="dialogEditLineModalDate" style="width:120px;"></td><td>@Html.DropDownList("dialogEditLineModalCategory", Model.DDLCategoryList, new { @onchange = "ShowHideCarRow();" })</td><td style="text-align:right;">&#8364; <input id="dialogEditLineModalAmount" style="width:80px;"></td></tr>
+        <tr><td colspan="3">Descrizione:<br /><input id="dialogEditLineModalDescription" style="width:100%;"></td></tr>
+        <tr id="dialogEditLineModalCarTr">
+            <td colspan="3">
+                <table style="width:100%;">
+                    <tr><td>TARGA</td><td>DESCRIZIONE</td><td>€/KM</td><td>Num. KM</td></tr>
+                    <tr><td><input id="dialogEditLineModalCarPlate" style="width:100px;"></td><td><input id="dialogEditLineModalCarDescription" style="width:340px;"></td><td>€ <input id="dialogEditLineModalCarKmCost" style="width:80px;"></td><td><input id="dialogEditLineModalKm" style="width:80px;" onblur="calcRimbKm();"></td></tr>
+                </table>
+            </td>
+        </tr>
+        <tr><td colspan="3">Annotazioni:<br /><textarea rows="5" style="width:100%;" id="dialogEditLineModalNote"></textarea></td></tr>
+    </table>
+</div>
+
+<div id="dialogAssignJob" title="Seleziona la commessa">
+    <span class="ui-helper-hidden-accessible"><input type="text" />Prevents autofocus from opening start datepicker on dialog load</span>
+    <table>
+        <tr>
+            <td>
+                    @Html.DropDownList("dialogAssignJobSelJob", Model.DDLJobsList)                
+            </td>
+            <td style="padding-left:12px;">
+                <label for="dialogAssignJobSelJobAmountPercent">%</label>
+                <select name="dialogAssignJobSelJobAmountPercent" id="dialogAssignJobSelJobAmountPercent" onchange="calcJobAmount();">
+                    <option value="25">25 %</option>
+                    <option value="50">50 %</option>
+                    <option value="75">75 %</option>
+                    <option value="100" selected>100 %</option>
+                </select>
+            </td>
+            <td style="padding-left:12px;">
+                <label for="dialogAssignJobSelJobAmount">€</label>
+                <input type="text" name="dialogAssignJobSelJobAmount" id="dialogAssignJobSelJobAmount" readonly="readonly" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="dialogTravelExpensePurchaseInvoice" title="Aggiungi una fattura di acquisto...">
+    <span class="ui-helper-hidden-accessible"><input type="text" />Prevents autofocus from opening start datepicker on dialog load</span>
+    Categoria:
+    Importo:
+    Nome:
+    Numero: 
+    Data:
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>@Html.ActionLink("[Home]", "Index", "Home")</li>
+            <li>@Html.ActionLink("[Spese trasferta]", "Index", "TravelExpense", new { filterMonth = Model.TEFilterMonth, filterYear = Model.TEFilterYear, filterPeopleId = Model.TEFilterPeopleId }, null)</li>
+            <li class="active">Modifica rimborso spese</li>
+        </ol>
+        <input type="hidden" id="hiddenTravelExpenseTotal" name="hiddenTravelExpenseTotal" value="@Html.Raw(string.Format("{0:N2}", Model.TravelExpenseList.Total))" />
+        <div style="margin-top:6px;">
+            NOTA SPESE <span>@Html.Raw(Model.TravelExpense.TravelExpenseCode)</span> DI <span>@Html.Raw(string.Format("{0} {1}", Model.TravelExpense.Person.LastName, Model.TravelExpense.Person.FirstName))</span> DEL <span>@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.TravelExpense.Date))</span><br />
+            TOTALE: &#8364; <span id="spanTravelExpenseTotal">@Html.Raw(string.Format("{0:N2}", Model.TravelExpenseList.Total))</span> - DAL : <span id="spanTravelExpenseBeginDate">@Html.Raw(Model.TravelExpenseList.BeginDate.HasValue ? string.Format("{0:d}", Model.TravelExpenseList.BeginDate.Value) : string.Empty)</span> AL : <span id="spanTravelExpenseEndDate">@Html.Raw(Model.TravelExpenseList.EndDate.HasValue ? string.Format("{0:d}", Model.TravelExpenseList.EndDate.Value) : string.Empty)</span><br />
+            STATUS: @Html.Raw(Model.TravelExpense.getStatusDescription(Model.TravelExpense.Status))
+        </div>
+        @if (Model.TravelExpense.Status == JobManagement.EFDataModel.TravelExpenses.STATUS_BOZZA)
+        {
+            <a href="#" onclick="assign_ToJobs();">Assegna a commessa</a>
+        }
+        <div style="margin-top:6px;">
+            <table>
+                <thead>
+                    <tr><th></th><th>Commessa</th><th style="text-align:right; padding-left:12px;">Importo</th></tr>
+                </thead>
+                <tbody id="tbodyTravelExpenseJobs">
+
+                </tbody>
+            </table>
+        </div>
+        <div style="margin-top:6px;">
+        @if (Model.TravelExpense.Status == JobManagement.EFDataModel.TravelExpenses.STATUS_BOZZA)
+        { 
+            <a href="#" onclick="add_TravelExpenseLine();">Nuova riga...</a>
+            <a href="#" onclick="add_TravelExpensePurchaseInvoice();">Nuova fattura...</a>
+        }
+        </div>
+        <div style="margin-top:6px;">
+            <table>
+                <thead>
+                    <tr><th>Data</th><th style="padding-left:12px;">Categoria</th><th style="text-align:right;padding-left:12px;">Importo</th></tr>
+                </thead>
+                <tbody id="tbodyTravelExpenseLine"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

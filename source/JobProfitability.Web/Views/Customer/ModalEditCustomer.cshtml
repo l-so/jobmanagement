@@ -1,0 +1,137 @@
+﻿@model JobManagement.WebMvc.Models.ModalEditCustomerModel
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        $('#dialogEditCustomer').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true,
+        });
+        $('#dialogEditCustomer').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+        })
+    });
+    function modal_edit_customer_save() {
+        var sendData = new Object();
+        sendData.CustomerId = $('#dialogEditCustomerCustomerId').val();
+        sendData.Status = $('#dialogEditCustomerStatus').val();
+        sendData.Name = $('#dialogEditCustomerName').val();
+        sendData.Name2 = $('#dialogEditCustomerNome2').val();
+        sendData.VatNumber = $('#dialogEditCustomerPIva').val();
+        sendData.FiscalCode = $('#dialogEditCustomerCFis').val();
+        sendData.Address = $('#dialogEditCustomerAddress').val();
+        sendData.Address1 = $('#dialogEditCustomerAddress1').val();
+        sendData.PostalCode = $('#dialogEditCustomerPostalCode').val();
+        sendData.City = $('#dialogEditCustomerCity').val();
+        sendData.Province = $('#dialogEditCustomerProvince').val();
+        sendData.State = $('#dialogEditCustomerState').val();
+        sendData.Country = $('#dialogEditCustomerCountry').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("ModalEditCustomer", "Customer")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if (result.ErrorResult == "OK") {
+                    $('#dialogEditCustomer').modal('hide');
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+</script>
+<style>
+    .row-margin-6top {
+        margin-top: 6px;
+    }
+    .modal-width-custom {
+        width: 800px;
+    }
+    .divColText {
+        position: relative;
+        min-height: 1px;
+        float: left;
+        width: 120px;
+        padding-left: 8px;
+        height: 34px;
+        line-height: 34px;
+        margin: auto;
+        font-weight:500;
+    }
+    .divColField {
+        position: relative;
+        min-height: 1px;
+        float: left;
+        width: 600px;
+    }
+</style>
+<div id="dialogEditCustomer" class="modal fade modal-width-custom " role="dialog" aria-labelledby="modal_edit_customer" aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+            Creazione/Modifica cliente
+        </div>
+        <div class="modal-body">
+            <input type="hidden" value="@Html.Raw(Model.Customer.CustomerId.ToString())" id="dialogEditCustomerCustomerId" name="dialogEditCustomerCustomerId" />
+            <div class="row row-margin-6top">
+                <div class="divColText">Nome :</div>
+                <div class="divColField">
+                    @Html.TextBox("dialogEditCustomerName", Model.Customer.Name, new { @class = "form-control", @placeholder = "Cognome/Ragione sociale" })
+                </div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">&nbsp;</div>
+                <div class="divColField">@Html.TextBox("dialogEditCustomerNome2", Model.Customer.Name2, new { @class = "form-control", @placeholder = "Nome / Ragione sociale" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">Partita IVA :</div>
+                <div class="divColField" style="width:240px;">@Html.TextBox("dialogEditCustomerPIva", Model.Customer.VATNumber, new { @class = "form-control", @placeholder = "Partita IVA" })</div>
+                <div class="divColText">Codice fiscale :</div>
+                <div class="divColField" style="width:240px;"> @Html.TextBox("dialogEditCustomerCFis", Model.Customer.FiscalCode, new { @class = "form-control", @placeholder = "Codice fiscale" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">Indirizzo :</div>
+                <div class="divColField">@Html.TextBox("dialogEditCustomerAddress", Model.Customer.Address, new { @class = "form-control", @placeholder = "Indirizzo" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">&nbsp;</div>
+                <div class="divColField">@Html.TextBox("dialogEditCustomerAddress1", Model.Customer.Address1, new { @class = "form-control", @placeholder = "Indirizzo" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">&nbsp;</div>
+                <div class="divColField" style="width:80px;">@Html.TextBox("dialogEditCustomerPostalCode", Model.Customer.PostalCode, new { @class = "form-control", @placeholder = "CAP" })</div>
+                <div class="divColField" style="width:430px;padding-left:8px;">@Html.TextBox("dialogEditCustomerCity", Model.Customer.City, new { @class = "form-control", @placeholder = "Città" })</div>
+                <div class="divColField" style="width:80px;padding-left:8px;">@Html.TextBox("dialogEditCustomerProvince", Model.Customer.Province, new { @class = "form-control", @placeholder = "Provincia" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">&nbsp;</div>
+                <div class="divColField">@Html.TextBox("dialogEditCustomerState", Model.Customer.State, new { @class = "form-control", @placeholder = "Stato" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">&nbsp;</div>
+                <div class="divColField">@Html.TextBox("dialogEditCustomerCountry", Model.Customer.Country, new { @class = "form-control", @placeholder = "Nazione" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText">Status</div>
+                <div class="divColField"><select id="dialogEditCustomerStatus" name="dialogEditCustomerStatus" class = "form-control"><option value="0" @Html.Raw((Model.Customer.Status == JobManagement.EFDataModel.Customers.STATUS_ACTIVE ? "selected" : string.Empty))>ATTIVO</option><option value="1" @Html.Raw((Model.Customer.Status == JobManagement.EFDataModel.Customers.STATUS_ARCHIVED ? "selected" : string.Empty))>ARCHIVIATO</option><option value="2" @Html.Raw((Model.Customer.Status == JobManagement.EFDataModel.Customers.STATUS_INTERNAL ? "selected" : string.Empty))>INTERNO</option></select></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btn-group">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button class="btn btn-success" id="dialogEditCustomer_confirm" type="button" onclick="modal_edit_customer_save();">
+                    <i class="fa fa-check"></i> Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+

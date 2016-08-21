@@ -1,0 +1,47 @@
+﻿@model JobManagement.WebMvc.Models.People.PeopleIndexModel
+@{
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+@section sectionHeader {
+    <script type="text/javascript">
+        function edit_people(btn) {
+            var id = btn.getAttribute("data-id");
+            if (id != null) {
+                if (id.trim() == '') {
+                    id = null;
+                }
+            }
+            if (id != null) {
+                $('#modal-placeholder').load('@Url.Content("~/People/EditModal")/' + id);
+            } else {
+                $('#modal-placeholder').load('@Url.Content("~/People/EditModal")');
+            }
+
+        }
+    </script>
+}
+<ol class="breadcrumb">
+    <li>Home</li>
+    <li class="active">Elenco persone</li>
+</ol>
+
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" class="btn-xs btn-default" data-id="" onclick="edit_people(this);"><span class="glyphicon glyphicon-plus"></span></button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+                <tr><th>Cognome</th><th>Nome</th><th>Utente</th><th>Società</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model.Peoples)
+                {
+                    <tr><td><button type="button" class="btn-xs btn-default" data-id="@Html.Raw(p.PeopleId.ToString())" onclick="edit_people(this);"><span class="glyphicon glyphicon-edit"></span></button> @Html.Raw(p.LastName)</td><td>@Html.Raw(p.FirstName)</td><td>@Html.Raw((p.AspNetUsers == null ? "<No user>" : p.AspNetUsers.UserName))</td><td>@Html.Raw(p.CompanyName)</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

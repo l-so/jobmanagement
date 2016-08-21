@@ -1,0 +1,169 @@
+﻿@model JobManagement.WebMvc.Models.TravelExpense.TravelExpenseIndexModel
+@{
+    ViewBag.Title = "Rimborsi spese";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+@section sectionHeader {
+    <script type="text/javascript">
+        $(function () {
+            $('#filterMonth').val(@Html.Raw(Model.TEFilterMonth));
+            $('#filterYear').val(@Html.Raw(Model.TEFilterYear));
+            filterTravelExpenseList();
+        });
+        function edit_travelexpense(id) {
+            var u = '@Url.Content("~/TravelExpense/TravelExpenseEditHeaderModal")';
+            if (parseInt(id) > 0) {
+                $('#modal-placeholder').load(u + '/' + id + '?peopleId=' + p + '&year=' + y + '&month=' + m);
+            } else {
+                var p = $('#filterPeople').val();
+                var m = $('#filterMonth').val();
+                var y = $('#filterYear').val();
+                $('#modal-placeholder').load(u + '/?peopleId=' + p + '&year=' + y + '&month=' + m);
+            }
+        }
+        function filterTravelExpenseList() {
+            var p = $('#filterPeople').val();
+            var m = $('#filterMonth').val();
+            var y = $('#filterYear').val();
+            var sendData = new Object();
+            sendData.Operation = "Filter";
+            sendData.FilterPeopleId = p;
+            sendData.FilterMonth = m;
+            sendData.FilterYear = y;
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/TravelExpenseSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus == "OK") {
+                        if (result.Data != null) {
+                            var dd = JSON.parse(result.Data);
+                            if (dd.length > 0) {
+                                displayTravelExpenseLine(dd)
+                            } else {
+                                $("#tbodyTravelExpenseList").empty();
+                                $("#tbodyTravelExpenseList").append('<tr><td colspan="5">Nessun valore trovato</td></tr>');
+                            }
+                        } else {
+                            $("#tbodyTravelExpenseList").empty();
+                            $("#tbodyTravelExpenseList").append('<tr><td colspan="5">Nessun valore trovato</td></tr>');
+                        }
+                    } else {
+                        alert(result.Error);
+                        alert(result.ErrorMessage)
+                    }
+                }
+            });
+        }
+        function closemonth_travelexpense() {
+            var peopleId =  $('#filterPeople').val();
+            var y = $('#filterYear').val();
+            var m =  $('#filterMonth').val();
+            var id = y.toString() + m.toString() + peopleId.toString();
+            window.location.assign('@Url.Action("PostTravelExpenses", "TravelExpense")/' + id);
+
+        }
+        function displayTravelExpenseLine(teLine) {
+            var baseEditUrl = '@Url.Action("Edit", "TravelExpense")' + '/';
+            $("#tbodyTravelExpenseList").empty();
+            teLine.sort(function (o1, o2) {
+                var od1 = new Date(o1.Date);
+                var od2 = new Date(o2.Date);
+                if (od1 < od2) return 1;
+                else if (od1 > od2) return -1;
+                else return 0;
+            });
+            var urlFilterParam = '?tefm=' + $('#filterMonth').val();
+            urlFilterParam += '&tefy=' + $('#filterYear').val();
+            urlFilterParam += '&tefp=' + $('#filterPeople').val();
+            for (var i = 0; i < teLine.length; i++) {
+                var editUrl = baseEditUrl  + teLine[i].TravelExpenseCode + urlFilterParam;
+                var r = '<tr style="margin-top:6px;">';
+                r += '<td><a href="' + editUrl + '">' + teLine[i].TravelExpenseCode + '</a></td>';
+                if (teLine[i].Date != null) {
+                    if (teLine[i].Date != 'null') {
+                        r += '<td style="padding-left:12px;">' + zzsDateToItalianString(new Date(teLine[i].Date)) + '</td>';
+                    } else {
+                        r += '<td></td>';
+                    }
+                } else {
+                    r += '<td></td>';
+                }
+                r += '<td style="padding-left:12px;">' + teLine[i].FirstName + " " + teLine[i].LastName + '</td>';
+                if (teLine[i].BeginDate != null) {
+                    if (teLine[i].BeginDate != 'null') {
+                        r += '<td style="padding-left:12px;">' + zzsDateToItalianString(new Date(teLine[i].BeginDate)) + '</td>';
+                    } else {
+                        r += '<td></td>';
+                    }
+                } else {
+                    r += '<td></td>';
+                }
+                if (teLine[i].EndDate != null) {
+                    if (teLine[i].EndDate != 'null') {
+                        r += '<td style="padding-left:12px;">' + zzsDateToItalianString(new Date(teLine[i].EndDate)) + '</td>';
+                    } else {
+                        r += '<td></td>';
+                    }
+                } else {
+                    r += '<td></td>';
+                }
+
+                if (teLine[i].Total != null) {
+                    r += '<td style="padding-left:12px;text-align:right;"> € ' + parseFloat(teLine[i].Total).toFixed(2) + '</td>';
+                } else {
+                    r += '<td style="padding-left:12px;text-align:right;"> € 0,00</td>';
+                }
+                r += '</tr>';
+                if ((teLine[i].Annotation != null) && (teLine[i].Annotation != 'undefined')) {
+                    r += '<tr><td></td><td colspan="3" style="padding-left:12px;font-size:80%;">' + teLine[i].Annotation + '</td><td></td></tr>';
+                }
+                $("#tbodyTravelExpenseList").append(r);
+            }
+        }
+    </script>
+}
+<div class="container-fluid">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>@Html.ActionLink("[Home]", "Index", "Home")</li>
+            <li class="active">Elenco rimborsi spese</li>
+        </ol>
+        <div style="margin-top:6px;">
+            <fieldset>
+                Rimborsi spese del mese di <select id="filterMonth">
+                    <option value="1">Gennaio</option>
+                    <option value="2">Febbraio</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Aprile</option>
+                    <option value="5">Maggio</option>
+                    <option value="6">Giugno</option>
+                    <option value="7">Luglio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Settembre</option>
+                    <option value="10">Ottobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Dicembre</option>
+                </select> <input id="filterYear" value="" style="height:21px;width:60px;line-height:inherit;padding: 0 0 0 0;margin: 0 0 0 0;"/> di @Html.DropDownList("filterPeople", Model.DDLPeople) <button type="button" class="btn btn-xs" onclick="javascript: filterTravelExpenseList();"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+            </fieldset>
+        </div>
+        <ol class="list-inline">
+            <li><button type="button" class="btn btn-xs" data-id="-1" onclick="edit_travelexpense(-1);"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuovo rimborso...</button></li>
+            <li></li>
+            <li><button type="button" class="btn btn-xs" data-id="-1" onclick="closemonth_travelexpense();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chiusura del mese!</button></li>
+        </ol>
+        <div style="margin-top:6px;">
+            <table>
+                <thead>
+                    <tr><th>Protocollo</th><th style="padding-left:12px;">Data</th><th style="padding-left:12px;">Persona</th><th style="padding-left:12px;">Dal</th><th style="padding-left:12px;">Al</th><th style="padding-left:12px;">Importo</th></tr>
+                </thead>
+                <tbody id="tbodyTravelExpenseList"></tbody>
+            </table>
+        </div>
+    </div>
+</div>

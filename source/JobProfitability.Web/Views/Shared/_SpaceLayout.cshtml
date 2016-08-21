@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="PRAGMA" content="NO-CACHE">
+    <title>@ViewBag.Title - ZZ Soft Space</title>
+    @Styles.Render("~/Content/stylefile")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link href="~/fonts/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/select2.min.css" rel="stylesheet" />
+    <script src="~/Scripts/select2.min.js"></script>
+    <link href="~/Content/themes/base/all.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui.min.js"></script>
+    <script src="~/Scripts/zzspacestupid.js"></script>
+    <script type="text/javascript">
+    $(function () {
+        $('#NavBarAddJobWorkJournalLine').click(function () {
+            //$('#modal-placeholder').empty();
+            $('#modal-placeholder').load('@Url.Content("~/Jobs/ModalEditJobWorkJournal")');
+        });
+        $('#NavBarAddJob').click(function () {
+            //$('#modal-placeholder').empty();
+            $('#modal-placeholder').load('@Url.Content("~/Jobs/ModalEditJob")');
+        });
+        $('#NavBarAddCustomer').click(function () {
+            //$('#modal-placeholder').empty();
+            $('#modal-placeholder').load('@Url.Content("~/Customer/ModalEditCustomer")');
+        });
+        $('#NavBarAddTravelExpense').click(function () {
+            //$('#modal-placeholder').empty();
+            $('#modal-placeholder').load('@Url.Content("~/TravelExpense/ModalEditHeader")');
+        });
+    });
+    </script>
+    @RenderSection("sectionHeader", required: false)
+    <style type="text/css">
+    	html, body 
+	    {
+		    height: 100%;
+		    background-color: #ffffff;		
+	    }
+	    body 
+	    {
+		    padding: 10px 10px  0px 10px;
+		    color: #000;
+		    font-family: "Helvetica Neue", Helvetica, "Open Sans", arial, sans-serif;
+		    font-size: 15px;
+		    line-height: 20px;
+	    }
+    </style>
+    </head>
+    <body>
+
+       <header>
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                        <img alt="Brand" src="~/assets/image/LogoOrrizontale.png" width="96" height="24">
+                    </a>
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("HOME", "Index", "Home")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commesse <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" id="NavBarAddJobWorkJournalLine" name="NavBarAddJobWorkJournalLine">Nuovo lavoro svolto...</a></li>
+                                <li>@Html.ActionLink("Elenco lavoro svolto", "JobsWorkJournal", "Jobs")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" id="NavBarAddJob" name="NavBarAddJob">Nuovo commessa...</a></li>
+                                <li>@Html.ActionLink("Elenco commesse", "Index", "Jobs")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" id="NavBarAddCustomer" name="NavBarAddCustomer">Nuovo cliente..</a></li>
+                                <li>@Html.ActionLink("Clienti", "Index", "Customer")</li>
+                                <li role="separator" class="divider"></li>
+                               
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione finanziaria<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" id="NavBarAddTravelExpense" name="NavBarAddTravelExpense">Nuovo rimborso..</a></li>
+                                <li>@Html.ActionLink("Rimborsi spese", "Index", "TravelExpense")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Nuovo ordine di acquisto...", "ModalPurchaseOrder", "Purchases")</li>
+                                <li>@Html.ActionLink("Nuovo acquisto...", "Edit", "Purchases")</li>
+                                <li>@Html.ActionLink("Acquisti", "Index", "Purchases")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Fatture", "Index", "Invoices")</li>
+                                <li role="separator" class="divider"></li>
+                                <li>@Html.ActionLink("Incassi/Pagamenti", "Index", "ReceipsAndPayments")</li>
+                            </ul>
+                        </li>
+                        @if (Request.IsAuthenticated)
+                        {
+                            if (User.IsInRole("ADMIN"))
+                            {
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa fa-cogs"></i>
+                                        <span class="visible-xs">&nbsp;Impostazioni</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Persone", "Index", "People")</li>
+                                        <li class="divider hidden-xs hidden-sm"></li>
+                                        <li>@Html.ActionLink("Account utenti", "Index", "AppUser")</li>
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    <li><span style="width:24px;"></span></li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </nav>
+        </header>
+        <div id="modal-placeholder"><!--Dialog place holder--></div>
+        @RenderBody()
+    
+    @RenderSection("sectionScripts", required: false)
+</body>
+</html>

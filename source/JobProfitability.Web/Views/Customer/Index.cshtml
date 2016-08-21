@@ -1,0 +1,71 @@
+﻿@model JobManagement.WebMvc.Models.CustomerIndexModel
+@{
+    ViewBag.Title = "Clienti";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+<ol class="breadcrumb">
+    <li>Home</li>
+    <li class="active">Elenco clienti</li>
+</ol>
+<div class="container-fluid">
+    <form method="get" id="filterForm" name="filterForm">
+        <div class="form-inline">
+            Nome: <input id="filterFullName" name="filterFullName" type="text" class="form-control" /> Stato: <select id="filterActiveState" name="filterActiveState" class="form-control"><option value="1">ATTIVI</option><option value="0">ARCHIVIATI</option><option value="2">ATTIVI + ARCHIVIATI</option><option value="3">INTERNI</option><option value="-1">TUTTI</option></select> <button id="filterButton" name="filterButton" class="btn btn-default" onclick="document.getElementById('filterForm').submit();"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+        </div>
+    </form>
+    <ol class="list-inline margin-top-06">
+        <li><button type="button" class="btn btn-xs" data-id="-1" onclick="edit_customer(this);"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuovo cliente ...</button></li>
+    </ol>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr><th rowspan="2" colspan="2" style="text-align:center;">Id</th><th rowspan="2" style="text-align:left;">Nome</th><th rowspan="2">Partita IVA</th><th colspan="2">Fatturato</th><th colspan="2">Scoperto</th></tr>
+                    <tr><th>@Html.Raw((Model.CurrentYear - 1))</th><th>@Html.Raw((Model.CurrentYear))</th><th>@Html.Raw((Model.CurrentYear - 1))</th><th>@Html.Raw((Model.CurrentYear))</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.CustomerList)
+                    {
+                        <tr><td style="width:32px;"><button type="button" class="btn-xs btn-default" data-id="@Html.Raw(c.CustomerId.ToString())" onclick="edit_customer(this);"><span class="glyphicon glyphicon-edit"></span></button></td><td style="width:64px;text-align:right;padding-left:12px;padding-right:8px;">@Html.Raw(c.CustomerId.ToString().PadLeft(6,'0'))</td><td>@Html.Raw(c.FullName)</td><td>@Html.Raw(c.VATNumber)</td><td>@Html.Raw(c.InvoicedLastYear.ToString("F2"))</td><td>@Html.Raw(c.InvoicedCurrentYear.ToString("F2"))</td><td>@Html.Raw(c.ToBePaid.ToString("F2"))</td><td>@Html.Raw(c.ToBePaidOutOfDate.ToString("F2"))</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section sectionScripts {
+    <script type="text/javascript">
+        $(function () {
+            $('#filterFullName').val(null);
+            $('#filterActiveState').val("1");
+            var fn = zzsGetUrlVar('filterFullName');
+            var fs = zzsGetUrlVar('filterActiveState');
+            if (fn != null) {
+                if (fn.trim() != '') {
+                    $('#filterFullName').val(fn);
+                } 
+            }
+            if (fs != null) {
+                if (fs.trim() != '') {
+                    $('#filterActiveState').val(fs);
+                }
+            }
+        });
+        function edit_customer(btn) {
+            var id = btn.getAttribute("data-id");
+            if (id != null) {
+                if (id.trim() == '') {
+                    id = null;
+                }
+            }
+            if (id != null) {
+                $('#modal-placeholder').load('@Url.Content("~/Customer/ModalEditCustomer")/' + id);
+            } else {
+                $('#modal-placeholder').load('@Url.Content("~/Customer/ModalEditCustomer")');
+            }
+        }
+    </script>
+}
+
+

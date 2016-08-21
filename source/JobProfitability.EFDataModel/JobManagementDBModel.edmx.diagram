@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="52a821bc89034db98778f12be9a868e0" Name="Diagram1" ZoomLevel="98">
+        <EntityTypeShape EntityType="JobManagement.DataModel.AspNetRoles" Width="1.5" PointX="5.75" PointY="0.875" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.AspNetUserClaims" Width="1.5" PointX="3" PointY="8.5" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.AspNetUserLogins" Width="1.5" PointX="3" PointY="6" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.AspNetUserRoles" Width="1.5" PointX="8" PointY="0.875" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.AspNetUsers" Width="1.5" PointX="0.75" PointY="8.875" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.AutoNumberBase" Width="1.5" PointX="5.75" PointY="3.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.Customers" Width="1.5" PointX="0.75" PointY="16.5" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.Jobs" Width="1.5" PointX="3" PointY="17.5" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.JobStatus" Width="1.5" PointX="0.75" PointY="21.375" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.JobTasks" Width="1.5" PointX="3" PointY="3" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.Person" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.PurchaseJobs" Width="1.5" PointX="7.75" PointY="3.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.Purchases" Width="1.5" PointX="8.25" PointY="7.625" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseAutoCode" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseJobs" Width="1.5" PointX="10.5" PointY="12.5" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseLineCategories" Width="1.5" PointX="11.25" PointY="15.5" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpensePurchases" Width="1.5" PointX="10.5" PointY="9.5" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenses" Width="1.5" PointX="8.25" PointY="12" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpensesLines" Width="1.5" PointX="13.5" PointY="11.625" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseStatus" Width="1.5" PointX="6" PointY="8.625" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.WorksJournal" Width="1.5" PointX="5.25" PointY="11.875" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.JobList" Width="1.5" PointX="11.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.JobTotalPeopleWorkedHours" Width="1.5" PointX="10.75" PointY="6.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.JobTotalWorkedHours" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseJobsList" Width="1.5" PointX="12.75" PointY="5.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseList" Width="1.5" PointX="13.75" PointY="0.75" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_People_AspNetUsers" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_Job_Customer" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_Job_JobState" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_JobWorkJournal_Job" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseJobs_Job" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_JobWorkJournal_JobTask" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_JobWorkJournal_Person" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpense_People" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpensePurchases_Purchase" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseJobs_TravelExpense" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpenseLineCategories" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpense" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

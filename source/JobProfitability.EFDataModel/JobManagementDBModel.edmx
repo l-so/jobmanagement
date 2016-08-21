@@ -1,0 +1,1840 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JobProfitabilityDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AutoNumberBase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Element" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastUsedNumber" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Name2" Type="nvarchar" MaxLength="100" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="201" StoreGeneratedPattern="Computed" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="100" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
+          <Property Name="Province" Type="nvarchar" MaxLength="100" />
+          <Property Name="State" Type="nvarchar" MaxLength="100" />
+          <Property Name="Country" Type="nvarchar" MaxLength="100" />
+          <Property Name="FiscalCode" Type="nvarchar" MaxLength="30" />
+          <Property Name="VATNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="Status" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Jobs">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="bigint" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="Description" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="ExpectedIncome" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ExpectedCost" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ExpectedWorkHours" Type="int" Nullable="false" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
+          <Property Name="Year" Type="int" />
+          <Property Name="ExpectedStartDate" Type="date" />
+          <Property Name="ExpectedFinishDate" Type="date" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="FinishDate" Type="date" />
+        </EntityType>
+        <EntityType Name="JobStatus">
+          <Key>
+            <PropertyRef Name="JobStateId" />
+          </Key>
+          <Property Name="JobStateId" Type="tinyint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobTasks">
+          <Key>
+            <PropertyRef Name="JobTaskId" />
+          </Key>
+          <Property Name="JobTaskId" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="75" />
+          <Property Name="NoWorkTask" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="PeopleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdentityId" Type="nvarchar" MaxLength="128" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="75" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="75" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Contract" Type="tinyint" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="HourCost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ActiveState" Type="bit" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="CarPlate" Type="nvarchar" MaxLength="10" />
+          <Property Name="CarDescription" Type="nvarchar" MaxLength="75" />
+          <Property Name="CarKmCost" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="IdentityDefault" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PurchaseJobs">
+          <Key>
+            <PropertyRef Name="PurchaseId" />
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="PurchaseId" Type="bigint" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="InPercent" Type="decimal" Precision="6" Scale="2" />
+        </EntityType>
+        <EntityType Name="Purchases">
+          <Key>
+            <PropertyRef Name="PurchaseId" />
+          </Key>
+          <Property Name="PurchaseId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BuyFromName" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyFromCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyFromCountry" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyFromDocType" Type="int" />
+          <Property Name="BuyFromDocNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="BuyFromDocDate" Type="date" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AmountNoVat" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Vat" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DueDate" Type="date" />
+        </EntityType>
+        <EntityType Name="TravelExpenseAutoCode">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="PeopleId" Type="int" Nullable="false" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Prefix" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="LastUsedNumber" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelExpenseJobs">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="InPercent" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelExpenseLineCategories">
+          <Key>
+            <PropertyRef Name="TravelExpenseLineCategoryId" />
+          </Key>
+          <Property Name="TravelExpenseLineCategoryId" Type="int" Nullable="false" />
+          <Property Name="UsePersonalCar" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TravelExpensePurchases">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="PurchaseId" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PurchaseId" Type="bigint" Nullable="false" />
+          <Property Name="InPercent" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelExpenses">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Annotation" Type="nvarchar(max)" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
+          <Property Name="PeopleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelExpensesLines">
+          <Key>
+            <PropertyRef Name="TravelExpenseLineId" />
+          </Key>
+          <Property Name="TravelExpenseLineId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="TravelExpenseLineCategoryId" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="150" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="CarPlate" Type="nvarchar" MaxLength="10" />
+          <Property Name="CarDescription" Type="nvarchar" MaxLength="75" />
+          <Property Name="CarKmCost" Type="decimal" Precision="8" Scale="4" Nullable="false" />
+          <Property Name="CarKm" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelExpenseStatus">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="tinyint" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="WorksJournal">
+          <Key>
+            <PropertyRef Name="WorkJournalId" />
+          </Key>
+          <Property Name="WorkJournalId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="WorkedHours" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="TaskWhere" Type="nvarchar" MaxLength="160" />
+          <Property Name="Annotation" Type="nvarchar(max)" />
+          <Property Name="JobTaskId" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PeopleId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'JobManagement.JobManagement.JobList'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="JobList">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="CustomerId" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="ExpectedIncome" />
+            <PropertyRef Name="ExpectedCost" />
+            <PropertyRef Name="ExpectedWorkHours" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="CustomerId" Type="bigint" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="Description" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="ExpectedIncome" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ExpectedCost" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ExpectedWorkHours" Type="int" Nullable="false" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
+          <Property Name="Year" Type="int" />
+          <Property Name="TotalHours" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="StatusDescription" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomerName2" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomerFullName" Type="nvarchar" MaxLength="201" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'JobManagement.JobManagement.JobTotalPeopleWorkedHours'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="JobTotalPeopleWorkedHours">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="PeopleId" Type="int" Nullable="false" />
+          <Property Name="TotalHours" Type="decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'JobManagement.JobManagement.JobTotalWorkedHours'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="JobTotalWorkedHours">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="TotalHours" Type="decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'JobManagement.JobManagement.TravelExpenseJobsList'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="TravelExpenseJobsList">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="InPercent" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="InPercent" Type="decimal" Precision="6" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="38" Scale="4" />
+          <Property Name="Status" Type="tinyint" />
+          <Property Name="Amount" Type="decimal" Precision="38" Scale="6" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="Description" Type="nvarchar" MaxLength="512" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'JobManagement.JobManagement.TravelExpenseList'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="TravelExpenseList">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Annotation" Type="nvarchar(max)" />
+          <Property Name="Status" Type="tinyint" Nullable="false" />
+          <Property Name="PeopleId" Type="int" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="75" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="75" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="BeginDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="Total" Type="decimal" Precision="38" Scale="4" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Job_Customer">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Job_JobState">
+          <End Role="JobStatus" Type="Self.JobStatus" Multiplicity="1" />
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobStatus">
+              <PropertyRef Name="JobStateId" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobWorkJournal_Job">
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="1" />
+          <End Role="WorksJournal" Type="Self.WorksJournal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="WorksJournal">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobWorkJournal_JobTask">
+          <End Role="JobTasks" Type="Self.JobTasks" Multiplicity="1" />
+          <End Role="WorksJournal" Type="Self.WorksJournal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTasks">
+              <PropertyRef Name="JobTaskId" />
+            </Principal>
+            <Dependent Role="WorksJournal">
+              <PropertyRef Name="JobTaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobWorkJournal_Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="WorksJournal" Type="Self.WorksJournal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PeopleId" />
+            </Principal>
+            <Dependent Role="WorksJournal">
+              <PropertyRef Name="PeopleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_People_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="Person" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="IdentityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpense_People">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="TravelExpenses" Type="Self.TravelExpenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PeopleId" />
+            </Principal>
+            <Dependent Role="TravelExpenses">
+              <PropertyRef Name="PeopleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpense_TravelExpenseStatus">
+          <End Role="TravelExpenseStatus" Type="Self.TravelExpenseStatus" Multiplicity="1" />
+          <End Role="TravelExpenses" Type="Self.TravelExpenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenseStatus">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="TravelExpenses">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseJobs_Job">
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="1" />
+          <End Role="TravelExpenseJobs" Type="Self.TravelExpenseJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="TravelExpenseJobs">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseJobs_TravelExpense">
+          <End Role="TravelExpenses" Type="Self.TravelExpenses" Multiplicity="1" />
+          <End Role="TravelExpenseJobs" Type="Self.TravelExpenseJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenses">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Principal>
+            <Dependent Role="TravelExpenseJobs">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseLine_TravelExpense">
+          <End Role="TravelExpenses" Type="Self.TravelExpenses" Multiplicity="1" />
+          <End Role="TravelExpensesLines" Type="Self.TravelExpensesLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenses">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Principal>
+            <Dependent Role="TravelExpensesLines">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseLine_TravelExpenseLineCategories">
+          <End Role="TravelExpenseLineCategories" Type="Self.TravelExpenseLineCategories" Multiplicity="1" />
+          <End Role="TravelExpensesLines" Type="Self.TravelExpensesLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenseLineCategories">
+              <PropertyRef Name="TravelExpenseLineCategoryId" />
+            </Principal>
+            <Dependent Role="TravelExpensesLines">
+              <PropertyRef Name="TravelExpenseLineCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpensePurchases_Purchase">
+          <End Role="Purchases" Type="Self.Purchases" Multiplicity="1" />
+          <End Role="TravelExpensePurchases" Type="Self.TravelExpensePurchases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Purchases">
+              <PropertyRef Name="PurchaseId" />
+            </Principal>
+            <Dependent Role="TravelExpensePurchases">
+              <PropertyRef Name="PurchaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpensePurchases_TravelExpense">
+          <End Role="TravelExpenses" Type="Self.TravelExpenses" Multiplicity="1" />
+          <End Role="TravelExpensePurchases" Type="Self.TravelExpensePurchases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenses">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Principal>
+            <Dependent Role="TravelExpensePurchases">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="upCustomerDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
+          <Parameter Name="customerId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="upJobAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
+          <Parameter Name="CustomerId" Type="bigint" Mode="In" />
+          <Parameter Name="Code" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="ExpectedWorkHours" Type="int" Mode="In" />
+          <Parameter Name="ExpectedIncome" Type="decimal" Mode="In" />
+          <Parameter Name="ExpectedCost" Type="decimal" Mode="In" />
+          <Parameter Name="ExpectedStartDate" Type="date" Mode="In" />
+          <Parameter Name="ExpectedFinishDate" Type="date" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="Status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="upJobDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
+          <Parameter Name="jobId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="upOreMensiliLavorateGiornaliero" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
+          <Parameter Name="PeopleId" Type="int" Mode="In" />
+          <Parameter Name="BeginDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="upTravelExpenseAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
+          <Parameter Name="Date" Type="date" Mode="In" />
+          <Parameter Name="Annotation" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="PeopleId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="upTravelExpenseAddPurchase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
+          <Parameter Name="TravelExpenseCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="PeopleId" Type="int" Mode="In" />
+          <Parameter Name="BuyFromName" Type="nvarchar" Mode="In" />
+          <Parameter Name="BuyFromCity" Type="nvarchar" Mode="In" />
+          <Parameter Name="BuyFromCountry" Type="nvarchar" Mode="In" />
+          <Parameter Name="BuyFromDocType" Type="int" Mode="In" />
+          <Parameter Name="BuyFromDocNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="BuyFromDocDate" Type="date" Mode="In" />
+          <Parameter Name="Amount" Type="decimal" Mode="In" />
+          <Parameter Name="AmountNoVat" Type="decimal" Mode="In" />
+          <Parameter Name="Vat" Type="decimal" Mode="In" />
+          <Parameter Name="Total" Type="decimal" Mode="In" />
+        </Function>
+        <EntityContainer Name="JobProfitabilityDataModelStoreContainer">
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AutoNumberBase" EntityType="Self.AutoNumberBase" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="JobStatus" EntityType="Self.JobStatus" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="JobTasks" EntityType="Self.JobTasks" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="PurchaseJobs" EntityType="Self.PurchaseJobs" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="Purchases" EntityType="Self.Purchases" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpenseAutoCode" EntityType="Self.TravelExpenseAutoCode" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpenseJobs" EntityType="Self.TravelExpenseJobs" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpenseLineCategories" EntityType="Self.TravelExpenseLineCategories" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpensePurchases" EntityType="Self.TravelExpensePurchases" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpenses" EntityType="Self.TravelExpenses" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpensesLines" EntityType="Self.TravelExpensesLines" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="TravelExpenseStatus" EntityType="Self.TravelExpenseStatus" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="WorksJournal" EntityType="Self.WorksJournal" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="JobList" EntityType="Self.JobList" store:Type="Views" store:Schema="JobManagement">
+            <DefiningQuery>SELECT 
+    [JobList].[JobId] AS [JobId], 
+    [JobList].[CustomerId] AS [CustomerId], 
+    [JobList].[Code] AS [Code], 
+    [JobList].[Description] AS [Description], 
+    [JobList].[ExpectedIncome] AS [ExpectedIncome], 
+    [JobList].[ExpectedCost] AS [ExpectedCost], 
+    [JobList].[ExpectedWorkHours] AS [ExpectedWorkHours], 
+    [JobList].[Status] AS [Status], 
+    [JobList].[Year] AS [Year], 
+    [JobList].[TotalHours] AS [TotalHours], 
+    [JobList].[StatusDescription] AS [StatusDescription], 
+    [JobList].[CustomerName] AS [CustomerName], 
+    [JobList].[CustomerName2] AS [CustomerName2], 
+    [JobList].[CustomerFullName] AS [CustomerFullName]
+    FROM [JobManagement].[JobList] AS [JobList]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="JobTotalPeopleWorkedHours" EntityType="Self.JobTotalPeopleWorkedHours" store:Type="Views" store:Schema="JobManagement">
+            <DefiningQuery>SELECT 
+    [JobTotalPeopleWorkedHours].[JobId] AS [JobId], 
+    [JobTotalPeopleWorkedHours].[PeopleId] AS [PeopleId], 
+    [JobTotalPeopleWorkedHours].[TotalHours] AS [TotalHours]
+    FROM [JobManagement].[JobTotalPeopleWorkedHours] AS [JobTotalPeopleWorkedHours]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="JobTotalWorkedHours" EntityType="Self.JobTotalWorkedHours" store:Type="Views" store:Schema="JobManagement">
+            <DefiningQuery>SELECT 
+    [JobTotalWorkedHours].[JobId] AS [JobId], 
+    [JobTotalWorkedHours].[TotalHours] AS [TotalHours]
+    FROM [JobManagement].[JobTotalWorkedHours] AS [JobTotalWorkedHours]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TravelExpenseJobsList" EntityType="Self.TravelExpenseJobsList" store:Type="Views" store:Schema="JobManagement">
+            <DefiningQuery>SELECT 
+    [TravelExpenseJobsList].[TravelExpenseCode] AS [TravelExpenseCode], 
+    [TravelExpenseJobsList].[JobId] AS [JobId], 
+    [TravelExpenseJobsList].[InPercent] AS [InPercent], 
+    [TravelExpenseJobsList].[Total] AS [Total], 
+    [TravelExpenseJobsList].[Status] AS [Status], 
+    [TravelExpenseJobsList].[Amount] AS [Amount], 
+    [TravelExpenseJobsList].[Code] AS [Code], 
+    [TravelExpenseJobsList].[Description] AS [Description]
+    FROM [JobManagement].[TravelExpenseJobsList] AS [TravelExpenseJobsList]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="TravelExpenseList" EntityType="Self.TravelExpenseList" store:Type="Views" store:Schema="JobManagement">
+            <DefiningQuery>SELECT 
+    [TravelExpenseList].[TravelExpenseCode] AS [TravelExpenseCode], 
+    [TravelExpenseList].[Date] AS [Date], 
+    [TravelExpenseList].[Annotation] AS [Annotation], 
+    [TravelExpenseList].[Status] AS [Status], 
+    [TravelExpenseList].[PeopleId] AS [PeopleId], 
+    [TravelExpenseList].[FirstName] AS [FirstName], 
+    [TravelExpenseList].[LastName] AS [LastName], 
+    [TravelExpenseList].[Code] AS [Code], 
+    [TravelExpenseList].[BeginDate] AS [BeginDate], 
+    [TravelExpenseList].[EndDate] AS [EndDate], 
+    [TravelExpenseList].[Total] AS [Total]
+    FROM [JobManagement].[TravelExpenseList] AS [TravelExpenseList]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Job_Customer" Association="Self.FK_Job_Customer">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Job_JobState" Association="Self.FK_Job_JobState">
+            <End Role="JobStatus" EntitySet="JobStatus" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobWorkJournal_Job" Association="Self.FK_JobWorkJournal_Job">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="WorksJournal" EntitySet="WorksJournal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobWorkJournal_JobTask" Association="Self.FK_JobWorkJournal_JobTask">
+            <End Role="JobTasks" EntitySet="JobTasks" />
+            <End Role="WorksJournal" EntitySet="WorksJournal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobWorkJournal_Person" Association="Self.FK_JobWorkJournal_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="WorksJournal" EntitySet="WorksJournal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_People_AspNetUsers" Association="Self.FK_People_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpense_People" Association="Self.FK_TravelExpense_People">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpense_TravelExpenseStatus" Association="Self.FK_TravelExpense_TravelExpenseStatus">
+            <End Role="TravelExpenseStatus" EntitySet="TravelExpenseStatus" />
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseJobs_Job" Association="Self.FK_TravelExpenseJobs_Job">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="TravelExpenseJobs" EntitySet="TravelExpenseJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseJobs_TravelExpense" Association="Self.FK_TravelExpenseJobs_TravelExpense">
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+            <End Role="TravelExpenseJobs" EntitySet="TravelExpenseJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseLine_TravelExpense" Association="Self.FK_TravelExpenseLine_TravelExpense">
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+            <End Role="TravelExpensesLines" EntitySet="TravelExpensesLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseLine_TravelExpenseLineCategories" Association="Self.FK_TravelExpenseLine_TravelExpenseLineCategories">
+            <End Role="TravelExpenseLineCategories" EntitySet="TravelExpenseLineCategories" />
+            <End Role="TravelExpensesLines" EntitySet="TravelExpensesLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpensePurchases_Purchase" Association="Self.FK_TravelExpensePurchases_Purchase">
+            <End Role="Purchases" EntitySet="Purchases" />
+            <End Role="TravelExpensePurchases" EntitySet="TravelExpensePurchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpensePurchases_TravelExpense" Association="Self.FK_TravelExpensePurchases_TravelExpense">
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+            <End Role="TravelExpensePurchases" EntitySet="TravelExpensePurchases" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JobManagement.DataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="JMContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AspNetRoles" EntityType="JobManagement.DataModel.AspNetRoles" />
+          <EntitySet Name="AspNetUserClaims" EntityType="JobManagement.DataModel.AspNetUserClaims" />
+          <EntitySet Name="AspNetUserLogins" EntityType="JobManagement.DataModel.AspNetUserLogins" />
+          <EntitySet Name="AspNetUserRoles" EntityType="JobManagement.DataModel.AspNetUserRoles" />
+          <EntitySet Name="AspNetUsers" EntityType="JobManagement.DataModel.AspNetUsers" />
+          <EntitySet Name="AutoNumberBase" EntityType="JobManagement.DataModel.AutoNumberBase" />
+          <EntitySet Name="Customers" EntityType="JobManagement.DataModel.Customers" />
+          <EntitySet Name="Jobs" EntityType="JobManagement.DataModel.Jobs" />
+          <EntitySet Name="JobStatus" EntityType="JobManagement.DataModel.JobStatus" />
+          <EntitySet Name="JobTasks" EntityType="JobManagement.DataModel.JobTasks" />
+          <EntitySet Name="Person" EntityType="JobManagement.DataModel.Person" />
+          <EntitySet Name="PurchaseJobs" EntityType="JobManagement.DataModel.PurchaseJobs" />
+          <EntitySet Name="Purchases" EntityType="JobManagement.DataModel.Purchases" />
+          <EntitySet Name="TravelExpenseAutoCode" EntityType="JobManagement.DataModel.TravelExpenseAutoCode" />
+          <EntitySet Name="TravelExpenseJobs" EntityType="JobManagement.DataModel.TravelExpenseJobs" />
+          <EntitySet Name="TravelExpenseLineCategories" EntityType="JobManagement.DataModel.TravelExpenseLineCategories" />
+          <EntitySet Name="TravelExpensePurchases" EntityType="JobManagement.DataModel.TravelExpensePurchases" />
+          <EntitySet Name="TravelExpenses" EntityType="JobManagement.DataModel.TravelExpenses" />
+          <EntitySet Name="TravelExpensesLines" EntityType="JobManagement.DataModel.TravelExpensesLines" />
+          <EntitySet Name="TravelExpenseStatus" EntityType="JobManagement.DataModel.TravelExpenseStatus" />
+          <EntitySet Name="WorksJournal" EntityType="JobManagement.DataModel.WorksJournal" />
+          <EntitySet Name="JobList" EntityType="JobManagement.DataModel.JobList" />
+          <EntitySet Name="JobTotalPeopleWorkedHours" EntityType="JobManagement.DataModel.JobTotalPeopleWorkedHours" />
+          <EntitySet Name="JobTotalWorkedHours" EntityType="JobManagement.DataModel.JobTotalWorkedHours" />
+          <EntitySet Name="TravelExpenseJobsList" EntityType="JobManagement.DataModel.TravelExpenseJobsList" />
+          <EntitySet Name="TravelExpenseList" EntityType="JobManagement.DataModel.TravelExpenseList" />
+          <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="JobManagement.DataModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="JobManagement.DataModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="JobManagement.DataModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_People_AspNetUsers" Association="JobManagement.DataModel.FK_People_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Job_Customer" Association="JobManagement.DataModel.FK_Job_Customer">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Job_JobState" Association="JobManagement.DataModel.FK_Job_JobState">
+            <End Role="JobStatus" EntitySet="JobStatus" />
+            <End Role="Jobs" EntitySet="Jobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobWorkJournal_Job" Association="JobManagement.DataModel.FK_JobWorkJournal_Job">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="WorksJournal" EntitySet="WorksJournal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseJobs_Job" Association="JobManagement.DataModel.FK_TravelExpenseJobs_Job">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="TravelExpenseJobs" EntitySet="TravelExpenseJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobWorkJournal_JobTask" Association="JobManagement.DataModel.FK_JobWorkJournal_JobTask">
+            <End Role="JobTasks" EntitySet="JobTasks" />
+            <End Role="WorksJournal" EntitySet="WorksJournal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobWorkJournal_Person" Association="JobManagement.DataModel.FK_JobWorkJournal_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="WorksJournal" EntitySet="WorksJournal" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpense_People" Association="JobManagement.DataModel.FK_TravelExpense_People">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpensePurchases_Purchase" Association="JobManagement.DataModel.FK_TravelExpensePurchases_Purchase">
+            <End Role="Purchases" EntitySet="Purchases" />
+            <End Role="TravelExpensePurchases" EntitySet="TravelExpensePurchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseJobs_TravelExpense" Association="JobManagement.DataModel.FK_TravelExpenseJobs_TravelExpense">
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+            <End Role="TravelExpenseJobs" EntitySet="TravelExpenseJobs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseLine_TravelExpenseLineCategories" Association="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpenseLineCategories">
+            <End Role="TravelExpenseLineCategories" EntitySet="TravelExpenseLineCategories" />
+            <End Role="TravelExpensesLines" EntitySet="TravelExpensesLines" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpensePurchases_TravelExpense" Association="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense">
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+            <End Role="TravelExpensePurchases" EntitySet="TravelExpensePurchases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpense_TravelExpenseStatus" Association="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus">
+            <End Role="TravelExpenseStatus" EntitySet="TravelExpenseStatus" />
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelExpenseLine_TravelExpense" Association="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpense">
+            <End Role="TravelExpenses" EntitySet="TravelExpenses" />
+            <End Role="TravelExpensesLines" EntitySet="TravelExpensesLines" />
+          </AssociationSet>
+          <FunctionImport Name="upCustomerDelete">
+          <Parameter Name="customerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="upJobAdd" ReturnType="Collection(JobManagement.DataModel.upJobAdd_Result)">
+            <Parameter Name="CustomerId" Mode="In" Type="Int64" />
+            <Parameter Name="Code" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="ExpectedWorkHours" Mode="In" Type="Int32" />
+            <Parameter Name="ExpectedIncome" Mode="In" Type="Decimal" />
+            <Parameter Name="ExpectedCost" Mode="In" Type="Decimal" />
+            <Parameter Name="ExpectedStartDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ExpectedFinishDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="Status" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="upJobDelete">
+          <Parameter Name="jobId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="upTravelExpenseAdd" ReturnType="Collection(JobManagement.DataModel.upTravelExpenseAdd_Result)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="Annotation" Mode="In" Type="String" />
+            <Parameter Name="PeopleId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="upTravelExpenseAddPurchase">
+            <Parameter Name="TravelExpenseCode" Mode="In" Type="String" />
+            <Parameter Name="PeopleId" Mode="In" Type="Int32" />
+            <Parameter Name="BuyFromName" Mode="In" Type="String" />
+            <Parameter Name="BuyFromCity" Mode="In" Type="String" />
+            <Parameter Name="BuyFromCountry" Mode="In" Type="String" />
+            <Parameter Name="BuyFromDocType" Mode="In" Type="Int32" />
+            <Parameter Name="BuyFromDocNumber" Mode="In" Type="String" />
+            <Parameter Name="BuyFromDocDate" Mode="In" Type="DateTime" />
+            <Parameter Name="Amount" Mode="In" Type="Decimal" />
+            <Parameter Name="AmountNoVat" Mode="In" Type="Decimal" />
+            <Parameter Name="Vat" Mode="In" Type="Decimal" />
+            <Parameter Name="Total" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <FunctionImport Name="upOreMensiliLavorateGiornaliero" ReturnType="Collection(JobManagement.DataModel.upOreMensiliLavorateGiornaliero_Result)">
+            <Parameter Name="PeopleId" Mode="In" Type="Int32" />
+            <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          </EntityContainer>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserRoles" Relationship="JobManagement.DataModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetRoles" ToRole="AspNetUserRoles" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="JobManagement.DataModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="JobManagement.DataModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetRoles" Relationship="JobManagement.DataModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetUserRoles" ToRole="AspNetRoles" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="JobManagement.DataModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="JobManagement.DataModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="Person" Relationship="JobManagement.DataModel.FK_People_AspNetUsers" FromRole="AspNetUsers" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="AutoNumberBase">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Element" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastUsedNumber" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Name2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="201" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Province" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FiscalCode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="VATNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Byte" />
+          <NavigationProperty Name="Jobs" Relationship="JobManagement.DataModel.FK_Job_Customer" FromRole="Customers" ToRole="Jobs" />
+        </EntityType>
+        <EntityType Name="Jobs">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int64" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="ExpectedIncome" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="ExpectedCost" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="ExpectedWorkHours" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="ExpectedStartDate" Type="DateTime" Precision="0" />
+          <Property Name="ExpectedFinishDate" Type="DateTime" Precision="0" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Customers" Relationship="JobManagement.DataModel.FK_Job_Customer" FromRole="Jobs" ToRole="Customers" />
+          <NavigationProperty Name="JobStatus" Relationship="JobManagement.DataModel.FK_Job_JobState" FromRole="Jobs" ToRole="JobStatus" />
+          <NavigationProperty Name="WorksJournal" Relationship="JobManagement.DataModel.FK_JobWorkJournal_Job" FromRole="Jobs" ToRole="WorksJournal" />
+          <NavigationProperty Name="TravelExpenseJobs" Relationship="JobManagement.DataModel.FK_TravelExpenseJobs_Job" FromRole="Jobs" ToRole="TravelExpenseJobs" />
+        </EntityType>
+        <EntityType Name="JobStatus">
+          <Key>
+            <PropertyRef Name="JobStateId" />
+          </Key>
+          <Property Name="JobStateId" Type="Byte" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Jobs" Relationship="JobManagement.DataModel.FK_Job_JobState" FromRole="JobStatus" ToRole="Jobs" />
+        </EntityType>
+        <EntityType Name="JobTasks">
+          <Key>
+            <PropertyRef Name="JobTaskId" />
+          </Key>
+          <Property Name="JobTaskId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="NoWorkTask" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="WorksJournal" Relationship="JobManagement.DataModel.FK_JobWorkJournal_JobTask" FromRole="JobTasks" ToRole="WorksJournal" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="PeopleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdentityId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Contract" Type="Byte" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="HourCost" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ActiveState" Type="Boolean" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CarPlate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CarDescription" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="CarKmCost" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="IdentityDefault" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="JobManagement.DataModel.FK_People_AspNetUsers" FromRole="Person" ToRole="AspNetUsers" />
+          <NavigationProperty Name="WorksJournal" Relationship="JobManagement.DataModel.FK_JobWorkJournal_Person" FromRole="Person" ToRole="WorksJournal" />
+          <NavigationProperty Name="TravelExpenses" Relationship="JobManagement.DataModel.FK_TravelExpense_People" FromRole="Person" ToRole="TravelExpenses" />
+        </EntityType>
+        <EntityType Name="PurchaseJobs">
+          <Key>
+            <PropertyRef Name="PurchaseId" />
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="PurchaseId" Type="Int64" Nullable="false" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="InPercent" Type="Decimal" Precision="6" Scale="2" />
+        </EntityType>
+        <EntityType Name="Purchases">
+          <Key>
+            <PropertyRef Name="PurchaseId" />
+          </Key>
+          <Property Name="PurchaseId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BuyFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromDocType" Type="Int32" />
+          <Property Name="BuyFromDocNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromDocDate" Type="DateTime" Precision="0" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AmountNoVat" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Vat" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="TravelExpensePurchases" Relationship="JobManagement.DataModel.FK_TravelExpensePurchases_Purchase" FromRole="Purchases" ToRole="TravelExpensePurchases" />
+        </EntityType>
+        <EntityType Name="TravelExpenseAutoCode">
+          <Key>
+            <PropertyRef Name="PeopleId" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="PeopleId" Type="Int32" Nullable="false" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Prefix" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LastUsedNumber" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TravelExpenseJobs">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="InPercent" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <NavigationProperty Name="Jobs" Relationship="JobManagement.DataModel.FK_TravelExpenseJobs_Job" FromRole="TravelExpenseJobs" ToRole="Jobs" />
+          <NavigationProperty Name="TravelExpenses" Relationship="JobManagement.DataModel.FK_TravelExpenseJobs_TravelExpense" FromRole="TravelExpenseJobs" ToRole="TravelExpenses" />
+        </EntityType>
+        <EntityType Name="TravelExpenseLineCategories">
+          <Key>
+            <PropertyRef Name="TravelExpenseLineCategoryId" />
+          </Key>
+          <Property Name="TravelExpenseLineCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="UsePersonalCar" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TravelExpensesLines" Relationship="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpenseLineCategories" FromRole="TravelExpenseLineCategories" ToRole="TravelExpensesLines" />
+        </EntityType>
+        <EntityType Name="TravelExpensePurchases">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="PurchaseId" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PurchaseId" Type="Int64" Nullable="false" />
+          <Property Name="InPercent" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <NavigationProperty Name="Purchases" Relationship="JobManagement.DataModel.FK_TravelExpensePurchases_Purchase" FromRole="TravelExpensePurchases" ToRole="Purchases" />
+          <NavigationProperty Name="TravelExpenses" Relationship="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense" FromRole="TravelExpensePurchases" ToRole="TravelExpenses" />
+        </EntityType>
+        <EntityType Name="TravelExpenses">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Annotation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="PeopleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Person" Relationship="JobManagement.DataModel.FK_TravelExpense_People" FromRole="TravelExpenses" ToRole="Person" />
+          <NavigationProperty Name="TravelExpenseJobs" Relationship="JobManagement.DataModel.FK_TravelExpenseJobs_TravelExpense" FromRole="TravelExpenses" ToRole="TravelExpenseJobs" />
+          <NavigationProperty Name="TravelExpensePurchases" Relationship="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense" FromRole="TravelExpenses" ToRole="TravelExpensePurchases" />
+          <NavigationProperty Name="TravelExpenseStatus" Relationship="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus" FromRole="TravelExpenses" ToRole="TravelExpenseStatus" />
+          <NavigationProperty Name="TravelExpensesLines" Relationship="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpense" FromRole="TravelExpenses" ToRole="TravelExpensesLines" />
+        </EntityType>
+        <EntityType Name="TravelExpensesLines">
+          <Key>
+            <PropertyRef Name="TravelExpenseLineId" />
+          </Key>
+          <Property Name="TravelExpenseLineId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TravelExpenseCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TravelExpenseLineCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CarPlate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CarDescription" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="CarKmCost" Type="Decimal" Nullable="false" Precision="8" Scale="4" />
+          <Property Name="CarKm" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TravelExpenseLineCategories" Relationship="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpenseLineCategories" FromRole="TravelExpensesLines" ToRole="TravelExpenseLineCategories" />
+          <NavigationProperty Name="TravelExpenses" Relationship="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpense" FromRole="TravelExpensesLines" ToRole="TravelExpenses" />
+        </EntityType>
+        <EntityType Name="TravelExpenseStatus">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="Byte" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TravelExpenses" Relationship="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus" FromRole="TravelExpenseStatus" ToRole="TravelExpenses" />
+        </EntityType>
+        <EntityType Name="WorksJournal">
+          <Key>
+            <PropertyRef Name="WorkJournalId" />
+          </Key>
+          <Property Name="WorkJournalId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="WorkedHours" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="TaskWhere" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="Annotation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="JobTaskId" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PeopleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Jobs" Relationship="JobManagement.DataModel.FK_JobWorkJournal_Job" FromRole="WorksJournal" ToRole="Jobs" />
+          <NavigationProperty Name="JobTasks" Relationship="JobManagement.DataModel.FK_JobWorkJournal_JobTask" FromRole="WorksJournal" ToRole="JobTasks" />
+          <NavigationProperty Name="Person" Relationship="JobManagement.DataModel.FK_JobWorkJournal_Person" FromRole="WorksJournal" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="JobList">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="CustomerId" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="ExpectedIncome" />
+            <PropertyRef Name="ExpectedCost" />
+            <PropertyRef Name="ExpectedWorkHours" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="CustomerId" Type="Int64" Nullable="false" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="ExpectedIncome" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="ExpectedCost" Type="Decimal" Nullable="false" Precision="18" Scale="4" />
+          <Property Name="ExpectedWorkHours" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="TotalHours" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="StatusDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerName2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerFullName" Type="String" MaxLength="201" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="JobTotalPeopleWorkedHours">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="PeopleId" Type="Int32" Nullable="false" />
+          <Property Name="TotalHours" Type="Decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <EntityType Name="JobTotalWorkedHours">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="TotalHours" Type="Decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <EntityType Name="TravelExpenseJobsList">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="InPercent" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="InPercent" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="38" Scale="4" />
+          <Property Name="Status" Type="Byte" />
+          <Property Name="Amount" Type="Decimal" Precision="38" Scale="6" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TravelExpenseList">
+          <Key>
+            <PropertyRef Name="TravelExpenseCode" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Status" />
+          </Key>
+          <Property Name="TravelExpenseCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Annotation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="PeopleId" Type="Int32" />
+          <Property Name="FirstName" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BeginDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="Total" Type="Decimal" Precision="38" Scale="4" />
+        </EntityType>
+        <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+          <End Type="JobManagement.DataModel.AspNetRoles" Role="AspNetRoles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="JobManagement.DataModel.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <End Type="JobManagement.DataModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="JobManagement.DataModel.AspNetUserClaims" Role="AspNetUserClaims" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserClaims">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <End Type="JobManagement.DataModel.AspNetUsers" Role="AspNetUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="JobManagement.DataModel.AspNetUserLogins" Role="AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_People_AspNetUsers">
+          <End Type="JobManagement.DataModel.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
+          <End Type="JobManagement.DataModel.Person" Role="Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="IdentityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Job_Customer">
+          <End Type="JobManagement.DataModel.Customers" Role="Customers" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.Jobs" Role="Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Job_JobState">
+          <End Type="JobManagement.DataModel.JobStatus" Role="JobStatus" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.Jobs" Role="Jobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobStatus">
+              <PropertyRef Name="JobStateId" />
+            </Principal>
+            <Dependent Role="Jobs">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobWorkJournal_Job">
+          <End Type="JobManagement.DataModel.Jobs" Role="Jobs" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.WorksJournal" Role="WorksJournal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="WorksJournal">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseJobs_Job">
+          <End Type="JobManagement.DataModel.Jobs" Role="Jobs" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpenseJobs" Role="TravelExpenseJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="TravelExpenseJobs">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobWorkJournal_JobTask">
+          <End Type="JobManagement.DataModel.JobTasks" Role="JobTasks" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.WorksJournal" Role="WorksJournal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTasks">
+              <PropertyRef Name="JobTaskId" />
+            </Principal>
+            <Dependent Role="WorksJournal">
+              <PropertyRef Name="JobTaskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobWorkJournal_Person">
+          <End Type="JobManagement.DataModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.WorksJournal" Role="WorksJournal" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PeopleId" />
+            </Principal>
+            <Dependent Role="WorksJournal">
+              <PropertyRef Name="PeopleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpense_People">
+          <End Type="JobManagement.DataModel.Person" Role="Person" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpenses" Role="TravelExpenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PeopleId" />
+            </Principal>
+            <Dependent Role="TravelExpenses">
+              <PropertyRef Name="PeopleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpensePurchases_Purchase">
+          <End Type="JobManagement.DataModel.Purchases" Role="Purchases" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpensePurchases" Role="TravelExpensePurchases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Purchases">
+              <PropertyRef Name="PurchaseId" />
+            </Principal>
+            <Dependent Role="TravelExpensePurchases">
+              <PropertyRef Name="PurchaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseJobs_TravelExpense">
+          <End Type="JobManagement.DataModel.TravelExpenses" Role="TravelExpenses" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpenseJobs" Role="TravelExpenseJobs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenses">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Principal>
+            <Dependent Role="TravelExpenseJobs">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseLine_TravelExpenseLineCategories">
+          <End Type="JobManagement.DataModel.TravelExpenseLineCategories" Role="TravelExpenseLineCategories" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpensesLines" Role="TravelExpensesLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenseLineCategories">
+              <PropertyRef Name="TravelExpenseLineCategoryId" />
+            </Principal>
+            <Dependent Role="TravelExpensesLines">
+              <PropertyRef Name="TravelExpenseLineCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpensePurchases_TravelExpense">
+          <End Type="JobManagement.DataModel.TravelExpenses" Role="TravelExpenses" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpensePurchases" Role="TravelExpensePurchases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenses">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Principal>
+            <Dependent Role="TravelExpensePurchases">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpense_TravelExpenseStatus">
+          <End Type="JobManagement.DataModel.TravelExpenseStatus" Role="TravelExpenseStatus" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpenses" Role="TravelExpenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenseStatus">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="TravelExpenses">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelExpenseLine_TravelExpense">
+          <End Type="JobManagement.DataModel.TravelExpenses" Role="TravelExpenses" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.TravelExpensesLines" Role="TravelExpensesLines" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelExpenses">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Principal>
+            <Dependent Role="TravelExpensesLines">
+              <PropertyRef Name="TravelExpenseCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="upJobAdd_Result">
+          <Property Type="Int64" Name="JobId" Nullable="false" />
+          <Property Type="Int64" Name="CustomerId" Nullable="false" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="512" />
+          <Property Type="Decimal" Name="ExpectedIncome" Nullable="false" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="ExpectedCost" Nullable="false" Precision="18" Scale="4" />
+          <Property Type="Int32" Name="ExpectedWorkHours" Nullable="false" />
+          <Property Type="Byte" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="Year" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="upTravelExpenseAdd_Result">
+          <Property Type="String" Name="TravelExpenseCode" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="Date" Nullable="false" />
+          <Property Type="String" Name="Annotation" Nullable="true" />
+          <Property Type="Byte" Name="Status" Nullable="false" />
+          <Property Type="Int32" Name="PeopleId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="upOreMensiliLavorateGiornaliero_Result">
+          <Property Type="Int32" Name="ResId" Nullable="true" />
+          <Property Type="DateTime" Name="Date" Nullable="true" />
+          <Property Type="Decimal" Name="Ore" Nullable="true" Precision="5" Scale="2" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JobProfitabilityDataModelStoreContainer" CdmEntityContainer="JMContext">
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.AspNetRoles">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.AspNetUserClaims">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.AspNetUserLogins">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserRoles">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.AspNetUserRoles">
+              <MappingFragment StoreEntitySet="AspNetUserRoles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.AspNetUsers">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AutoNumberBase">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.AutoNumberBase">
+              <MappingFragment StoreEntitySet="AutoNumberBase">
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="LastUsedNumber" ColumnName="LastUsedNumber" />
+                <ScalarProperty Name="Element" ColumnName="Element" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.Customers">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="VATNumber" ColumnName="VATNumber" />
+                <ScalarProperty Name="FiscalCode" ColumnName="FiscalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Name2" ColumnName="Name2" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.Jobs">
+              <MappingFragment StoreEntitySet="Jobs">
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ExpectedFinishDate" ColumnName="ExpectedFinishDate" />
+                <ScalarProperty Name="ExpectedStartDate" ColumnName="ExpectedStartDate" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpectedWorkHours" ColumnName="ExpectedWorkHours" />
+                <ScalarProperty Name="ExpectedCost" ColumnName="ExpectedCost" />
+                <ScalarProperty Name="ExpectedIncome" ColumnName="ExpectedIncome" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobStatus">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.JobStatus">
+              <MappingFragment StoreEntitySet="JobStatus">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="JobStateId" ColumnName="JobStateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTasks">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.JobTasks">
+              <MappingFragment StoreEntitySet="JobTasks">
+                <ScalarProperty Name="NoWorkTask" ColumnName="NoWorkTask" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="JobTaskId" ColumnName="JobTaskId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Person">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="IdentityDefault" ColumnName="IdentityDefault" />
+                <ScalarProperty Name="CarKmCost" ColumnName="CarKmCost" />
+                <ScalarProperty Name="CarDescription" ColumnName="CarDescription" />
+                <ScalarProperty Name="CarPlate" ColumnName="CarPlate" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ActiveState" ColumnName="ActiveState" />
+                <ScalarProperty Name="HourCost" ColumnName="HourCost" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Contract" ColumnName="Contract" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="IdentityId" ColumnName="IdentityId" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseJobs">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.PurchaseJobs">
+              <MappingFragment StoreEntitySet="PurchaseJobs">
+                <ScalarProperty Name="InPercent" ColumnName="InPercent" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="PurchaseId" ColumnName="PurchaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Purchases">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.Purchases">
+              <MappingFragment StoreEntitySet="Purchases">
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Vat" ColumnName="Vat" />
+                <ScalarProperty Name="AmountNoVat" ColumnName="AmountNoVat" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BuyFromDocDate" ColumnName="BuyFromDocDate" />
+                <ScalarProperty Name="BuyFromDocNumber" ColumnName="BuyFromDocNumber" />
+                <ScalarProperty Name="BuyFromDocType" ColumnName="BuyFromDocType" />
+                <ScalarProperty Name="BuyFromCountry" ColumnName="BuyFromCountry" />
+                <ScalarProperty Name="BuyFromCity" ColumnName="BuyFromCity" />
+                <ScalarProperty Name="BuyFromName" ColumnName="BuyFromName" />
+                <ScalarProperty Name="PurchaseId" ColumnName="PurchaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenseAutoCode">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenseAutoCode">
+              <MappingFragment StoreEntitySet="TravelExpenseAutoCode">
+                <ScalarProperty Name="LastUsedNumber" ColumnName="LastUsedNumber" />
+                <ScalarProperty Name="Prefix" ColumnName="Prefix" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenseJobs">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenseJobs">
+              <MappingFragment StoreEntitySet="TravelExpenseJobs">
+                <ScalarProperty Name="InPercent" ColumnName="InPercent" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenseLineCategories">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenseLineCategories">
+              <MappingFragment StoreEntitySet="TravelExpenseLineCategories">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UsePersonalCar" ColumnName="UsePersonalCar" />
+                <ScalarProperty Name="TravelExpenseLineCategoryId" ColumnName="TravelExpenseLineCategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpensePurchases">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpensePurchases">
+              <MappingFragment StoreEntitySet="TravelExpensePurchases">
+                <ScalarProperty Name="InPercent" ColumnName="InPercent" />
+                <ScalarProperty Name="PurchaseId" ColumnName="PurchaseId" />
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenses">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenses">
+              <MappingFragment StoreEntitySet="TravelExpenses">
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpensesLines">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpensesLines">
+              <MappingFragment StoreEntitySet="TravelExpensesLines">
+                <ScalarProperty Name="CarKm" ColumnName="CarKm" />
+                <ScalarProperty Name="CarKmCost" ColumnName="CarKmCost" />
+                <ScalarProperty Name="CarDescription" ColumnName="CarDescription" />
+                <ScalarProperty Name="CarPlate" ColumnName="CarPlate" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TravelExpenseLineCategoryId" ColumnName="TravelExpenseLineCategoryId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+                <ScalarProperty Name="TravelExpenseLineId" ColumnName="TravelExpenseLineId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenseStatus">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenseStatus">
+              <MappingFragment StoreEntitySet="TravelExpenseStatus">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorksJournal">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.WorksJournal">
+              <MappingFragment StoreEntitySet="WorksJournal">
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+                <ScalarProperty Name="JobTaskId" ColumnName="JobTaskId" />
+                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
+                <ScalarProperty Name="TaskWhere" ColumnName="TaskWhere" />
+                <ScalarProperty Name="WorkedHours" ColumnName="WorkedHours" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="WorkJournalId" ColumnName="WorkJournalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobList">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.JobList">
+              <MappingFragment StoreEntitySet="JobList">
+                <ScalarProperty Name="CustomerFullName" ColumnName="CustomerFullName" />
+                <ScalarProperty Name="CustomerName2" ColumnName="CustomerName2" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="StatusDescription" ColumnName="StatusDescription" />
+                <ScalarProperty Name="TotalHours" ColumnName="TotalHours" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpectedWorkHours" ColumnName="ExpectedWorkHours" />
+                <ScalarProperty Name="ExpectedCost" ColumnName="ExpectedCost" />
+                <ScalarProperty Name="ExpectedIncome" ColumnName="ExpectedIncome" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTotalPeopleWorkedHours">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.JobTotalPeopleWorkedHours">
+              <MappingFragment StoreEntitySet="JobTotalPeopleWorkedHours">
+                <ScalarProperty Name="TotalHours" ColumnName="TotalHours" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTotalWorkedHours">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.JobTotalWorkedHours">
+              <MappingFragment StoreEntitySet="JobTotalWorkedHours">
+                <ScalarProperty Name="TotalHours" ColumnName="TotalHours" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenseJobsList">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenseJobsList">
+              <MappingFragment StoreEntitySet="TravelExpenseJobsList">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="InPercent" ColumnName="InPercent" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelExpenseList">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenseList">
+              <MappingFragment StoreEntitySet="TravelExpenseList">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="BeginDate" ColumnName="BeginDate" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="upCustomerDelete" FunctionName="JobProfitabilityDataModel.Store.upCustomerDelete" />
+          <FunctionImportMapping FunctionImportName="upJobAdd" FunctionName="JobProfitabilityDataModel.Store.upJobAdd">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobManagement.DataModel.upJobAdd_Result">
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ExpectedIncome" ColumnName="ExpectedIncome" />
+                <ScalarProperty Name="ExpectedCost" ColumnName="ExpectedCost" />
+                <ScalarProperty Name="ExpectedWorkHours" ColumnName="ExpectedWorkHours" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="upJobDelete" FunctionName="JobProfitabilityDataModel.Store.upJobDelete" />
+          <FunctionImportMapping FunctionImportName="upTravelExpenseAdd" FunctionName="JobProfitabilityDataModel.Store.upTravelExpenseAdd">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobManagement.DataModel.upTravelExpenseAdd_Result">
+                <ScalarProperty Name="TravelExpenseCode" ColumnName="TravelExpenseCode" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Annotation" ColumnName="Annotation" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="upTravelExpenseAddPurchase" FunctionName="JobProfitabilityDataModel.Store.upTravelExpenseAddPurchase" />
+          <FunctionImportMapping FunctionImportName="upOreMensiliLavorateGiornaliero" FunctionName="JobProfitabilityDataModel.Store.upOreMensiliLavorateGiornaliero">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="JobManagement.DataModel.upOreMensiliLavorateGiornaliero_Result">
+                <ScalarProperty Name="ResId" ColumnName="ResId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Ore" ColumnName="Ore" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Nessuno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

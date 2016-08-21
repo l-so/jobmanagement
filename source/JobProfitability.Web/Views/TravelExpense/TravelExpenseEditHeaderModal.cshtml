@@ -1,0 +1,73 @@
+﻿@model JobManagement.WebMvc.Models.TravelExpense.TravelExpenseEditHeaderModalModel
+<script type="text/javascript">
+    $(function () {
+        $('#dialogEditHeaderModal').dialog({
+            autoOpen: true,
+            width: 800,
+            resizable: false,
+            title: 'Edit Item Details',
+            modal: true,
+            buttons: {
+                "Salva": updateDialogEditHeaderModal,
+                Cancel: cancelDialogEditHeaderModal
+            }
+        });
+        if ($('#dialogEditHeaderModalDate').val() != null) {
+            var d = new Date($('#dialogEditHeaderModalDate').val());
+            $('#dialogEditHeaderModalDataSpan').text(zzsDateToItalianString(d));
+        }
+    });
+
+    function updateDialogEditHeaderModal() {
+        var sendData = new Object();
+        sendData.Operation = "Update";
+        sendData.TravelExpenseCode = $('#dialogEditHeaderModalId').val();
+        sendData.PeopleId = $('#dialogEditHeaderModalPeople').val();
+        if (parseInt(sendData.PeopleId) < 1) {
+            alert('La persona è obbligatoria!');
+            return;
+        }
+        sendData.TypeId = $('#dialogEditHeaderModalType').val();
+        sendData.Description = $('#dialogEditHeaderModalDescription').val();
+        sendData.Date = $('#dialogEditHeaderModalDate').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/TravelExpenseSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if (result.ResultStatus == "OK") {
+                    cancelDialogEditHeaderModal();
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage)
+                }
+            }
+        });
+    }
+    function cancelDialogEditHeaderModal() {
+        $('#dialogEditHeaderModalId').val('');
+        $('#dialogEditHeaderModalPeople').val('');
+        $('#dialogEditHeaderModalType').val('');
+        $('#dialogEditHeaderModalDescription').val('');
+        $('#dialogEditHeaderModalPeriodoSpan').text('');
+        $('#dialogEditHeaderModalDate').val('');
+        $('#dialogEditHeaderModalDataSpan').text('');
+        $('#dialogEditHeaderModal').dialog("close");
+    }
+</script>
+<div id="dialogEditHeaderModal" title="Crea/modifica nota spese">
+    <input type="hidden" value="@Html.Raw(Model.TravelExpense.TravelExpenseCode)" id="dialogEditHeaderModalId" name="dialogEditHeaderModalId" />
+    <table>
+        <tr><td>Codice</td><td>@Html.Raw(Model.TravelExpense.TravelExpenseCode)</td></tr>
+        <tr><td>Persona</td><td>@Html.DropDownList("dialogEditHeaderModalPeople", Model.DDLPeople)</td></tr>
+        <tr><td>Tipo</td><td>@Html.DropDownList("dialogEditHeaderModalType", Model.DDLType)</td></tr>
+        <tr><td>Data</td><td><span id="dialogEditHeaderModalDataSpan"></span><input type="hidden" value="@Html.Raw(string.Format("{0:yyyy-MM-dd}",Model.TravelExpense.Date))" id="dialogEditHeaderModalDate" name="dialogEditHeaderModalDate" /></td></tr>
+        <tr><td colspan="2">Descrizione:</td></tr>
+        <tr><td colspan="2"><textarea rows="5" cols="80" id="dialogEditHeaderModalDescription"></textarea></td></tr>
+    </table>
+</div>
