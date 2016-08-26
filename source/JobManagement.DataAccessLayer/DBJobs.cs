@@ -45,7 +45,7 @@ namespace JobManagement.DataAccessLayer
             {
                 using (EFDataModel.JMContext db = new EFDataModel.JMContext())
                 {
-                    result = db.WorksJournal.Include("Jobs").Include(jw => jw.Person).Include(jw => jw.Jobs.Customers).Include("JobTask").Where(jl => (jl.Date >= beginDate && jl.Date <= endDate) && (jl.PeopleId == peopleId || peopleId == -1) && (jl.Jobs.CustomerId == customerId || customerId == -1)).OrderByDescending(jl => jl.Date).ToList();
+                    result = db.WorksJournal.Include(x => x.Jobs).Include(jw => jw.Person).Include(jw => jw.Jobs.Customers).Include(x => x.JobTasks).Where(jl => (jl.Date >= beginDate && jl.Date <= endDate) && (jl.PeopleId == peopleId || peopleId == -1) && (jl.Jobs.CustomerId == customerId || customerId == -1)).OrderByDescending(jl => jl.Date).ToList();
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)

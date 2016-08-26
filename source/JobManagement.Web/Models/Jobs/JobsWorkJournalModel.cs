@@ -13,6 +13,7 @@ namespace JobManagement.WebMvc.Models.Jobs
         public EFDataModel.Person People { get; private set;}
         public EFDataModel.Customers Customer { get; private set;}
         public List<EFDataModel.WorksJournal> WorkJournalList { get; private set;}
+        public List<WorkJournalListElement> WorkList { get; private set; }
         public IEnumerable<SelectListItem> DDLPeopleList { get; private set; }
         public IEnumerable<SelectListItem> DDLCustomerList { get; private set; }
         public void LoadModelData(EFDataModel.Person people, long? filterCustomerId, DateTime? fromDate, DateTime? toDate)
@@ -33,53 +34,27 @@ namespace JobManagement.WebMvc.Models.Jobs
 
             this.DDLCustomerList = DataAccessLayer.DBCustomers.getCustomerSelectListItem((filterCustomerId.HasValue ? filterCustomerId.Value : -1));
             this.DDLPeopleList = DataAccessLayer.DBPeople.getPeopleDDL((this.People == null ? -1 : this.People.PeopleId));
-            LoadWorkJournalData();
+            LoadWorks();
         }
-        private void LoadWorkJournalData() 
+        private void LoadWorks()
         {
-            List<EFDataModel.WorksJournal> ttt = DataAccessLayer.DBJobs.getWorksJournal((this.People == null ? -1 : this.People.PeopleId), (this.Customer == null ? -1 : this.Customer.CustomerId), this.BeginDate, this.EndDate);
-            this.WorkJournalList = new List<EFDataModel.WorksJournal>();
+            List<EFDataModel.WorksJournal> _works = DataAccessLayer.DBJobs.getWorksJournal((this.People == null ? -1 : this.People.PeopleId), (this.Customer == null ? -1 : this.Customer.CustomerId), this.BeginDate, this.EndDate);
+            this.WorkList = new List<WorkJournalListElement>();
             // Add not worked day
-            System.DateTime d = this.BeginDate;
-            EFDataModel.WorksJournal t = null;
-            bool addNew = true;
-            while (d.Date.Date <= this.EndDate.Date) 
+            System.DateTime d = this.BeginDate.Date;
+            WorkJournalListElement e = null;
+            while (d.Date <= this.EndDate.Date)
             {
-                foreach (var w in ttt)
-                {
-                    if (w.Date.Date == d.Date.Date)
-                    {
-                        addNew = false;
-                        t = w;
-                        break;
-                    }
-                }
-                if (addNew)
-                {
-                    t = new EFDataModel.WorksJournal();
-                    t.Date = d;
-                    t.WorkJournalId = 0;
-                    t.Person = null;
-                    t.Jobs = null;
-                    t.TaskWhere = null;
-                    t.Annotation = null;
-                    t.JobTasks = null;
-                    t.WorkedHours = 0;
-                    t.JobId = 0;
-                    t.JobTaskId = null;
-                    t.PeopleId = 0;
-                    this.WorkJournalList.Add(t);
-                }
-                else
-                {
-                    this.WorkJournalList.Add(t);
-                }
-                addNew = true;
+                e = new WorkJournalListElement();
+                e.Date = d.Date;
+                e.Works = new List<EFDataModel.WorksJournal>();
+                e.Works = _works.Where(w => w.Date == e.Date).ToList();
+                this.WorkList.Add(e);
                 d = d.AddDays(1);
             }
 
-}
-        public static string getListRowStyle(EFDataModel.WorksJournal el, int pos)
+        }
+        public static string getListRowStyle(WorkJournalListElement el, int pos)
         {
             string _r = "trStd";
             if ((pos % 2) == 0)
@@ -101,5 +76,10 @@ namespace JobManagement.WebMvc.Models.Jobs
             }
             return _r;
         }
+    }
+    public class WorkJournalListElement
+    {
+        public System.DateTime Date { get; set; }
+        public List<EFDataModel.WorksJournal> Works { get; set; }
     }
 }

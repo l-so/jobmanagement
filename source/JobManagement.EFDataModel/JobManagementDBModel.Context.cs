@@ -11,13 +11,14 @@ namespace JobManagement.EFDataModel
 {
     using System;
     using System.Data.Entity;
-    using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Infrastructure;
-
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
+    
     public partial class JMContext : DbContext
     {
         public JMContext()
-            : base("name=JobManagementJMContextConnectionString")
+            : base("name=JMContext")
         {
         }
     
@@ -52,6 +53,10 @@ namespace JobManagement.EFDataModel
         public virtual DbSet<JobTotalWorkedHours> JobTotalWorkedHours { get; set; }
         public virtual DbSet<TravelExpenseJobsList> TravelExpenseJobsList { get; set; }
         public virtual DbSet<TravelExpenseList> TravelExpenseList { get; set; }
+        public virtual DbSet<GLAccount> GLAccount { get; set; }
+        public virtual DbSet<GeneralJournalLines> GeneralJournalLines { get; set; }
+        public virtual DbSet<GenerlaJournalLineEntries> GenerlaJournalLineEntries { get; set; }
+        public virtual DbSet<PurchaseInvoices> PurchaseInvoices { get; set; }
     
         public virtual int upCustomerDelete(Nullable<int> customerId)
         {
@@ -197,6 +202,15 @@ namespace JobManagement.EFDataModel
                 new ObjectParameter("BeginDate", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upOreMensiliLavorateGiornaliero_Result>("upOreMensiliLavorateGiornaliero", peopleIdParameter, beginDateParameter);
+        }
+    
+        public virtual int upPostTravelExpense(string travelExpenseCode)
+        {
+            var travelExpenseCodeParameter = travelExpenseCode != null ?
+                new ObjectParameter("TravelExpenseCode", travelExpenseCode) :
+                new ObjectParameter("TravelExpenseCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upPostTravelExpense", travelExpenseCodeParameter);
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace JobManagement.WebMvc.Controllers.api
 {
+    [Authorize]
     public class TravelExpenseLineSvcController : ApiController
     {
         [AcceptVerbs("GET")]

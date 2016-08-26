@@ -84,6 +84,39 @@
           <Property Name="VATNumber" Type="nvarchar" MaxLength="30" />
           <Property Name="Status" Type="tinyint" />
         </EntityType>
+        <EntityType Name="GeneralJournalLines">
+          <Key>
+            <PropertyRef Name="GeneralJournalLineId" />
+          </Key>
+          <Property Name="GeneralJournalLineId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="LineNumber" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="75" Nullable="false" />
+          <Property Name="DocumentReference" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Type" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="GenerlaJournalLineEntries">
+          <Key>
+            <PropertyRef Name="GenerlaJournalLineEntryId" />
+          </Key>
+          <Property Name="GenerlaJournalLineEntryId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GenerlaJournalLineId" Type="bigint" Nullable="false" />
+          <Property Name="Position" Type="int" Nullable="false" />
+          <Property Name="GLAccountCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DebitCredit" Type="nchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GLAccount">
+          <Key>
+            <PropertyRef Name="GLAccountCode" />
+          </Key>
+          <Property Name="GLAccountCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Type" Type="nchar" MaxLength="1" />
+          <Property Name="SubType" Type="nchar" MaxLength="2" />
+          <Property Name="BeginTotal" Type="nvarchar" MaxLength="20" />
+          <Property Name="EndTotal" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="Jobs">
           <Key>
             <PropertyRef Name="JobId" />
@@ -135,6 +168,28 @@
           <Property Name="CarDescription" Type="nvarchar" MaxLength="75" />
           <Property Name="CarKmCost" Type="decimal" Precision="8" Scale="4" Nullable="false" />
           <Property Name="IdentityDefault" Type="bit" Nullable="false" />
+          <Property Name="DebitAccount" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreditAccount" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="PurchaseInvoices">
+          <Key>
+            <PropertyRef Name="PurchaseInvoiceId" />
+          </Key>
+          <Property Name="PurchaseInvoiceId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BuyFromName" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyFromCity" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyFromCountry" Type="nvarchar" MaxLength="100" />
+          <Property Name="BuyFromDocType" Type="int" />
+          <Property Name="BuyFromDocNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="BuyFromDocDate" Type="date" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AmountNoVat" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Vat" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="DueDate" Type="date" />
+          <Property Name="GLAccountCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="WhoPayId" Type="int" Nullable="false" />
+          <Property Name="AmountPaid" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="PurchaseJobs">
           <Key>
@@ -207,6 +262,8 @@
           <Property Name="Annotation" Type="nvarchar(max)" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="PeopleId" Type="int" Nullable="false" />
+          <Property Name="PostDate" Type="date" />
+          <Property Name="PostLine" Type="int" />
         </EntityType>
         <EntityType Name="TravelExpensesLines">
           <Key>
@@ -367,6 +424,18 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             </Principal>
             <Dependent Role="AspNetUserRoles">
               <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GenerlaJournalLineEntries_GeneralJournalLines">
+          <End Role="GeneralJournalLines" Type="Self.GeneralJournalLines" Multiplicity="1" />
+          <End Role="GenerlaJournalLineEntries" Type="Self.GenerlaJournalLineEntries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeneralJournalLines">
+              <PropertyRef Name="GeneralJournalLineId" />
+            </Principal>
+            <Dependent Role="GenerlaJournalLineEntries">
+              <PropertyRef Name="GenerlaJournalLineId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -538,6 +607,9 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="upPostTravelExpense" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="jm">
+          <Parameter Name="TravelExpenseCode" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="upCustomerDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="JobManagement">
           <Parameter Name="customerId" Type="int" Mode="In" />
         </Function>
@@ -587,10 +659,14 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AutoNumberBase" EntityType="Self.AutoNumberBase" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="GeneralJournalLines" EntityType="Self.GeneralJournalLines" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="GenerlaJournalLineEntries" EntityType="Self.GenerlaJournalLineEntries" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="GLAccount" EntityType="Self.GLAccount" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="JobStatus" EntityType="Self.JobStatus" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="JobTasks" EntityType="Self.JobTasks" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="Person" EntityType="Self.Person" Schema="JobManagement" store:Type="Tables" />
+          <EntitySet Name="PurchaseInvoices" EntityType="Self.PurchaseInvoices" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="PurchaseJobs" EntityType="Self.PurchaseJobs" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="Purchases" EntityType="Self.Purchases" Schema="JobManagement" store:Type="Tables" />
           <EntitySet Name="TravelExpenseAutoCode" EntityType="Self.TravelExpenseAutoCode" Schema="JobManagement" store:Type="Tables" />
@@ -670,6 +746,10 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GenerlaJournalLineEntries_GeneralJournalLines" Association="Self.FK_GenerlaJournalLineEntries_GeneralJournalLines">
+            <End Role="GeneralJournalLines" EntitySet="GeneralJournalLines" />
+            <End Role="GenerlaJournalLineEntries" EntitySet="GenerlaJournalLineEntries" />
           </AssociationSet>
           <AssociationSet Name="FK_Job_Customer" Association="Self.FK_Job_Customer">
             <End Role="Customers" EntitySet="Customers" />
@@ -868,6 +948,17 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <Parameter Name="PeopleId" Mode="In" Type="Int32" />
             <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="GLAccount" EntityType="JobManagement.DataModel.GLAccount" />
+          <FunctionImport Name="upPostTravelExpense">
+          <Parameter Name="TravelExpenseCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="GeneralJournalLines" EntityType="JobManagement.DataModel.GeneralJournalLines" />
+          <EntitySet Name="GenerlaJournalLineEntries" EntityType="JobManagement.DataModel.GenerlaJournalLineEntries" />
+          <EntitySet Name="PurchaseInvoices" EntityType="JobManagement.DataModel.PurchaseInvoices" />
+          <AssociationSet Name="FK_GenerlaJournalLineEntries_GeneralJournalLines" Association="JobManagement.DataModel.FK_GenerlaJournalLineEntries_GeneralJournalLines">
+            <End Role="GeneralJournalLines" EntitySet="GeneralJournalLines" />
+            <End Role="GenerlaJournalLineEntries" EntitySet="GenerlaJournalLineEntries" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -1016,6 +1107,8 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <NavigationProperty Name="AspNetUsers" Relationship="JobManagement.DataModel.FK_People_AspNetUsers" FromRole="Person" ToRole="AspNetUsers" />
           <NavigationProperty Name="WorksJournal" Relationship="JobManagement.DataModel.FK_JobWorkJournal_Person" FromRole="Person" ToRole="WorksJournal" />
           <NavigationProperty Name="TravelExpenses" Relationship="JobManagement.DataModel.FK_TravelExpense_People" FromRole="Person" ToRole="TravelExpenses" />
+          <Property Name="DebitAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreditAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PurchaseJobs">
           <Key>
@@ -1099,6 +1192,8 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <NavigationProperty Name="TravelExpensePurchases" Relationship="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense" FromRole="TravelExpenses" ToRole="TravelExpensePurchases" />
           <NavigationProperty Name="TravelExpenseStatus" Relationship="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus" FromRole="TravelExpenses" ToRole="TravelExpenseStatus" />
           <NavigationProperty Name="TravelExpensesLines" Relationship="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpense" FromRole="TravelExpenses" ToRole="TravelExpensesLines" />
+          <Property Name="PostDate" Type="DateTime" Precision="0" />
+          <Property Name="PostLine" Type="Int32" />
         </EntityType>
         <EntityType Name="TravelExpensesLines">
           <Key>
@@ -1449,6 +1544,73 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Property Type="DateTime" Name="Date" Nullable="true" />
           <Property Type="Decimal" Name="Ore" Nullable="true" Precision="5" Scale="2" />
         </ComplexType>
+        <EntityType Name="GLAccount">
+          <Key>
+            <PropertyRef Name="GLAccountCode" />
+          </Key>
+          <Property Name="GLAccountCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="SubType" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="BeginTotal" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EndTotal" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="GeneralJournalLines">
+          <Key>
+            <PropertyRef Name="GeneralJournalLineId" />
+          </Key>
+          <Property Name="GeneralJournalLineId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LineNumber" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentReference" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="GenerlaJournalLineEntries" Relationship="JobManagement.DataModel.FK_GenerlaJournalLineEntries_GeneralJournalLines" FromRole="GeneralJournalLines" ToRole="GenerlaJournalLineEntries" />
+        </EntityType>
+        <EntityType Name="GenerlaJournalLineEntries">
+          <Key>
+            <PropertyRef Name="GenerlaJournalLineEntryId" />
+          </Key>
+          <Property Name="GenerlaJournalLineEntryId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GenerlaJournalLineId" Type="Int64" Nullable="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="GLAccountCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="DebitCredit" Type="String" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="GeneralJournalLines" Relationship="JobManagement.DataModel.FK_GenerlaJournalLineEntries_GeneralJournalLines" FromRole="GenerlaJournalLineEntries" ToRole="GeneralJournalLines" />
+        </EntityType>
+        <EntityType Name="PurchaseInvoices">
+          <Key>
+            <PropertyRef Name="PurchaseInvoiceId" />
+          </Key>
+          <Property Name="PurchaseInvoiceId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BuyFromName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromCity" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromCountry" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromDocType" Type="Int32" />
+          <Property Name="BuyFromDocNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="BuyFromDocDate" Type="DateTime" Precision="0" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AmountNoVat" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Vat" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Total" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="GLAccountCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="WhoPayId" Type="Int32" Nullable="false" />
+          <Property Name="AmountPaid" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_GenerlaJournalLineEntries_GeneralJournalLines">
+          <End Type="JobManagement.DataModel.GeneralJournalLines" Role="GeneralJournalLines" Multiplicity="1" />
+          <End Type="JobManagement.DataModel.GenerlaJournalLineEntries" Role="GenerlaJournalLineEntries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GeneralJournalLines">
+              <PropertyRef Name="GeneralJournalLineId" />
+            </Principal>
+            <Dependent Role="GenerlaJournalLineEntries">
+              <PropertyRef Name="GenerlaJournalLineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1577,6 +1739,8 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <EntitySetMapping Name="Person">
             <EntityTypeMapping TypeName="JobManagement.DataModel.Person">
               <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="CreditAccount" ColumnName="CreditAccount" />
+                <ScalarProperty Name="DebitAccount" ColumnName="DebitAccount" />
                 <ScalarProperty Name="IdentityDefault" ColumnName="IdentityDefault" />
                 <ScalarProperty Name="CarKmCost" ColumnName="CarKmCost" />
                 <ScalarProperty Name="CarDescription" ColumnName="CarDescription" />
@@ -1661,6 +1825,8 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <EntitySetMapping Name="TravelExpenses">
             <EntityTypeMapping TypeName="JobManagement.DataModel.TravelExpenses">
               <MappingFragment StoreEntitySet="TravelExpenses">
+                <ScalarProperty Name="PostLine" ColumnName="PostLine" />
+                <ScalarProperty Name="PostDate" ColumnName="PostDate" />
                 <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Annotation" ColumnName="Annotation" />
@@ -1814,6 +1980,64 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="GLAccount">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.GLAccount">
+              <MappingFragment StoreEntitySet="GLAccount">
+                <ScalarProperty Name="EndTotal" ColumnName="EndTotal" />
+                <ScalarProperty Name="BeginTotal" ColumnName="BeginTotal" />
+                <ScalarProperty Name="SubType" ColumnName="SubType" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="GLAccountCode" ColumnName="GLAccountCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="upPostTravelExpense" FunctionName="JobProfitabilityDataModel.Store.upPostTravelExpense" />
+          <EntitySetMapping Name="GeneralJournalLines">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.GeneralJournalLines">
+              <MappingFragment StoreEntitySet="GeneralJournalLines">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DocumentReference" ColumnName="DocumentReference" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LineNumber" ColumnName="LineNumber" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="GeneralJournalLineId" ColumnName="GeneralJournalLineId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GenerlaJournalLineEntries">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.GenerlaJournalLineEntries">
+              <MappingFragment StoreEntitySet="GenerlaJournalLineEntries">
+                <ScalarProperty Name="DebitCredit" ColumnName="DebitCredit" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GLAccountCode" ColumnName="GLAccountCode" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="GenerlaJournalLineId" ColumnName="GenerlaJournalLineId" />
+                <ScalarProperty Name="GenerlaJournalLineEntryId" ColumnName="GenerlaJournalLineEntryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchaseInvoices">
+            <EntityTypeMapping TypeName="JobManagement.DataModel.PurchaseInvoices">
+              <MappingFragment StoreEntitySet="PurchaseInvoices">
+                <ScalarProperty Name="AmountPaid" ColumnName="AmountPaid" />
+                <ScalarProperty Name="WhoPayId" ColumnName="WhoPayId" />
+                <ScalarProperty Name="GLAccountCode" ColumnName="GLAccountCode" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Vat" ColumnName="Vat" />
+                <ScalarProperty Name="AmountNoVat" ColumnName="AmountNoVat" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="BuyFromDocDate" ColumnName="BuyFromDocDate" />
+                <ScalarProperty Name="BuyFromDocNumber" ColumnName="BuyFromDocNumber" />
+                <ScalarProperty Name="BuyFromDocType" ColumnName="BuyFromDocType" />
+                <ScalarProperty Name="BuyFromCountry" ColumnName="BuyFromCountry" />
+                <ScalarProperty Name="BuyFromCity" ColumnName="BuyFromCity" />
+                <ScalarProperty Name="BuyFromName" ColumnName="BuyFromName" />
+                <ScalarProperty Name="PurchaseInvoiceId" ColumnName="PurchaseInvoiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

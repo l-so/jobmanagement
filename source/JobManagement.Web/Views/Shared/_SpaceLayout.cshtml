@@ -62,35 +62,42 @@
                         <img alt="Brand" src="~/assets/image/LogoOrrizontale.png" width="96" height="24">
                     </a>
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("HOME", "Index", "Home")</li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commesse <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Persone <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#" id="NavBarAddJobWorkJournalLine" name="NavBarAddJobWorkJournalLine">Nuovo lavoro svolto...</a></li>
                                 <li>@Html.ActionLink("Elenco lavoro svolto", "JobsWorkJournal", "Jobs")</li>
                                 <li role="separator" class="divider"></li>
+                                <li><a href="#" id="NavBarAddTravelExpense" name="NavBarAddTravelExpense">Nuovo rimborso..</a></li>
+                                <li>@Html.ActionLink("Rimborsi spese", "Index", "TravelExpense")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Commesse <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+                            <ul class="dropdown-menu">
                                 <li><a href="#" id="NavBarAddJob" name="NavBarAddJob">Nuovo commessa...</a></li>
                                 <li>@Html.ActionLink("Elenco commesse", "Index", "Jobs")</li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#" id="NavBarAddCustomer" name="NavBarAddCustomer">Nuovo cliente..</a></li>
-                                <li>@Html.ActionLink("Clienti", "Index", "Customer")</li>
-                                <li role="separator" class="divider"></li>
-                               
+                                <li>@Html.ActionLink("Clienti", "Index", "Customer")</li>                              
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione finanziaria<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#" id="NavBarAddTravelExpense" name="NavBarAddTravelExpense">Nuovo rimborso..</a></li>
-                                <li>@Html.ActionLink("Rimborsi spese", "Index", "TravelExpense")</li>
-                                <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Nuovo ordine di acquisto...", "ModalPurchaseOrder", "Purchases")</li>
                                 <li>@Html.ActionLink("Nuovo acquisto...", "Edit", "Purchases")</li>
                                 <li>@Html.ActionLink("Acquisti", "Index", "Purchases")</li>
                                 <li role="separator" class="divider"></li>
-                                <li>@Html.ActionLink("Fatture", "Index", "Invoices")</li>
+                                <li>@Html.ActionLink("Nuova fattura di vendita...", "Edit", "Invoices")</li>
+                                <li>@Html.ActionLink("Fatture di vendita", "Index", "Invoices")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Incassi/Pagamenti", "Index", "ReceipsAndPayments")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Contabilità<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Piano dei conti", "Index", "GL")</li>
                             </ul>
                         </li>
                         @if (Request.IsAuthenticated)

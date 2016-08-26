@@ -24,6 +24,7 @@
                 id = null;
             }
         }
+        $('#modal-placeholder').empty();
         if (id != null) {
             $('#modal-placeholder').load('@Url.Content("~/AppUser/ModalAppUserEdit")/' + id);
         } else {
@@ -32,12 +33,12 @@
     }
     function resetUserPassword(btn) {
         var id = btn.getAttribute("data-id");
-        alert('Reset ' + id);
         if (id != null) {
             if (id.trim() == '') {
                 id = null;
             }
         }
+        $('#modal-placeholder').empty();
         if (id != null) {
             $('#modal-placeholder').load('@Url.Content("~/AppUser/ModalResetPassword")/' + id);
         } else {

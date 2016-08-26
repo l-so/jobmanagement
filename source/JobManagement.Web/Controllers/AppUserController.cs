@@ -10,7 +10,7 @@ namespace JobManagement.WebMvc.Controllers
     [Authorize]
     public class AppUserController : Controller
     {
-        // GET: AppUser
+        [Authorize(Roles = "ADMIN")]
         public ActionResult Index()
         {
             Models.AppUser.AppUserIndexModel model = new Models.AppUser.AppUserIndexModel();
@@ -32,7 +32,7 @@ namespace JobManagement.WebMvc.Controllers
             Identity.AppUser usr = Identity.IdentityHelper.Create(UserName,Email,Passwd);
             return RedirectToAction("Index");
         }
-        [HttpPost]
+
         [HttpGet]
         [OutputCache(Duration = 0, VaryByParam = "none", NoStore = true)]
         public ActionResult ModalResetPassword(string id)

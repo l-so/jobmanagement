@@ -28,6 +28,20 @@ namespace JobManagement.WebMvc.Controllers
             model.TEFilterMonth = tefm;
             model.TEFilterYear = tefy;
             model.TEFilterPeopleId = tefp;
+            if (model.TravelExpense.Status == EFDataModel.TravelExpenses.STATUS_BOZZA)
+            {
+                return View(model);
+            } else  {
+                return RedirectToAction("Display", new { id = id, tefm = tefm, tefy = tefy, tefp = tefp });
+            }
+        }
+        public ActionResult Display(string id, int tefm, int tefy, int tefp)
+        {
+            Models.TravelExpense.TravelExpenseDisplayModel model = new Models.TravelExpense.TravelExpenseDisplayModel();
+            model.LoadData(id);
+            model.TEFilterMonth = tefm;
+            model.TEFilterYear = tefy;
+            model.TEFilterPeopleId = tefp;
             return View(model);
         }
         
@@ -45,9 +59,12 @@ namespace JobManagement.WebMvc.Controllers
             return PartialView(model);
         }
 
-        public ActionResult GLPost(string id)
+        public ActionResult PostTravelExpenses(string id)
         {
-            JobManagement.WebMvc.Models.TravelExpense.TravelExpenseGLPostModel model = new Models.TravelExpense.TravelExpenseGLPostModel();
+            int y = int.Parse(id.Substring(0, 4));
+            int m = int.Parse(id.Substring(4, 2));
+            int p = int.Parse(id.Substring(6));
+            JobManagement.WebMvc.Models.TravelExpense.TravelExpensePostTravelExpensesModel model = new Models.TravelExpense.TravelExpensePostTravelExpensesModel();
             return View(model);
         }
     }

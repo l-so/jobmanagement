@@ -21,7 +21,8 @@
                             <table style="width:100%;">
                                 <tr><td style="padding-top:6px;width:120px;">Nome utente</td><td style="padding-top:6px;padding-left:6px;"><input type="text" id="userUserName" name="userUserName" maxlength="255" value="@Html.Raw(Model.User.UserName)" style="width:100%;" /></td></tr>
                                 <tr><td style="padding-top:6px;width:120px;">Email</td><td style="padding-top:6px;padding-left:6px;"><input type="text" id="userEmail" name="userEmail" maxlength="255" value="@Html.Raw(Model.User.Email)" style="width:100%;" /></td></tr>
-                                @if (string.IsNullOrWhiteSpace(Model.User.Id)) 
+                                <tr><td style="padding-top:6px;width:120px;">Ruolo</td><td style="padding-top:6px;padding-left:6px;"><select id="userRole" name="userRole"><option value="ADMIN" @Html.Raw(Model.UserRoles.Contains("ADMIN") ? "selected" : string.Empty)>Amministratore</option><option value="PEOPLE" @Html.Raw(Model.UserRoles.Contains("PEOPLE") ? "selected" : string.Empty)>Persona</option></select></td></tr>
+                                 @if (string.IsNullOrWhiteSpace(Model.User.Id)) 
                                 { 
                                 <text>
                                 <tr><td style="padding-top:6px;width:120px;">Password</td><td style="padding-top:6px;padding-left:6px;"><input type="password" id="userPasswd" name="userPasswd" maxlength="255" style="width:100%;" /></td></tr>
@@ -29,13 +30,6 @@
                                 </text>
                                 }
                              </table>
-                        </td>
-                        <td style="vertical-align:top;padding-left:12px;">
-                            <table style="width:100%;">
-                                <tr><td><input type="radio" id="roleAdmin" name="userRole" @Html.Raw(Model.UserRoles.Contains("ADMIN") ? "checked" : string.Empty) /></td><td>Amministratore</td></tr>
-                                <tr><td><input type="radio" id="roleManager" name="userRole" @Html.Raw(Model.UserRoles.Contains("MANAGER") ? "checked" : string.Empty) /></td><td>Responsabile commessa</td></tr>
-                                <tr><td><input type="radio" id="roleResource" name="userRole" @Html.Raw(Model.UserRoles.Contains("RESOURCE") ? "checked" : string.Empty) /></td><td>Risorsa</td></tr>
-                            </table>
                         </td>
                     </tr>
                  </table>
@@ -82,6 +76,7 @@
     function ModalAppUserSave()
     {
         var sendData = new Object();
+        sendData.Operation = "Edit";
         sendData.UserId = $('#ModalAppUserId').val();
         sendData.UserName = $('#userUserName').val();
         sendData.Email = $('#userEmail').val();
@@ -97,22 +92,11 @@
                 return;
             }
         }
-        var r1 = $('#roleAdmin').prop('checked');
-        if (r1) {
-            sendData.UserRole = 'ADMIN';
-        }
-        var r2 = $('#roleManager').prop('checked');
-        if (r2) {
-            sendData.UserRole = 'MANAGER';
-        }
-        var r3 = $('#roleResource').prop('checked');
-        if (r3) {
-            sendData.UserRole = 'USER';
-        }
-        
+        sendData.UserRole = $("#userRole").val();
+
         $.ajax({
             method: "POST",
-            url: '@Url.Action("ModalEditUser", "AppUser")',
+            url: '@Url.Content("~/api/AppUserSvc")',
             data: JSON.stringify(sendData),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -120,7 +104,13 @@
                 alert(response.responseText);
             },
             success: function (result) {
-                $('#dialogModalAppUserRstPwd').modal('hide');
+                if (result.ResultStatus == "OK") {
+                    $('#dialogModalAppUserEdit').modal('hide');
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage)
+                }
+                
             }
         });
     }

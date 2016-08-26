@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace JobManagement.WebMvc.Models.TravelExpense
+namespace JobManagement.WebMvc.Models.GL
 {
-    public class TravelExpenseGLPostModel
+    public class GLShowAccountModel
     {
     }
 }

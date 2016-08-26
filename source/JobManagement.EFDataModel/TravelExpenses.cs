@@ -27,6 +27,8 @@ namespace JobManagement.EFDataModel
         public string Annotation { get; set; }
         public byte Status { get; set; }
         public int PeopleId { get; set; }
+        public Nullable<System.DateTime> PostDate { get; set; }
+        public Nullable<int> PostLine { get; set; }
     
         public virtual Person Person { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

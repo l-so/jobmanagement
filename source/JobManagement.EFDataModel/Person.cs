@@ -35,6 +35,8 @@ namespace JobManagement.EFDataModel
         public string CarDescription { get; set; }
         public decimal CarKmCost { get; set; }
         public bool IdentityDefault { get; set; }
+        public string DebitAccount { get; set; }
+        public string CreditAccount { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

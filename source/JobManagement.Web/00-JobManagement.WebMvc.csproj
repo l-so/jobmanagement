@@ -162,7 +162,13 @@
     <Content Include="App_Code\api\PeopleSvcController.cs" />
     <Content Include="App_Code\api\PurchasesSvcController.cs" />
     <Content Include="App_Code\api\InvoicesSvcController.cs" />
+    <Content Include="App_Code\api\AppUserSvcController.cs" />
+    <Compile Include="Controllers\GLController.cs" />
+    <Compile Include="Controllers\InvoicesController.cs" />
     <Compile Include="Controllers\PurchasesController.cs" />
+    <Compile Include="Controllers\ReceipsAndPaymentsController.cs" />
+    <Compile Include="Models\GL\GLIndexModel.cs" />
+    <Compile Include="Models\GL\GLShowAccountModel.cs" />
     <Compile Include="Models\Home\HomeDayEditModel.cs" />
     <Compile Include="Identity\LoggedUserSessionData.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -185,9 +191,10 @@
     <Compile Include="Models\People\PeopleIndexModel.cs" />
     <Compile Include="Models\Purchases\EditPurchaseModel.cs" />
     <Compile Include="Models\Purchases\IndexPurchaseModel.cs" />
+    <Compile Include="Models\TravelExpense\TravelExpenseDisplayModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseEditHeaderModalModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseEditModel.cs" />
-    <Compile Include="Models\TravelExpense\TravelExpenseGLPostModel.cs" />
+    <Compile Include="Models\TravelExpense\TravelExpensePostTravelExpensesModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseIndexModel.cs" />
     <Compile Include="Reports\ReportViewer.aspx.cs">
       <DependentUpon>ReportViewer.aspx</DependentUpon>
@@ -1640,7 +1647,12 @@
     <Content Include="Views\Purchases\Index.cshtml" />
     <Content Include="Views\Purchases\Edit.cshtml" />
     <Content Include="Views\Jobs\Edit.cshtml" />
-    <Content Include="Views\TravelExpense\GLPost.cshtml" />
+    <Content Include="Views\ReceipsAndPayments\Index.cshtml" />
+    <Content Include="Views\Invoices\Index.cshtml" />
+    <Content Include="Views\Invoices\Edit.cshtml" />
+    <Content Include="Views\TravelExpense\PostTravelExpenses.cshtml" />
+    <Content Include="Views\TravelExpense\Display.cshtml" />
+    <Content Include="Views\GL\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JobManagement.Code\04-JobManagement.Code.csproj">

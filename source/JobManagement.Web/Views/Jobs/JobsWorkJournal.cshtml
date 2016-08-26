@@ -3,14 +3,6 @@
     ViewBag.Title = "JobWorkJournal";
     Layout = "~/Views/Shared/_SpaceLayout.cshtml";
 }
-
-<ol class="breadcrumb">
-    <li>Home</li>
-    <li class="active">Elenco lavoro svolto</li>
-</ol>
-<ol class="list-inline">
-    <li><button type="button" class="btn btn-xs" data-id="" onclick="edit_jobworkjournal_line(this);"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi riga...</button></li>
-</ol>
 <style>
     .form-control-width-80 {
         width: 80px;
@@ -46,21 +38,35 @@
     }
 
     .trStd {
+        line-height:32px;
         background-color: #f6f3f3;
     }
 
     .trAlt {
+        line-height:32px;
         background-color: #e6e3e3;
     }
 
     .trFesStd {
+        line-height:32px;
         background-color: #69e87f;
+
     }
 
     .trFesAlt {
+        line-height:32px;
         background-color: #84ea96;
     }
 </style>
+
+<ol class="breadcrumb">
+    <li>Home</li>
+    <li class="active">Elenco lavoro svolto</li>
+</ol>
+<ol class="list-inline">
+    <li><button type="button" class="btn btn-xs" data-id="" onclick="edit_jobworkjournal_line(this);"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Aggiungi riga...</button></li>
+</ol>
+
 <div class="container-fluid">
     @using (Html.BeginForm("JobsWorkJournal", "Jobs", FormMethod.Post, new { @onsubmit = "setHiddenFilterData();" }))
     {
@@ -75,31 +81,57 @@
             <tr><th></th><th>DATA</th><th>ORE</th><th>Persona</th><th>Commessa</th><th>Attività</th></tr>
         </thead>
         <tbody>
-            @{int rowPos = 1;}
-            @foreach (var e in Model.WorkJournalList)
-            {
-                <tr class="@Html.Raw(JobManagement.WebMvc.Models.Jobs.JobsWorkJournalModel.getListRowStyle(e, rowPos))">
-                    <td>
-                        @if (e.JobWorkJournalId > 0)
+            @{int rowPos = 1; bool firstRow = true; }
+
+                @foreach (var e in Model.WorkList)
+                {
+                    firstRow = true;
+                    if (e.Works.Count > 0)
+                    {
+                        foreach (var w in e.Works)
+                        { 
+                        <tr class="@Html.Raw(JobManagement.WebMvc.Models.Jobs.JobsWorkJournalModel.getListRowStyle(e, rowPos))">
+                            <td>
+                            @if (w.WorkJournalId > 0)
+                            {
+                                <button type="button" class="btn-xs btn-default" data-id="@Html.Raw(w.WorkJournalId.ToString())" onclick="edit_jobworkjournal_line(this);"><span class="fa fa-edit"></span></button>
+                            }
+                            </td>
+                            @if (firstRow)
+                            {
+                                <text>
+                                <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", JobManagement.Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
+                                </text>
+                                firstRow = false;
+                            }
+                            else
+                            {
+                                <td class="tdWorkListDay">&nbsp;</td>
+                            }
+                            <td>@Html.Raw(w.WorkedHours == decimal.Zero ? string.Empty : w.WorkedHours.ToString("N2"))</td>
+                            <td>@Html.Raw(w.Person == null ? string.Empty : w.Person.FirstName + " " + w.Person.LastName)</td>
+                            <td>@Html.Raw(w.Jobs == null ? String.Empty : w.Jobs.JobId + " - " + w.Jobs.Description)</td>
+                            <td>@Html.Raw(string.IsNullOrWhiteSpace(w.JobTaskId) ? string.Empty : w.JobTaskId)</td>
+                        </tr>
+                        if (!string.IsNullOrWhiteSpace(w.TaskWhere))
                         {
-                            <button type="button" class="btn-xs btn-default" data-id="@Html.Raw(e.JobWorkJournalId.ToString())" onclick="edit_jobworkjournal_line(this);"><span class="fa fa-edit"></span></button>
+                            <tr class="@Html.Raw(JobManagement.WebMvc.Models.Jobs.JobsWorkJournalModel.getListRowStyle(e, rowPos))" style="line-height:normal;"><td></td><td></td><td></td><td colspan="3">@Html.Raw(w.TaskWhere)</td></tr>
                         }
-                    </td>
-                    <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
-                    <td>@Html.Raw(e.WorkedHours == decimal.Zero ? string.Empty : e.WorkedHours.ToString("N2"))</td>
-                    <td>@Html.Raw(e.People == null ? string.Empty : e.People.FirstName + " " + e.People.LastName)</td>
-                    <td>@Html.Raw(e.Jobs == null ? String.Empty : e.Jobs.JobId + " - " + e.Jobs.Description)</td>
-                    <td>@Html.Raw(string.IsNullOrWhiteSpace(e.JobTaskId) ? string.Empty : e.JobTaskId)</td>
-                </tr>
-                if (!string.IsNullOrWhiteSpace(e.TaskWhere))
-                {
-                    <tr><td></td><td></td><td></td><td colspan="3">@Html.Raw(e.TaskWhere)</td></tr>
+                    }
+                    rowPos += 1;
                 }
-                if (!string.IsNullOrWhiteSpace(e.Annotation))
+                else
                 {
-                    <tr><td></td><td></td><td></td><td colspan="3">@Html.Raw(e.Annotation)</td></tr>
+                    <tr class="@Html.Raw(JobManagement.WebMvc.Models.Jobs.JobsWorkJournalModel.getListRowStyle(e, rowPos))">
+                        <td>&nbsp;</td>
+                        <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", JobManagement.Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    rowPos += 1;
                 }
-                rowPos += 1;
             }
         </tbody>
     </table>
@@ -144,12 +176,13 @@
     }
     function edit_jobworkjournal_line(btn) {
         var id = btn.getAttribute("data-id");
-        //if (id != null) {
-        //    if (id.trim() == '') {
-        //        id = 0;
-        //    }
-        //}
-        //if (d == null) d = 0;
+        if (id != null) {
+            if (id.trim() == '') {
+                id = 0;
+            }
+        } else {
+            id = 0;
+        }
         if (id > 0) {
             $('#modal-placeholder').load('@Url.Content("~/Jobs/ModalEditJobWorkJournal")/' + id);
         } else {

@@ -63,13 +63,21 @@
         function closemonth_travelexpense() {
             var peopleId =  $('#filterPeople').val();
             var y = $('#filterYear').val();
-            var m =  $('#filterMonth').val();
-            var id = y.toString() + m.toString() + peopleId.toString();
+            var m = $('#filterMonth').val();
+            var id = y.toString();
+            if (m < 10) {
+                id += '0' + m.toString() + peopleId.toString();
+            } else {
+                id += m.toString() + peopleId.toString();
+            }
+
             window.location.assign('@Url.Action("PostTravelExpenses", "TravelExpense")/' + id);
 
         }
         function displayTravelExpenseLine(teLine) {
+
             var baseEditUrl = '@Url.Action("Edit", "TravelExpense")' + '/';
+            var baseDisplayUrl = '@Url.Action("Display", "TravelExpense")' + '/';
             $("#tbodyTravelExpenseList").empty();
             teLine.sort(function (o1, o2) {
                 var od1 = new Date(o1.Date);
@@ -81,10 +89,21 @@
             var urlFilterParam = '?tefm=' + $('#filterMonth').val();
             urlFilterParam += '&tefy=' + $('#filterYear').val();
             urlFilterParam += '&tefp=' + $('#filterPeople').val();
+            var editUrl = '';
             for (var i = 0; i < teLine.length; i++) {
-                var editUrl = baseEditUrl  + teLine[i].TravelExpenseCode + urlFilterParam;
+                var s = Number.parseInt(teLine[i].Status);
+                if ( s == 0) {
+                    editUrl = baseEditUrl + teLine[i].TravelExpenseCode + urlFilterParam;
+                } else {
+                    editUrl = baseDisplayUrl + teLine[i].TravelExpenseCode + urlFilterParam;
+                }
                 var r = '<tr style="margin-top:6px;">';
                 r += '<td><a href="' + editUrl + '">' + teLine[i].TravelExpenseCode + '</a></td>';
+                if (s == 0) {
+                    r += '<td style="padding-left:12px;">BOZZA</td>';
+                } else {
+                    r += '<td style="padding-left:12px;">REGISTRATA</td>';
+                }
                 if (teLine[i].Date != null) {
                     if (teLine[i].Date != 'null') {
                         r += '<td style="padding-left:12px;">' + zzsDateToItalianString(new Date(teLine[i].Date)) + '</td>';
@@ -121,7 +140,7 @@
                 }
                 r += '</tr>';
                 if ((teLine[i].Annotation != null) && (teLine[i].Annotation != 'undefined')) {
-                    r += '<tr><td></td><td colspan="3" style="padding-left:12px;font-size:80%;">' + teLine[i].Annotation + '</td><td></td></tr>';
+                    r += '<tr><td></td><td></td><td colspan="3" style="padding-left:12px;font-size:80%;">' + teLine[i].Annotation + '</td><td></td></tr>';
                 }
                 $("#tbodyTravelExpenseList").append(r);
             }
@@ -160,7 +179,7 @@
         <div style="margin-top:6px;">
             <table>
                 <thead>
-                    <tr><th>Protocollo</th><th style="padding-left:12px;">Data</th><th style="padding-left:12px;">Persona</th><th style="padding-left:12px;">Dal</th><th style="padding-left:12px;">Al</th><th style="padding-left:12px;">Importo</th></tr>
+                    <tr><th>Protocollo</th><th style="padding-left:12px;">Status</th><th style="padding-left:12px;">Data</th><th style="padding-left:12px;">Persona</th><th style="padding-left:12px;">Dal</th><th style="padding-left:12px;">Al</th><th style="padding-left:12px;">Importo</th></tr>
                 </thead>
                 <tbody id="tbodyTravelExpenseList"></tbody>
             </table>

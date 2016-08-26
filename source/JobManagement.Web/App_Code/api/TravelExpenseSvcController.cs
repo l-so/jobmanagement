@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace JobManagement.WebMvc.Controllers.api
 {
+    [Authorize]
     public class TravelExpenseSvcController : ApiController
     {
 
@@ -71,6 +69,12 @@ namespace JobManagement.WebMvc.Controllers.api
                         long jobsId = long.Parse(values["JobsId"]);
                         DataAccessLayer.DBTravelExpense.RemoveJobs(travelExpenseCode,jobsId);
                         break;
+                    case "PostTravelExpenseRequest":
+                        travelExpenseCode = values["TravelExpenseCode"];
+                        _response.Data = DataAccessLayer.DBTravelExpense.PostTravelExpenseRequest(travelExpenseCode);
+                        
+                        break;
+
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)

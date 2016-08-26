@@ -48,6 +48,11 @@
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense" />
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus" />
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpense" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.GLAccount" Width="1.5" PointX="15.375" PointY="4.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.GeneralJournalLines" Width="1.5" PointX="15.375" PointY="8" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.GenerlaJournalLineEntries" Width="1.5" PointX="17.625" PointY="8" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.PurchaseInvoices" Width="1.5" PointX="5.375" PointY="16.75" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_GenerlaJournalLineEntries_GeneralJournalLines" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -34,7 +34,6 @@
                 "Annulla": cancelJobAssign
             }
         });
-        
         $('#dialogEditLineModalDate').datepicker({
             firstDay: 1,
             dateFormat: 'dd/mm/yy'
@@ -162,7 +161,7 @@
         $('#dialogEditLineModal').dialog('close');
         loadPageData();
     }
-    function loadPageData() 
+    function loadPageData()
     {
         $("#tbodyTravelExpenseLine").empty();
         $("#tbodyTravelExpenseJobs").empty();
@@ -261,7 +260,7 @@
         $('#dialogAssignJob').dialog('open');
         calcJobAmount();
     }
-    function loadTravelExpenseJobs() 
+    function loadTravelExpenseJobs()
     {
         var sendData = new Object();
         sendData.Operation = "LoadJobs";
@@ -339,6 +338,7 @@
                 var r= '<tr>';
                 r += '<td style="padding-left:12px;padding-right:12px;><button type="button" class="btn btn-xs" data-id="' + jobs[i].JobId + '" onclick="remove_TravelExpenseJob(this);"><span class="fa fa-times"></span></button></td>'
                 r += '<td><a href="#" onclick="assign_ToJobs(' + jobs[i].JobId + ')">[' + jobs[i].Code + '] ' + jobs[i].Description + '</a></td>';
+                r += '<td  style="padding-left:12px;">' + jobs[i].InPercent + '% </td>';
                 r += '<td style="text-align:rigth;padding-left:12px;">&#8364; ' + jobs[i].Amount.toFixed(2) + '</td>';
                 r += '</tr>';
                 $("#tbodyTravelExpenseJobs").append(r);
@@ -348,7 +348,7 @@
             if (jTotal != $('#hiddenTravelExpenseTotal').val()) {
                 r = '<tr style="color:red;">'
             }
-            r += '<td colspan="2" style="padding-top:6px;text-align:right;">Totale associotato:</td>';
+            r += '<td colspan="3" style="padding-top:6px;text-align:right;">Totale associotato:</td>';
             r += '<td style="text-align:rigth;padding-top:6px;padding-left:12px;">&#8364; ' + jTotal.toFixed(2) + '</td>';
             r += '</tr>';
             $("#tbodyTravelExpenseJobs").append(r);
@@ -357,7 +357,7 @@
             $('#dialogAssignJob').dialog('close');
             loadPageData();
         }
-        function remove_TravelExpenseJob(btn) 
+        function remove_TravelExpenseJob(btn)
         {
             var id = btn.getAttribute("data-id");
             if (id != null) {
@@ -406,9 +406,29 @@
             var r = rk * k;
             $('#dialogEditLineModalAmount').val(r.toFixed(2));
         }
-        function add_TravelExpensePurchaseInvoice () {
-        
+        function register_travelExpense() {
+            var sendData = new Object();
+            sendData.Operation = "PostTravelExpenseRequest";
+            sendData.TravelExpenseCode = TRAVEL_EXPENSE_CODE;
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/TravelExpenseSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus != "OK") {
+                        alert(result.Error);
+                        alert(result.ErrorMessage);
+                    }
+                }
+            });
+            window.location.reload(true);
         }
+
     </script>
 }
 <div id="dialogEditLineModal" title="Crea/modifica linea nota spese">
@@ -441,8 +461,9 @@
                 <label for="dialogAssignJobSelJobAmountPercent">%</label>
                 <select name="dialogAssignJobSelJobAmountPercent" id="dialogAssignJobSelJobAmountPercent" onchange="calcJobAmount();">
                     <option value="25">25 %</option>
+                    <option value="33">33 %</option>
+                    <option value="33">34 %</option>
                     <option value="50">50 %</option>
-                    <option value="75">75 %</option>
                     <option value="100" selected>100 %</option>
                 </select>
             </td>
@@ -454,14 +475,6 @@
     </table>
 </div>
 
-<div id="dialogTravelExpensePurchaseInvoice" title="Aggiungi una fattura di acquisto...">
-    <span class="ui-helper-hidden-accessible"><input type="text" />Prevents autofocus from opening start datepicker on dialog load</span>
-    Categoria:
-    Importo:
-    Nome:
-    Numero: 
-    Data:
-</div>
 <div class="container-fluid">
     <div class="row">
         <ol class="breadcrumb">
@@ -470,6 +483,10 @@
             <li class="active">Modifica rimborso spese</li>
         </ol>
         <input type="hidden" id="hiddenTravelExpenseTotal" name="hiddenTravelExpenseTotal" value="@Html.Raw(string.Format("{0:N2}", Model.TravelExpenseList.Total))" />
+        @if (Model.TravelExpense.Status == JobManagement.EFDataModel.TravelExpenses.STATUS_BOZZA)
+        {
+            <a href="#" onclick="register_travelExpense();">Registra la nota spese in contabilità...</a>
+        }
         <div style="margin-top:6px;">
             NOTA SPESE <span>@Html.Raw(Model.TravelExpense.TravelExpenseCode)</span> DI <span>@Html.Raw(string.Format("{0} {1}", Model.TravelExpense.Person.LastName, Model.TravelExpense.Person.FirstName))</span> DEL <span>@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.TravelExpense.Date))</span><br />
             TOTALE: &#8364; <span id="spanTravelExpenseTotal">@Html.Raw(string.Format("{0:N2}", Model.TravelExpenseList.Total))</span> - DAL : <span id="spanTravelExpenseBeginDate">@Html.Raw(Model.TravelExpenseList.BeginDate.HasValue ? string.Format("{0:d}", Model.TravelExpenseList.BeginDate.Value) : string.Empty)</span> AL : <span id="spanTravelExpenseEndDate">@Html.Raw(Model.TravelExpenseList.EndDate.HasValue ? string.Format("{0:d}", Model.TravelExpenseList.EndDate.Value) : string.Empty)</span><br />
@@ -482,7 +499,7 @@
         <div style="margin-top:6px;">
             <table>
                 <thead>
-                    <tr><th></th><th>Commessa</th><th style="text-align:right; padding-left:12px;">Importo</th></tr>
+                    <tr><th></th><th>Commessa</th><th  style="padding-left:12px;text-align:right;">%</th><th style="text-align:right; padding-left:12px;">Importo</th></tr>
                 </thead>
                 <tbody id="tbodyTravelExpenseJobs">
 
@@ -493,7 +510,6 @@
         @if (Model.TravelExpense.Status == JobManagement.EFDataModel.TravelExpenses.STATUS_BOZZA)
         { 
             <a href="#" onclick="add_TravelExpenseLine();">Nuova riga...</a>
-            <a href="#" onclick="add_TravelExpensePurchaseInvoice();">Nuova fattura...</a>
         }
         </div>
         <div style="margin-top:6px;">

@@ -3,7 +3,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace JobManagement.WebMvc.Identity
 {
@@ -22,7 +21,8 @@ namespace JobManagement.WebMvc.Identity
             using (Identity.AppDbContext dbctx = new Identity.AppDbContext())
             {
                 var userMgr = new UserManager<AppUser>(new UserStore<AppUser>(dbctx));
-                var appUsr = new AppUser {
+                var appUsr = new AppUser
+                {
                     UserName = userName,
                     Email = email,
                     EmailConfirmed = true
@@ -48,7 +48,7 @@ namespace JobManagement.WebMvc.Identity
                 return r;
             }
         }
-        
+
         internal static IdentityResult ChangePassword(string userId, string oldPwd, string newPwd)
         {
             using (Identity.AppDbContext dbctx = new Identity.AppDbContext())
@@ -58,14 +58,14 @@ namespace JobManagement.WebMvc.Identity
                 return r;
             }
         }
-        
+
         public static bool IsAdmin(string userId)
         {
             bool r = false;
             using (Identity.AppDbContext dbctx = new Identity.AppDbContext())
             {
                 var userMgr = new UserManager<AppUser>(new UserStore<AppUser>(dbctx));
-                r = userMgr.IsInRole(userId,"ADMIN");
+                r = userMgr.IsInRole(userId, "ADMIN");
             }
             return r;
         }
@@ -80,7 +80,7 @@ namespace JobManagement.WebMvc.Identity
             }
             return _result;
         }
-        
+
         internal static IEnumerable<AppUser> getUserList()
         {
             IEnumerable<AppUser> _result = null;
@@ -101,23 +101,45 @@ namespace JobManagement.WebMvc.Identity
             return _roles;
         }
 
-        internal static IEnumerable<IdentityRole> getAvailableRole () {
+        internal static IEnumerable<IdentityRole> getAvailableRole()
+        {
             RoleStore<IdentityRole> storeRole = new RoleStore<IdentityRole>(new AppDbContext());
             RoleManager<IdentityRole> managerRole = new RoleManager<IdentityRole>(storeRole);
             return managerRole.Roles.ToList<IdentityRole>();
         }
 
-        internal static IdentityResult ResetUserPassword(string userId, string passwd)
+        public static IdentityResult ResetUserPassword(string userId, string passwd)
         {
-            
+
             UserStore<AppUser> store = new UserStore<AppUser>(new AppDbContext());
             UserManager<AppUser> userManager = new UserManager<AppUser>(store);
             IdentityResult r = userManager.RemovePassword(userId);
-            if (r.Succeeded) { 
+            if (r.Succeeded)
+            {
                 r = userManager.AddPassword(userId, passwd);
             }
             return r;
         }
 
+        public static IdentityResult AppUserCreate(string _userName, string _userEmail, string _userPwd, string _userRoleId)
+        {
+            IdentityResult _result = null;
+            using (Identity.AppDbContext dbctx = new Identity.AppDbContext())
+            {
+                var userMgr = new UserManager<AppUser>(new UserStore<AppUser>(dbctx));
+                var appUsr = new AppUser
+                {
+                    UserName = _userName,
+                    Email = _userEmail,
+                    EmailConfirmed = true
+                };
+                _result = userMgr.Create(appUsr, _userPwd);
+                if (_result.Succeeded)
+                {
+                    userMgr.AddToRole<AppUser, string>(appUsr.Id, _userRoleId);
+                }
+                return _result;
+            }
+        }
     }
 }

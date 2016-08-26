@@ -75,6 +75,15 @@
     <Compile Include="CustomPartialClass\Customers.cs" />
     <Compile Include="CustomPartialClass\Jobs.cs" />
     <Compile Include="CustomPartialClass\TravelsExpenses.cs" />
+    <Compile Include="GeneralJournalLines.cs">
+      <DependentUpon>JobManagementDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GenerlaJournalLineEntries.cs">
+      <DependentUpon>JobManagementDBModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GLAccount.cs">
+      <DependentUpon>JobManagementDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="JobList.cs">
       <DependentUpon>JobManagementDBModel.tt</DependentUpon>
     </Compile>
@@ -112,6 +121,9 @@
       <DependentUpon>JobManagementDBModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PurchaseInvoices.cs">
+      <DependentUpon>JobManagementDBModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PurchaseJobs.cs">
       <DependentUpon>JobManagementDBModel.tt</DependentUpon>
     </Compile>

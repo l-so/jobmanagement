@@ -13,8 +13,8 @@ namespace JobManagement.DataAccessLayer
 
         public static object GetTravelExpenseInMonth(int peopleId, int m, int y)
         {
-            DateTime fromDate = new DateTime(y,m,1);
-            DateTime toDate = new DateTime(y, m, DateTime.DaysInMonth(y,m));
+            DateTime fromDate = new DateTime(y, m, 1);
+            DateTime toDate = new DateTime(y, m, DateTime.DaysInMonth(y, m));
             List<EFDataModel.TravelExpenseList> _result = new List<EFDataModel.TravelExpenseList>();
             try
             {
@@ -118,10 +118,11 @@ namespace JobManagement.DataAccessLayer
                     _result = ctx.TravelExpensesLines.Include("TravelExpenseLineCategories").Where(tel => tel.TravelExpenseCode == travelExpenseCode).ToList<EFDataModel.TravelExpensesLines>();
                     foreach (var l in _result)
                     {
-                        if (l.TravelExpenseLineCategories     != null) { 
-                            if (l.TravelExpenseLineCategories.TravelExpensesLines != null) 
+                        if (l.TravelExpenseLineCategories != null)
+                        {
+                            if (l.TravelExpenseLineCategories.TravelExpensesLines != null)
                             {
-                                if (l.TravelExpenseLineCategories.TravelExpensesLines.Count != 0) 
+                                if (l.TravelExpenseLineCategories.TravelExpensesLines.Count != 0)
                                 {
                                     l.TravelExpenseLineCategories.TravelExpensesLines.Clear();
                                 }
@@ -160,6 +161,49 @@ namespace JobManagement.DataAccessLayer
             }
             return _result;
 
+        }
+
+        public static string PostTravelExpenseRequest(string travelExpenseCode)
+        {
+            string _result = "OK";
+            try
+            {
+                using (EFDataModel.JMContext ctx = new EFDataModel.JMContext())
+                {
+                    ctx.Configuration.LazyLoadingEnabled = false;
+                    ctx.Configuration.ProxyCreationEnabled = false;
+                    ctx.upPostTravelExpense(travelExpenseCode);
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException)
+            {
+                throw;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException)
+            {
+                throw;
+            }
+            catch (System.NotSupportedException)
+            {
+                throw;
+            }
+            catch (System.ObjectDisposedException)
+            {
+                throw;
+            }
+            catch (System.InvalidOperationException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return _result;
         }
 
         public static EFDataModel.TravelExpensesLines LineGet(long id)
@@ -204,7 +248,7 @@ namespace JobManagement.DataAccessLayer
             }
             return _result;
         }
-                
+
         public static void LineDelete()
         {
 
@@ -245,7 +289,7 @@ namespace JobManagement.DataAccessLayer
             EFDataModel.TravelExpenseLineCategories result = null;
             try
             {
-               using (EFDataModel.JMContext db = new EFDataModel.JMContext())
+                using (EFDataModel.JMContext db = new EFDataModel.JMContext())
                 {
                     result = db.TravelExpenseLineCategories.Where(c => c.UsePersonalCar == true).FirstOrDefault<EFDataModel.TravelExpenseLineCategories>();
                 }
@@ -331,7 +375,7 @@ namespace JobManagement.DataAccessLayer
                         ctx.SaveChanges();
                         if (te.Person == null)
                         {
-                           te.Person = DataAccessLayer.DBPeople.getOne(te.PeopleId);
+                            te.Person = DataAccessLayer.DBPeople.getOne(te.PeopleId);
                         }
                     }
 
@@ -378,7 +422,7 @@ namespace JobManagement.DataAccessLayer
                 {
                     var q = from p in db.TravelExpenseJobsList
                             where p.TravelExpenseCode == travelExpenseCode
-                            select new { p.TravelExpenseCode, p.JobId, p.Code, p.Description, p.Amount };
+                            select new { p.TravelExpenseCode, p.JobId, p.Code, p.Description, p.InPercent, p.Amount };
                     _res = Newtonsoft.Json.JsonConvert.SerializeObject(q);
                 }
 
@@ -412,14 +456,15 @@ namespace JobManagement.DataAccessLayer
             {
                 TravelExpenseCode = travelExpenseCode,
                 JobId = teJobJobId,
-                InPercent  = tePercent
+                InPercent = tePercent
             };
             try
             {
                 using (EFDataModel.JMContext db = new EFDataModel.JMContext())
                 {
-                    var o = db.TravelExpenseJobs.Find(tej.TravelExpenseCode,tej.JobId);
-                    if (o != null) { 
+                    var o = db.TravelExpenseJobs.Find(tej.TravelExpenseCode, tej.JobId);
+                    if (o != null)
+                    {
                         db.TravelExpenseJobs.Remove(o);
                         db.SaveChanges();
                     }
@@ -430,7 +475,7 @@ namespace JobManagement.DataAccessLayer
                             select new { p.TravelExpenseCode, p.JobId, p.Code, p.Description, p.Amount };
                     _res = Newtonsoft.Json.JsonConvert.SerializeObject(q);
                 }
-                
+
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
             {
