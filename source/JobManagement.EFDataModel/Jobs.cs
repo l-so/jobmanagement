@@ -18,7 +18,6 @@ namespace JobManagement.EFDataModel
         public Jobs()
         {
             this.WorksJournal = new HashSet<WorksJournal>();
-            this.TravelExpenseJobs = new HashSet<TravelExpenseJobs>();
         }
     
         public long JobId { get; set; }
@@ -39,7 +38,5 @@ namespace JobManagement.EFDataModel
         public virtual JobStatus JobStatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorksJournal> WorksJournal { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TravelExpenseJobs> TravelExpenseJobs { get; set; }
     }
 }

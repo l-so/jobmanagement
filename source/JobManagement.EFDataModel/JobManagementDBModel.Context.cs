@@ -38,10 +38,7 @@ namespace JobManagement.EFDataModel
         public virtual DbSet<JobStatus> JobStatus { get; set; }
         public virtual DbSet<JobTasks> JobTasks { get; set; }
         public virtual DbSet<Person> Person { get; set; }
-        public virtual DbSet<PurchaseJobs> PurchaseJobs { get; set; }
-        public virtual DbSet<Purchases> Purchases { get; set; }
         public virtual DbSet<TravelExpenseAutoCode> TravelExpenseAutoCode { get; set; }
-        public virtual DbSet<TravelExpenseJobs> TravelExpenseJobs { get; set; }
         public virtual DbSet<TravelExpenseLineCategories> TravelExpenseLineCategories { get; set; }
         public virtual DbSet<TravelExpensePurchases> TravelExpensePurchases { get; set; }
         public virtual DbSet<TravelExpenses> TravelExpenses { get; set; }
@@ -56,7 +53,10 @@ namespace JobManagement.EFDataModel
         public virtual DbSet<GLAccount> GLAccount { get; set; }
         public virtual DbSet<GeneralJournalLines> GeneralJournalLines { get; set; }
         public virtual DbSet<GenerlaJournalLineEntries> GenerlaJournalLineEntries { get; set; }
+        public virtual DbSet<Vendors> Vendors { get; set; }
+        public virtual DbSet<PurchaseInvoicePaidBy> PurchaseInvoicePaidBy { get; set; }
         public virtual DbSet<PurchaseInvoices> PurchaseInvoices { get; set; }
+        public virtual DbSet<JobCosts> JobCosts { get; set; }
     
         public virtual int upCustomerDelete(Nullable<int> customerId)
         {

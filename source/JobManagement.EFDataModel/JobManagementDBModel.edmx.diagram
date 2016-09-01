@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="52a821bc89034db98778f12be9a868e0" Name="Diagram1" ZoomLevel="98">
+      <Diagram DiagramId="52a821bc89034db98778f12be9a868e0" Name="Diagram1" ZoomLevel="84">
         <EntityTypeShape EntityType="JobManagement.DataModel.AspNetRoles" Width="1.5" PointX="5.75" PointY="0.875" />
         <EntityTypeShape EntityType="JobManagement.DataModel.AspNetUserClaims" Width="1.5" PointX="3" PointY="8.5" />
         <EntityTypeShape EntityType="JobManagement.DataModel.AspNetUserLogins" Width="1.5" PointX="3" PointY="6" />
@@ -16,10 +16,7 @@
         <EntityTypeShape EntityType="JobManagement.DataModel.JobStatus" Width="1.5" PointX="0.75" PointY="21.375" />
         <EntityTypeShape EntityType="JobManagement.DataModel.JobTasks" Width="1.5" PointX="3" PointY="3" />
         <EntityTypeShape EntityType="JobManagement.DataModel.Person" Width="1.5" PointX="3" PointY="11.25" />
-        <EntityTypeShape EntityType="JobManagement.DataModel.PurchaseJobs" Width="1.5" PointX="7.75" PointY="3.75" />
-        <EntityTypeShape EntityType="JobManagement.DataModel.Purchases" Width="1.5" PointX="8.25" PointY="7.625" />
         <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseAutoCode" Width="1.5" PointX="9.75" PointY="3.75" />
-        <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseJobs" Width="1.5" PointX="10.5" PointY="12.5" />
         <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenseLineCategories" Width="1.5" PointX="11.25" PointY="15.5" />
         <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpensePurchases" Width="1.5" PointX="10.5" PointY="9.5" />
         <EntityTypeShape EntityType="JobManagement.DataModel.TravelExpenses" Width="1.5" PointX="8.25" PointY="12" />
@@ -38,12 +35,9 @@
         <AssociationConnector Association="JobManagement.DataModel.FK_Job_Customer" />
         <AssociationConnector Association="JobManagement.DataModel.FK_Job_JobState" />
         <AssociationConnector Association="JobManagement.DataModel.FK_JobWorkJournal_Job" />
-        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseJobs_Job" />
         <AssociationConnector Association="JobManagement.DataModel.FK_JobWorkJournal_JobTask" />
         <AssociationConnector Association="JobManagement.DataModel.FK_JobWorkJournal_Person" />
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpense_People" />
-        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpensePurchases_Purchase" />
-        <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseJobs_TravelExpense" />
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpenseLine_TravelExpenseLineCategories" />
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpensePurchases_TravelExpense" />
         <AssociationConnector Association="JobManagement.DataModel.FK_TravelExpense_TravelExpenseStatus" />
@@ -51,8 +45,13 @@
         <EntityTypeShape EntityType="JobManagement.DataModel.GLAccount" Width="1.5" PointX="15.375" PointY="4.75" />
         <EntityTypeShape EntityType="JobManagement.DataModel.GeneralJournalLines" Width="1.5" PointX="15.375" PointY="8" />
         <EntityTypeShape EntityType="JobManagement.DataModel.GenerlaJournalLineEntries" Width="1.5" PointX="17.625" PointY="8" />
-        <EntityTypeShape EntityType="JobManagement.DataModel.PurchaseInvoices" Width="1.5" PointX="5.375" PointY="16.75" />
         <AssociationConnector Association="JobManagement.DataModel.FK_GenerlaJournalLineEntries_GeneralJournalLines" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.Vendors" Width="1.5" PointX="7.375" PointY="16.75" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.PurchaseInvoicePaidBy" Width="1.5" PointX="16.375" PointY="11.875" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.PurchaseInvoices" Width="1.5" PointX="18.625" PointY="14.375" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_PurchaseInvoices_PurchaseInvoicePaidBy" />
+        <AssociationConnector Association="JobManagement.DataModel.FK_PurchaseInvoices_Vendors" />
+        <EntityTypeShape EntityType="JobManagement.DataModel.JobCosts" Width="1.5" PointX="13.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

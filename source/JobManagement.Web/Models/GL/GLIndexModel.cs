@@ -29,7 +29,7 @@ namespace JobManagement.WebMvc.Models.GL
                 indent -= 1;
                 lastLength = l;
             }
-            if (l < 3)
+            if (l < 4)
             {
                 indent = 0;
                 lastLength = l;

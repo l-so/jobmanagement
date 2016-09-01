@@ -30,9 +30,17 @@
             //$('#modal-placeholder').empty();
             $('#modal-placeholder').load('@Url.Content("~/Customer/ModalEditCustomer")');
         });
+        $('#NavBarAddVendor').click(function () {
+            //$('#modal-placeholder').empty();
+            $('#modal-placeholder').load('@Url.Content("~/Vendor/ModalEdit")');
+        });
         $('#NavBarAddTravelExpense').click(function () {
             //$('#modal-placeholder').empty();
             $('#modal-placeholder').load('@Url.Content("~/TravelExpense/ModalEditHeader")');
+        });
+        $('#NavBarAddPurchaseInvoice').click(function () {
+            //$('#modal-placeholder').empty();
+            $('#modal-placeholder').load('@Url.Content("~/PurchaseInvoices/ModalEdit")');
         });
     });
     </script>
@@ -79,14 +87,18 @@
                                 <li>@Html.ActionLink("Elenco commesse", "Index", "Jobs")</li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="#" id="NavBarAddCustomer" name="NavBarAddCustomer">Nuovo cliente..</a></li>
-                                <li>@Html.ActionLink("Clienti", "Index", "Customer")</li>                              
+                                <li>@Html.ActionLink("Clienti", "Index", "Customer")</li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#" id="NavBarAddVendor" name="NavBarAddVendor">Nuovo fornitore..</a></li>
+                                <li>@Html.ActionLink("Fornitori", "Index", "Vendor")</li>
                             </ul>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestione finanziaria<span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Nuovo acquisto...", "Edit", "Purchases")</li>
-                                <li>@Html.ActionLink("Acquisti", "Index", "Purchases")</li>
+                            <ul class="dropdown-menu">  
+                                <li>@Html.ActionLink("Nuovo acquisto...", "Edit", "PurchaseInvoices")</li>
+                                <li><a href="#" id="NavBarAddPurchaseInvoice" name="NavBarAddPurchaseInvoice">Nuova fattura acquisto...</a></li>
+                                <li>@Html.ActionLink("Acquisti", "Index", "PurchaseInvoices")</li>
                                 <li role="separator" class="divider"></li>
                                 <li>@Html.ActionLink("Nuova fattura di vendita...", "Edit", "Invoices")</li>
                                 <li>@Html.ActionLink("Fatture di vendita", "Index", "Invoices")</li>

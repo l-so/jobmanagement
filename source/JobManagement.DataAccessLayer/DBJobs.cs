@@ -167,6 +167,47 @@ namespace JobManagement.DataAccessLayer
             }
             return result;
         }
+        public static List<SelectListItem> getDDLJobSelectListItem(long jobId)
+        {
+            List<SelectListItem> _result = new List<SelectListItem>();
+            try
+            {
+                using (EFDataModel.JMContext db = new EFDataModel.JMContext())
+                {
+                    db.Configuration.LazyLoadingEnabled = false;
+                    db.Configuration.ProxyCreationEnabled = false;
+                    var r  = db.Jobs.Include(j => j.Customers).Include(j => j.JobStatus).Where(j => j.Status == 10 || j.JobId == jobId).ToList();
+                    foreach(var j in r)
+                    {
+                        
+                        _result.Add(new SelectListItem()
+                        {
+                            Value = j.JobId.ToString(),
+                            Text = j.Description,
+                            Selected = (j.JobId == jobId)
+                        });
+                    }
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return _result;
+        }
         public static List<EFDataModel.Jobs> getJobForDDL(long jobId)
         {
             List<EFDataModel.Jobs> result = new List<EFDataModel.Jobs>();

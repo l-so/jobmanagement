@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using JobManagement.EFDataModel;
 
 namespace JobManagement.DataAccessLayer
 {
-    public class DBGeneralLedger
+    public class DBPurchaseInvoices
     {
-        public static List<GLAccount> getGLAccounts()
+        public static PurchaseInvoices getById(long id)
         {
-            List<GLAccount> list = new List<GLAccount>();
+            PurchaseInvoices _result = new PurchaseInvoices();
             try
             {
                 using (EFDataModel.JMContext ctx = new EFDataModel.JMContext())
                 {
-                    list = ctx.GLAccount.OrderBy(a => a.GLAccountCode).ToList();
+                    ctx.Configuration.LazyLoadingEnabled = false;
+                    ctx.Configuration.ProxyCreationEnabled = false;
+                    _result = ctx.PurchaseInvoices.Find(id);
+                    if (_result.BuyFromVendorId.HasValue)
+                    {
+                        _result.Vendors = ctx.Vendors.Find(_result.BuyFromVendorId.Value);
+                    }
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
@@ -31,30 +38,43 @@ namespace JobManagement.DataAccessLayer
             {
                 throw;
             }
+            catch (System.NotSupportedException)
+            {
+                throw;
+            }
+            catch (System.ObjectDisposedException)
+            {
+                throw;
+            }
+            catch (System.InvalidOperationException)
+            {
+                throw;
+            }
             catch (Exception)
             {
                 throw;
             }
-            return list;
+            return _result;
         }
 
-        public static List<System.Web.Mvc.SelectListItem> getDDLPurchaseInvoiceGLAccount (string accountId)
+        public static List<SelectListItem> getDDLPaidBy(int? paidById)
         {
-            List<System.Web.Mvc.SelectListItem> _result = new List<System.Web.Mvc.SelectListItem>();
+            int selectedId = (paidById.HasValue ? paidById.Value : -1);
+            List <System.Web.Mvc.SelectListItem> _result = new List<System.Web.Mvc.SelectListItem>();
             try
             {
                 using (EFDataModel.JMContext ctx = new EFDataModel.JMContext())
                 {
                     ctx.Configuration.LazyLoadingEnabled = false;
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    var r = ctx.GLAccount.Where(a => a.Type == "E" && a.SubType== "AC").ToList();
+                    var r = ctx.PurchaseInvoicePaidBy.ToList();
                     foreach (var a in r)
                     {
                         _result.Add(new System.Web.Mvc.SelectListItem()
                         {
-                            Value = a.GLAccountCode,
+                            Value = a.PurchaseInvoicePaidById.ToString(),
                             Text = a.Name,
-                            Selected = (a.GLAccountCode == accountId)
+                            Selected = (a.PurchaseInvoicePaidById == selectedId)
                         });
                     }
                 }

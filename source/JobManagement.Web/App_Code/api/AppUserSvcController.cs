@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Http;
 
-namespace JobManagement.WebMvc.App_Code.api
+namespace JobManagement.WebMvc.Controllers.api
 {
     [Authorize(Roles = "ADMIN")]
     public class AppUserSvcController : ApiController

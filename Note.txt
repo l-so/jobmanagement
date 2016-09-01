@@ -1,0 +1,21 @@
+
+- Nelle spese di trasferta aggiungere la riga fattura
+	VendorName -> Descrizione
+	Pagato da -> [PaidBy] Fare una tabella con i nome ed i relativi conti in SP
+							Banco Pololare
+							ZZSoft Carta Credito
+							
+							
+
+
+var: finanziaria attiva DARE  
+aumenti di crediti - diminuzioni di debiti - aumenti di denaro 
+
+var finanziaria passiva AVERE 
+diminuzione di crediti - aumenti di debiti - diminuzioni di denaro 
+
+var. economica negativa DARE 
+costi - rettifiche sui ricavi 
+
+var. economica positiva AVERE 
+ricavi - rettifiche sui costi 

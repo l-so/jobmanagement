@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace JobManagement.WebMvc.Models.Purchases
+namespace JobManagement.WebMvc.Models.DisplayDocument
 {
-    public class IndexPurchaseModel
+    public class DisplayPurchaseInvoiceModel
     {
     }
 }

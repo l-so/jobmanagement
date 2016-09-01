@@ -163,10 +163,16 @@
     <Content Include="App_Code\api\PurchasesSvcController.cs" />
     <Content Include="App_Code\api\InvoicesSvcController.cs" />
     <Content Include="App_Code\api\AppUserSvcController.cs" />
+    <Content Include="App_Code\api\VendorSvcController.cs" />
     <Compile Include="Controllers\GLController.cs" />
     <Compile Include="Controllers\InvoicesController.cs" />
-    <Compile Include="Controllers\PurchasesController.cs" />
+    <Compile Include="Controllers\PurchaseInvoicesController.cs" />
     <Compile Include="Controllers\ReceipsAndPaymentsController.cs" />
+    <Compile Include="Controllers\VendorController.cs" />
+    <Compile Include="Models\PurchaseInvoice\ModalEditPurchaseInvoiceModel.cs" />
+    <Compile Include="Models\Vendor\ModalEditVendorModel.cs" />
+    <Compile Include="Models\DisplayDocument\DisplayPurchaseInvoiceModel.cs" />
+    <Compile Include="Models\DisplayDocument\DisplayTravelExpenseModel.cs" />
     <Compile Include="Models\GL\GLIndexModel.cs" />
     <Compile Include="Models\GL\GLShowAccountModel.cs" />
     <Compile Include="Models\Home\HomeDayEditModel.cs" />
@@ -189,13 +195,14 @@
     <Compile Include="Models\Jobs\JobsWorkJournalModel.cs" />
     <Compile Include="Models\People\PeopleEditModalModel.cs" />
     <Compile Include="Models\People\PeopleIndexModel.cs" />
-    <Compile Include="Models\Purchases\EditPurchaseModel.cs" />
-    <Compile Include="Models\Purchases\IndexPurchaseModel.cs" />
+    <Compile Include="Models\PurchaseInvoice\EditPurchaseInvoiceModel.cs" />
+    <Compile Include="Models\PurchaseInvoice\IndexPurchaseInvoiceModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseDisplayModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseEditHeaderModalModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseEditModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpensePostTravelExpensesModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseIndexModel.cs" />
+    <Compile Include="Models\Vendor\IndexVendorModel.cs" />
     <Compile Include="Reports\ReportViewer.aspx.cs">
       <DependentUpon>ReportViewer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1631,9 +1638,6 @@
     <Content Include="Views\Customer\ModalEditCustomer.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Scripts\Web.config" />
-    <Content Include="Views\DisplayDocument\Index.cshtml" />
-    <Content Include="Views\DisplayDocument\DDRimborsoSpese.cshtml" />
-    <Content Include="Views\DisplayDocument\DDInvoice.cshtml" />
     <Content Include="Views\AppUser\ModalAppUserEdit.cshtml" />
     <Content Include="Views\AppUser\EditMe.cshtml" />
     <Content Include="Views\AppUser\ModalResetPassword.cshtml" />
@@ -1644,8 +1648,6 @@
     <Content Include="Views\TravelExpense\Edit.cshtml" />
     <Content Include="Views\People\EditModal.cshtml" />
     <Content Include="Views\Jobs\JobsWorkJournal.cshtml" />
-    <Content Include="Views\Purchases\Index.cshtml" />
-    <Content Include="Views\Purchases\Edit.cshtml" />
     <Content Include="Views\Jobs\Edit.cshtml" />
     <Content Include="Views\ReceipsAndPayments\Index.cshtml" />
     <Content Include="Views\Invoices\Index.cshtml" />
@@ -1653,6 +1655,12 @@
     <Content Include="Views\TravelExpense\PostTravelExpenses.cshtml" />
     <Content Include="Views\TravelExpense\Display.cshtml" />
     <Content Include="Views\GL\Index.cshtml" />
+    <Content Include="Views\DisplayDocument\TravelExpense.cshtml" />
+    <Content Include="Views\DisplayDocument\PurchaseInvoice.cshtml" />
+    <Content Include="Views\PurchaseInvoices\Index.cshtml" />
+    <Content Include="Views\Vendor\Index.cshtml" />
+    <Content Include="Views\Vendor\ModalEdit.cshtml" />
+    <Content Include="Views\PurchaseInvoices\ModalEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JobManagement.Code\04-JobManagement.Code.csproj">

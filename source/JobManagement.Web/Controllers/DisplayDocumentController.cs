@@ -26,5 +26,13 @@ namespace JobManagement.WebMvc.Controllers
             }
             return View(viewName, objModel);
         }
+        public ActionResult TravelExpense(string id)
+        {
+            return View();
+        }
+        public ActionResult PurchaseInvoice(long id)
+        {
+            return View();
+        }
     }
 }

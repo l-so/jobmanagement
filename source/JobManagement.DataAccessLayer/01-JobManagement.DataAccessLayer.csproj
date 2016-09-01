@@ -67,9 +67,10 @@
     <Compile Include="DBGeneralLedger.cs" />
     <Compile Include="DBJobs.cs" />
     <Compile Include="DBPeople.cs" />
-    <Compile Include="DBPurchaseDocument.cs" />
+    <Compile Include="DBPurchaseInvoices.cs" />
     <Compile Include="DBTravelExpense.cs" />
     <Compile Include="DBTravelExpenseLineUpdateResult.cs" />
+    <Compile Include="DBVendor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

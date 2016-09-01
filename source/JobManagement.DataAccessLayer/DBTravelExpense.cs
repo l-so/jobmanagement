@@ -449,30 +449,34 @@ namespace JobManagement.DataAccessLayer
             }
             return _res;
         }
-        public static string AssignJob(string travelExpenseCode, long teJobJobId, decimal tePercent)
+        public static string AssignJob(string travelExpenseCode, long teJobJobId, short tePercent)
         {
             string _res = null;
-            EFDataModel.TravelExpenseJobs tej = new EFDataModel.TravelExpenseJobs()
+            EFDataModel.JobCosts tej = new EFDataModel.JobCosts()
             {
                 TravelExpenseCode = travelExpenseCode,
                 JobId = teJobJobId,
-                InPercent = tePercent
+                Percent = tePercent,
+                PurchaseInvoiceId = null,
+                Amount = 0
+                
             };
             try
             {
-                using (EFDataModel.JMContext db = new EFDataModel.JMContext())
+                using (EFDataModel.JMContext ctx = new EFDataModel.JMContext())
                 {
-                    var o = db.TravelExpenseJobs.Find(tej.TravelExpenseCode, tej.JobId);
+                    var o = ctx.JobCosts.Where(jc => jc.TravelExpenseCode == tej.TravelExpenseCode && jc.JobId == tej.JobId).FirstOrDefault();
                     if (o != null)
                     {
-                        db.TravelExpenseJobs.Remove(o);
-                        db.SaveChanges();
+                        ctx.JobCosts.Remove(o);
+                        ctx.SaveChanges();
                     }
-                    db.Entry(tej).State = System.Data.Entity.EntityState.Added;
-                    db.SaveChanges();
-                    var q = from p in db.TravelExpenseJobsList
+                    ctx.Entry(tej).State = System.Data.Entity.EntityState.Added;
+                    ctx.SaveChanges();
+                    var q = from p in ctx.JobCosts join j in ctx.Jobs 
+                            on p.JobId equals j.JobId
                             where p.TravelExpenseCode == travelExpenseCode
-                            select new { p.TravelExpenseCode, p.JobId, p.Code, p.Description, p.Amount };
+                            select new { p.TravelExpenseCode, p.JobId, j.Code, j.Description, p.Amount };
                     _res = Newtonsoft.Json.JsonConvert.SerializeObject(q);
                 }
 
@@ -500,17 +504,18 @@ namespace JobManagement.DataAccessLayer
             return _res;
         }
 
-        public static void RemoveJobs(string travelExpenseCode, long jobsId)
+        public static void RemoveJobs(string travelExpenseCode, long jobId)
         {
             try
             {
-                using (EFDataModel.JMContext db = new EFDataModel.JMContext())
+                using (EFDataModel.JMContext ctx = new EFDataModel.JMContext())
                 {
-                    var o = db.TravelExpenseJobs.Find(travelExpenseCode, jobsId);
+                    var o = ctx.JobCosts.Where(jc => jc.TravelExpenseCode == travelExpenseCode && jc.JobId == jobId).FirstOrDefault();
+
                     if (o != null)
                     {
-                        db.TravelExpenseJobs.Remove(o);
-                        db.SaveChanges();
+                        ctx.JobCosts.Remove(o);
+                        ctx.SaveChanges();
                     }
                 }
             }

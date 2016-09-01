@@ -15,19 +15,19 @@ namespace JobManagement.EFDataModel
     public partial class PurchaseInvoices
     {
         public long PurchaseInvoiceId { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<long> BuyFromVendorId { get; set; }
         public string BuyFromName { get; set; }
-        public string BuyFromCity { get; set; }
-        public string BuyFromCountry { get; set; }
-        public Nullable<int> BuyFromDocType { get; set; }
-        public string BuyFromDocNumber { get; set; }
-        public Nullable<System.DateTime> BuyFromDocDate { get; set; }
-        public Nullable<decimal> Amount { get; set; }
-        public Nullable<decimal> AmountNoVat { get; set; }
-        public Nullable<decimal> Vat { get; set; }
-        public Nullable<decimal> Total { get; set; }
-        public Nullable<System.DateTime> DueDate { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Vat { get; set; }
         public string GLAccountCode { get; set; }
-        public int WhoPayId { get; set; }
-        public Nullable<decimal> AmountPaid { get; set; }
+        public Nullable<System.DateTime> DueDate { get; set; }
+        public Nullable<int> PaidById { get; set; }
+        public Nullable<byte> Status { get; set; }
+        public Nullable<System.DateTime> PostDate { get; set; }
+        public Nullable<int> PostLine { get; set; }
+    
+        public virtual PurchaseInvoicePaidBy PurchaseInvoicePaidBy { get; set; }
+        public virtual Vendors Vendors { get; set; }
     }
 }

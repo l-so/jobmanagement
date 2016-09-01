@@ -17,7 +17,6 @@ namespace JobManagement.EFDataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TravelExpenses()
         {
-            this.TravelExpenseJobs = new HashSet<TravelExpenseJobs>();
             this.TravelExpensePurchases = new HashSet<TravelExpensePurchases>();
             this.TravelExpensesLines = new HashSet<TravelExpensesLines>();
         }
@@ -31,8 +30,6 @@ namespace JobManagement.EFDataModel
         public Nullable<int> PostLine { get; set; }
     
         public virtual Person Person { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TravelExpenseJobs> TravelExpenseJobs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TravelExpensePurchases> TravelExpensePurchases { get; set; }
         public virtual TravelExpenseStatus TravelExpenseStatus { get; set; }

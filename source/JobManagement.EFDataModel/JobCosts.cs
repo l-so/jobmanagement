@@ -12,10 +12,14 @@ namespace JobManagement.EFDataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class PurchaseJobs
+    public partial class JobCosts
     {
-        public long PurchaseId { get; set; }
+        public long JobCostId { get; set; }
         public long JobId { get; set; }
-        public Nullable<decimal> InPercent { get; set; }
+        public string Type { get; set; }
+        public string TravelExpenseCode { get; set; }
+        public Nullable<long> PurchaseInvoiceId { get; set; }
+        public Nullable<short> Percent { get; set; }
+        public Nullable<decimal> Amount { get; set; }
     }
 }

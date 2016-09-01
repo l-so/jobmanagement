@@ -1,0 +1,150 @@
+﻿@model JobManagement.WebMvc.Models.PurchaseInvoice.ModalEditPurchaseInvoiceModel
+<script type="text/javascript">
+    $(function () {
+        $('#dialogPurchInvModalEdit').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true,
+        });
+        $('#dialogPurchInvModalEdit').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+        })
+    });
+    function dialogPurchInvModalEdit_save() {
+
+    }
+</script>
+<style type="text/css">
+    .cssPurchInvMoney {
+        height: 26px;
+        text-align: right;
+        padding-right: 4px;
+        width:120px;
+    }
+
+    .cssPurchInvInput {
+        height: 26px;
+    }
+
+    .cssPurchInvInputAllRow {
+        height: 26px;
+        width: 100%;
+        padding-left: 4px;
+    }
+
+    .cssPurchInvInputHalfRow {
+        height: 26px;
+        width: 50%;
+        padding-left: 4px;
+    }
+    .cssPurchInvJobsRow {
+        height: 26px;
+    }
+    .cssPurchInvDivRowLabel {
+        display:table-row;
+        margin-top:8px;
+    }
+        .cssPurchInvDivRowInput {
+        display:table-row;
+    }
+</style>
+
+<div id="dialogPurchInvModalEdit" class="modal fade modal-width-custom " role="dialog" aria-labelledby="modal_edit_PurchInvModalEdit" aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+            Creazione/Modifica cliente
+        </div>
+        <div class="modal-body">
+            @Html.Hidden("purchInvId", Model.PurchaseInvoice.PurchaseInvoiceId)
+            <div style="display:table;">
+                <div class="cssPurchInvDivRowLabel">
+                    [BuyFromVendorId]
+                 </div>
+                <div class="cssPurchInvDivRowInput">
+                    @Html.DropDownList("purchInvBuyFromVendorId", Model.DDLVendorList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })
+                </div>
+                <div class="cssPurchInvDivRowLabel">
+                    [BuyFromName]
+                    </div>
+
+                <div class="cssPurchInvDivRowInput"">
+                    @Html.TextBox("purchInvBuyFromName", Model.PurchaseInvoice.BuyFromName, new { @class = "cssPurchInvInputAllRow"})<br />
+                    </div>
+                    <div class="cssPurchInvDivRowLabel">
+                        <div style="float: left;width:140px;">[Date]</div>
+                        <div style="float: left;padding-left:8px;width:180px;">[Amount]</div>
+                        <div style="float: left;padding-left:8px;width:180px;">[Vat]</div>
+                        <div style="float: left;padding-left:8px;">[DueDate]</div>
+                    </div>
+                    <div class="cssPurchInvDivRowInput">
+                        <div style="float: left;width:140px;">@Html.TextBox("purchInvDate", Model.PurchaseInvoice.Date, new { @type = "date", @class = "cssPurchInvInput" })</div>
+                        <div style="float: left;padding-left:8px;width:180px;">€ @Html.TextBox("purchInvAmount", Model.PurchaseInvoice.Amount, new { @class = "cssPurchInvMoney"})</div>
+                        <div style="float: left;padding-left:8px;width:180px;">€ @Html.TextBox("purchInvVat", Model.PurchaseInvoice.Vat, new { @class = "cssPurchInvMoney"})</div>
+                        <div style="float: left;padding-left:8px;width:140px;">@Html.TextBox("purchInvDueDate", Model.PurchaseInvoice.DueDate, new { @type = "date", @class = "cssPurchInvInput" })</div>
+                    </div>
+               
+                <div class="cssPurchInvDivRowLabel">
+                    [GLAccountCode]
+                </div>
+                <div class="cssPurchInvDivRowInput">
+                    @Html.DropDownList("purchInvGLAccount", Model.DDLAccountList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })
+                </div>
+                <div class="cssPurchInvDivRowLabel">
+                    [PaidById]
+                </div>
+
+                <div class="cssPurchInvDivRowInput">
+                    @Html.DropDownList("purchInvPaidById", Model.DDLPurchInvPaidByist, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })
+                    </div>
+                </div>
+                <br />
+                <div style="display:table;">
+                    <div class="cssPurchInvDivRowLabel">
+                        Assegna la spesa ad una o più commesse...
+                    </div>
+                    <div class="cssPurchInvDivRowLabel">
+                        <div style="float: left;width:480px;">Commessa</div>
+                        <div style="float: left;padding-left:8px;width:80px;">Percentuale</div>
+                        <div style="float: left;padding-left:8px;width:80px;">Totale</div>
+                    </div>
+                    <div class="cssPurchInvDivRowInput">
+                        <div style="float: left;width:480px;">@Html.DropDownList("purchInvAssociateJob1Id", Model.DDLJobList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })</div>
+                        <div style="float: left;padding-left:8px;width:70px;">% <input type="text" id="purchInvAssociateJob1Percent" class="cssPurchInvInput" style="padding-left:4px;width:40px;" /></div>
+                        <div style="float: left;padding-left:8px;width:100px;">€ <input type="text" id="purchInvAssociateJob1Total" class="cssPurchInvMoney" style="width:80px;" /></div>
+                    </div>
+                    <div class="cssPurchInvDivRowInput">
+                        <div style="float: left;width:480px;">@Html.DropDownList("purchInvAssociateJob2Id", Model.DDLJobList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })</div>
+                        <div style="float: left;padding-left:8px;width:70px;">% <input type="text" id="purchInvAssociateJob2Percent" class="cssPurchInvInput" style="padding-left:4px;width:40px;" /></div>
+                        <div style="float: left;padding-left:8px;width:100px;">€ <input type="text" id="purchInvAssociateJob2Total" class="cssPurchInvMoney" style="width:80px;" /></div>
+                    </div>
+                    <div class="cssPurchInvDivRowInput">
+                        <div style="float: left;width:480px;">@Html.DropDownList("purchInvAssociateJob3Id", Model.DDLJobList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })</div>
+                        <div style="float: left;padding-left:8px;width:70px;">% <input type="text" id="purchInvAssociateJob3Percent" class="cssPurchInvInput" style="padding-left:4px;width:40px;" /></div>
+                        <div style="float: left;padding-left:8px;width:100px;">€ <input type="text" id="purchInvAssociateJob3Total" class="cssPurchInvMoney" style="width:80px;" /></div>
+                    </div>
+                    <div class="cssPurchInvDivRowInput">
+                        <div style="float: left;width:480px;">@Html.DropDownList("purchInvAssociateJob4Id", Model.DDLJobList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })</div>
+                        <div style="float: left;padding-left:8px;width:70px;">% <input type="text" id="purchInvAssociateJob4Percent" class="cssPurchInvInput" style="padding-left:4px;width:40px;" /></div>
+                        <div style="float: left;padding-left:8px;width:100px;">€ <input type="text" id="purchInvAssociateJob4Total" class="cssPurchInvMoney" style="width:80px;" /></div>
+                    </div>
+                    <div class="cssPurchInvDivRowInput">
+                        <div style="float: left;width:480px;">@Html.DropDownList("purchInvAssociateJob5Id", Model.DDLJobList, new { @class = "cssPurchInvInputAllRow", @style = "height:26px;" })</div>
+                        <div style="float: left;padding-left:8px;width:70px;">% <input type="text" id="purchInvAssociateJob5Percent" class="cssPurchInvInput" style="padding-left:4px;width:40px;" /></div>
+                        <div style="float: left;padding-left:8px;width:100px;">€ <input type="text" id="purchInvAssociateJob5Total" class="cssPurchInvMoney" style="width:80px;" /></div>
+                    </div>
+                </div>
+            </div>
+<div class="modal-footer">
+    <div class="btn-group">
+        <button class="btn btn-danger" type="button" data-dismiss="modal">
+            <i class="fa fa-times"></i> Annulla
+        </button>
+        <button class="btn btn-success" id="dialogPurchInvModalEdit_confirm" type="button" onclick="dialogPurchInvModalEdit_save();">
+            <i class="fa fa-check"></i> Salva
+        </button>
+    </div>
+</div>
+
+    </form>
+</div>
+

@@ -18,7 +18,6 @@ namespace JobManagement.EFDataModel
         public long PurchaseId { get; set; }
         public decimal InPercent { get; set; }
     
-        public virtual Purchases Purchases { get; set; }
         public virtual TravelExpenses TravelExpenses { get; set; }
     }
 }
