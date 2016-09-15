@@ -1,0 +1,67 @@
+﻿@model Job.WebMvc.Models.JobIndexModel
+@{
+    ViewBag.Title = "Commesse";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+<ol class="breadcrumb">
+    <li>Home</li>
+    <li class="active">Elenco commesse</li>
+</ol>
+<ol class="list-inline">
+    <li><button type="button" class="btn btn-xs" data-id="" onclick="edit_job(this);"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuova commessa...</button></li>
+</ol>
+<div class="container-fluid">
+    <div class="row">
+    @using (Html.BeginForm("Index", "Jobs", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <div class="col-md-1">Cliente:</div>
+        <div class="col-md-4">@Html.DropDownList("filterCustomerId", Model.DDLCustomerList)</div>
+        <div class="col-md-3"><input type="checkbox" id="filterStatusOfferta" name="filterStatusOfferta" @Html.Raw(Model.filterStatusOfferta > 0 ? "checked=\"checked\"" : string.Empty) title="Offerta" value="0" /> Offerta <input type="checkbox" id="filterStatusOperativa" name="filterStatusOperativa" @Html.Raw(Model.filterStatusOperativa > 0 ? "checked=\"checked\"" : string.Empty) title="Aperta" value="10" /> Operativa <input type="checkbox" id="filterStatusChiusa" name="filterStatusChiusa" @Html.Raw(Model.filterStatusChiusa > 0 ? "checked=\"checked\"" : string.Empty) title="Chiusa" value="20" /> Chiusa <input type="checkbox" id="filterStatusArchiviata" name="filterStatusArchiviata" @Html.Raw(Model.filterStatusArchiviata > 0 ? "checked=\"checked\"" : string.Empty)  title="Archiviata" value="30" /> Archiviata<br /><input type="checkbox" id="filterStatusInterna" name="filterStatusInterna" @Html.Raw(Model.filterStatusInterna > 0 ? "checked=\"checked\"" : string.Empty) title="Interna" value="125" /> INTERNA</div>
+        <div class="col-md-1"><button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button></div>
+    }
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+            <thead>
+            <tr><th>Codice</th><th></th><th>Cliente</th><th>Descrizione</th><th>Ore prev.</th><th>Ore</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var j in Model.JobsList)
+            {
+                <tr><td><button type="button" class="btn btn-xs" data-id="@Html.Raw(j.JobId.ToString())" onclick="edit_job(this);"><span class="fa fa-edit"></span></button>@Html.Raw(j.Code)</td><td>@Html.Raw(j.StatusDescription)</td><td>@Html.Raw(j.CustomerFullName)</td><td>@Html.Raw(j.Description)</td><td>@Html.Raw(j.ExpectedWorkHours.ToString("F2"))</td><td></td></tr>
+            }
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section sectionScripts {
+<script type="text/javascript">
+    $(function () {
+        $('#filterCustomerId').select2({ width: '100%' });
+    });
+    function edit_job(btn) {
+        var id = btn.getAttribute("data-id");
+        if (id != null) {
+            if (id.trim() == '') {
+                id = null;
+            }
+        }
+        if (id != null) {
+            //window.location.href = '@Url.Action("Edit", "Jobs")/' + id;
+            window.location.assign('@Url.Action("Edit", "Jobs")/' + id);
+        } else {
+            $('#modal-placeholder').load('@Url.Content("~/Jobs/ModalEditJob")');
+         }
+     }
+    function job_budget(btn) {
+        var id = btn.getAttribute("data-id");
+        var url = '@Url.Action("Budget")/' + id;
+        window.location.href = url;
+    }
+</script>
+}
+
+

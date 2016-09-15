@@ -1,0 +1,128 @@
+﻿@model Job.WebMvc.Models.AppUser.AppUserEditMeModel
+<style type="text/css">
+    .modal-dialog {
+        width: 600px;
+    }
+    .ctrl-input-text {
+        border: 1px solid #808080;
+        border-radius: 4px;
+        height:32px;
+        font-size: 16px;
+        margin:0;
+        padding: 0px 16px 0px 16px;
+        vertical-align: middle;
+    }
+    .ctrl-button {
+        padding: 2px 6px 2px 6px;
+        border-radius: 4px;
+        background-color: #808080;
+        border: none;
+        color: white;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        
+    }
+</style>
+<div id="dialogModalChangeMyPasswd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="labelDialogModalChangeMyPasswd" aria-hidden="true">
+    <div class="modal-dialog modal-large">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Cambia la password</span>
+                <a data-dismiss="modal" class="close"><i class="fa fa-close"></i></a>
+                <input type="hidden" id="loggedUserId" name="loggedUserId" value="@Html.Raw(Model.LoggedUserId)" />
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr><td style="padding: 6px 6px 2px 4px;">Attuale password:</td><td style="padding: 6px 6px 2px 4px;"><input type="password" id="passwd" class="ctrl-input-text" /></td></tr>
+                    <tr><td style="padding: 6px 6px 2px 4px;">Nuova password:</td><td style="padding: 6px 6px 2px 4px;"><input type="password" id="passwdNew" class="ctrl-input-text" /></td></tr>
+                    <tr><td style="padding: 6px 6px 2px 4px;">Nuova password (controllo):</td><td style="padding: 6px 6px 2px 4px;"><input type="password" id="passwdNewConfirm" class="ctrl-input-text" /></td></tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <div style="float:right;">
+                    <table>
+                        <tr>
+                            <td>
+                                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                                    <i class="fa fa-times"></i> Annulla
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-success" id="dialogModalChangeMyPasswdConfirm" type="button" onclick="PasswordChange();">
+                                    <i class="fa fa-check"></i> Salva
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#dialogModalChangeMyPasswd').modal({
+            backdrop: true,
+            keyboard: true,
+            show: false
+        });
+    });
+    function PasswordChange()
+    {
+
+    }
+</script>
+<h2>Modifica utente</h2>
+@if (Request.IsAuthenticated)
+{
+    if (User.IsInRole("ADMIN"))
+    {
+        <table>
+            <tr><td style="padding: 6px 6px 2px 4px;">Nome utente:</td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userUserName" name="userUserName" maxlength="255" class="ctrl-input-text" style="width:460px;" /></td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Password:</td><td style="padding: 6px 6px 2px 4px;">******** <button id="cambiaPasswd" name="cambiaPasswd" class="ctrl-button" data-toggle="modal" data-target="#dialogModalChangeMyPasswd">Cambia</button></td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Nome completo:</td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userFullName" name="userFullName" maxlength="150" class="ctrl-input-text" style="width:460px;" /></td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Email:</td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userEmail" name="userEmail" maxlength="255" class="ctrl-input-text" style="width:460px;" /></td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Società:</td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userCompany" name="userCompany" maxlength="150" class="ctrl-input-text" style="width:460px;" /></td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Codice:</td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userCode" class="ctrl-input-text" maxlength="20" /></td></tr>
+            <tr style="margin-top:6px;padding: 6px 6px 2px 4px; text-align:center; vertical-align:middle; background-color:#808080;color:#ffffff;"><td colspan="2">Macchina per rimborso</td></tr>
+            <tr>
+                <td colspan="2" style="padding: 6px 6px 2px 4px;">
+                    <table>
+                        <tr><td>Targa</td><td>Descrizione</td><td>Rimb. €/km</td></tr>
+                        <tr><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userCarPlate" class="ctrl-input-text" maxlength="20" style="width:100px;" /></td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userCarDescription" class="ctrl-input-text" maxlength="75" style="width:260px;" /></td><td style="padding: 6px 6px 2px 4px;"><input type="text" id="userCarKmCost" class="ctrl-input-text" maxlength="6" style="width:80px;" /></td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <table>
+            <tr><td style="padding: 6px 6px 2px 4px;">Nome utente:</td><td style="padding: 6px 6px 2px 4px;">@Html.Raw(Model.UserApp.UserName)</td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Password:</td><td style="padding: 6px 6px 2px 4px;">******** <button id="cambiaPasswd" name="cambiaPasswd" class="ctrl-button" data-toggle="modal" data-target="#dialogModalChangeMyPasswd">Cambia</button></td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Nome completo:</td><td style="padding: 6px 6px 2px 4px;">@Html.TextBox("userFullName", Model.UserPeople.FirstName + " " + Model.UserPeople.LastName, new { @maxlength = 150, @class = "ctrl-input-text", @style = "width:460px;" })</td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Email:</td><td style="padding: 6px 6px 2px 4px;">@Html.Raw(Model.UserApp.Email)</td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Società:</td><td style="padding: 6px 6px 2px 4px;">@Html.TextBox("userCompany", Model.UserPeople.CompanyName, new { @maxlength = 150, @class = "ctrl-input-text", @style = "width:460px;" })</td></tr>
+            <tr><td style="padding: 6px 6px 2px 4px;">Codice:</td><td style="padding: 6px 6px 2px 4px;">@Html.TextBox("userCompany", Model.UserPeople.Code, new { @maxlength = 20, @class = "ctrl-input-text", @style = "width:240px;" })</td></tr>
+            <tr style="margin-top:6px;padding: 6px 6px 2px 4px; text-align:center; vertical-align:middle; background-color:#808080;color:#ffffff;"><td colspan="2">Macchina per rimborso</td></tr>
+            <tr>
+                <td colspan="2" style="padding: 6px 6px 2px 4px;">
+                    <table>
+                        <tr><td>Targa</td><td>Descrizione</td><td>Rimb. €/km</td></tr>
+                        <tr><td style="padding: 6px 6px 2px 4px;">@Html.TextBox("userCarPlate", Model.UserPeople.CarPlate, new { @maxlength = 20, @class = "ctrl-input-text", @style = "width:120px;" })</td><td style="padding: 6px 6px 2px 4px;">@Html.TextBox("userCarDescription", Model.UserPeople.CarDescription, new { @maxlength = 75, @class = "ctrl-input-text", @style = "width:280px;" })</td><td style="padding: 6px 6px 2px 4px;">@Html.TextBox("userCarKmCost", string.Format("€ {0:N4}", Model.UserPeople.CarKmCost), new { @maxlength = 6, @class = "ctrl-input-text", @style = "width:120px;text-align:right;" })</td></tr>
+                    </table>
+                </td>
+            </tr>
+            <tr style="margin-top:6px;padding: 6px 6px 2px 4px; text-align:center; vertical-align:middle; background-color:#808080;color:#ffffff;"><td colspan="2">Dettaglio costi commessa</td></tr>
+            <tr>
+                <td colspan="2">
+                    <table>
+                        <tr><td>Tipo</td><td>Orario</td></tr>
+                        <tr><td style="padding: 6px 6px 2px 4px;">Costo interno</td><td style="padding: 6px 6px 2px 4px;">€ @Html.TextBox("userHourCost", Model.UserPeople.HourCost, new { @maxlength = 20, @class = "ctrl-input-text", @style = "width:120px;" })</td></tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    }
+}

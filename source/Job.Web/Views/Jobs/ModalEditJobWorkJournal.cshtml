@@ -1,0 +1,142 @@
+﻿@model Job.WebMvc.Models.ModalEditJobWorkJournalModel
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        $('#dialogEditWorkLogJob').select2({ width: '100%' });
+        $('#dialogEditWorkLogJobTaskId').select2({ width: '100%' });
+        $('#dialogModalEditJobWorkJournal').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+        $('#dialogModalEditJobWorkJournal').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+        });
+        $('#dialogEditWorkLogDate').datepicker({
+            firstDay: 1,
+            dateFormat: 'dd/mm/yy'
+        }).datepicker('setDate','@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.WorkJournal.Date))');
+    });
+    function modal_edit_jobworkjournal_save() {
+        var sendData = new Object();
+        sendData.jobWorkJournalId = $('#dialogEditWorkLogJobWorkJournalId').val();
+        sendData.jobId = $('#dialogEditWorkLogJob').val();
+        sendData.peopleId = $('#dialogEditWorkLogPeopleId').val();
+        sendData.date = zzsDateToISOString($('#dialogEditWorkLogDate').datepicker('getDate'));
+        sendData.jobTaskId = $('#dialogEditWorkLogJobTaskId').val();
+        sendData.workedHours = $('#dialogEditWorkLogUnit').val();
+        sendData.taskWhere = $('#dialogEditWorkLogWhere').val();
+        sendData.annotation = $('#dialogEditWorkLogAnnotation').val();
+        sendData.jobDimensionId = $('#dialogEditWorkLogJobDimension').val();
+        sendData.jobReportId = null;
+        // Check data
+        if (sendData.date == null) {
+            alert("La data è obbligatoria");
+            return false;
+        }
+        // Worked Hours
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("ModalEditJobWorkJournal", "Jobs")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ErrorResult == "OK") || (result.ErrorResult == undefined))
+                {
+                    $('#dialogModalEditJobWorkJournal').modal('hide');
+                    window.location.reload(false);
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+    function modal_edit_jobworkjournal_delete() {
+        if (confirm('Sei certo di volermi cancellare?')) {
+            var sendData = new Object();
+            sendData.jobWorkJournalId = $('#dialogEditWorkLogJobWorkJournalId').val();
+            $.ajax({
+                method: "POST",
+                url: '@Url.Action("DeleteJobWorkJournal", "Jobs")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ErrorResult == "OK") {
+                        $('#dialogModalEditJobWorkJournal').modal('hide');
+                    } else {
+                        alert(result.ErrorMessage);
+                    }
+                }
+            });
+        }
+    }
+</script>
+<style>
+    .row-margin-6top {
+        margin-top: 6px;
+    }
+</style>
+<div id="dialogModalEditJobWorkJournal" class="modal fade" role="dialog" aria-labelledby="modal_edit_jobworkjournal" aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+            <a data-dismiss="modal" class="close"><i class="fa fa-close"></i></a>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Risorsa:</div>
+                <div class="col-xs-10">@Html.DropDownList("dialogEditWorkLogPeopleId", Model.DDLPerson)</div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" value="@Html.Raw(Model.WorkJournal.WorkJournalId)" id="dialogEditWorkLogJobWorkJournalId" name="dialogEditWorkLogJobWorkJournalId" />
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Commessa:</div>
+                <div class="col-xs-10">@Html.DropDownList("dialogEditWorkLogJob", Model.DDLJobs, new { @class = "form-control" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Attivita:</div>
+                <div class="col-xs-10">@Html.DropDownList("dialogEditWorkLogJobTaskId", Model.DDLJobTask, new { @class = "form-control" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Data:</div>
+                <div class="col-xs-2"><input type="text" id="dialogEditWorkLogDate" name="dialogEditWorkLogDate" class="form-control" /></div>
+                <div class="col-xs-1">Ore:</div>
+                <div class="col-xs-1">@Html.TextBox("dialogEditWorkLogUnit", Model.WorkJournal.WorkedHours, new { @class = "form-control text-right" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Luogo:</div>
+                <div class="col-xs-10">@Html.TextBox("dialogEditWorkLogWhere", Model.WorkJournal.TaskWhere, new { @class = "form-control" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-xs-1">Note:</div>
+                <div class="col-xs-10">@Html.TextArea("dialogEditWorkLogAnnotation", Model.WorkJournal.Annotation, new { @class = "form-control", @rows = 5 })</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="float:left;">
+                <div class="btn-group">
+                    <button class="btn btn-warning" type="button" onclick="modal_edit_jobworkjournal_delete();">
+                        <i class=" fa fa-times">
+                        </i> Delete
+                    </button>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button class="btn btn-success" id="dialogModalCreateJobWorkJournalLine_confirm" type="button" onclick="modal_edit_jobworkjournal_save();">
+                    <i class="fa fa-check"></i> Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

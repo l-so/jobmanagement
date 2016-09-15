@@ -1,0 +1,71 @@
+﻿@model Job.WebMvc.Models.Home.HomeIndexModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+<style>
+    .tdNomeGiorno {
+        border-bottom: 2px solid #ddd;        
+        padding: 8px;
+        line-height: 1.4285;
+        vertical-align: bottom;
+        border-top: 1px solid #ddd;
+        width: 110px;
+    }
+    .tableOreGiornaliere {
+        border-collapse: separate;
+        border-spacing: 4px;
+    }
+    .tdGiornoOre {
+        padding-right: 6px;
+        vertical-align: top;
+    }
+    .margin-top-06 {
+        margin-top: 6px;
+    }
+</style>
+
+<div class="container-fluid">
+    <ol class="breadcrumb">
+        <li class="active">Home</li>
+    </ol>
+
+    @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <input type="text" id="filterYear" name="filterYear" style="height:21px;width:60px;" value="@Html.Raw(Model.FilterYear)"/> <select id="filterMonth" name="filterMonth" style="height:21px;" >
+    <option value="1" @Html.Raw(Model.FilterMonth == 1 ? "selected" : string.Empty)>Gennaio</option>
+    <option value="2" @Html.Raw(Model.FilterMonth == 2 ? "selected" : string.Empty)>Febbraio</option>
+    <option value="3" @Html.Raw(Model.FilterMonth == 3 ? "selected" : string.Empty)>Marzo</option>
+    <option value="4" @Html.Raw(Model.FilterMonth == 4 ? "selected" : string.Empty)>Aprile</option>
+    <option value="5" @Html.Raw(Model.FilterMonth == 5 ? "selected" : string.Empty)>Maggio</option>
+    <option value="6" @Html.Raw(Model.FilterMonth == 6 ? "selected" : string.Empty)>Giugno</option>
+    <option value="7" @Html.Raw(Model.FilterMonth == 7 ? "selected" : string.Empty)>Luglio</option>
+    <option value="8" @Html.Raw(Model.FilterMonth == 8 ? "selected" : string.Empty)>Agosto</option>
+    <option value="9" @Html.Raw(Model.FilterMonth == 9 ? "selected" : string.Empty)>Settembre</option>
+    <option value="10" @Html.Raw(Model.FilterMonth == 10 ? "selected" : string.Empty)>Ottobre</option>
+    <option value="11" @Html.Raw(Model.FilterMonth == 11 ? "selected" : string.Empty)>Novembre</option>
+    <option value="12" @Html.Raw(Model.FilterMonth == 12 ? "selected" : string.Empty)>Dicembre</option>
+</select> @Html.DropDownList("filterPeople", Model.DDLPerson) <button type="submit" class="btn btn-xs"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+    }
+
+
+            <table class="tableOreGiornaliere">
+                <tr><td colspan="7"><h2><span>@Html.Raw(Model.MeseAnno)</span> <span style="float:right;">@Html.Raw(Model.loggedPeople.FirstName + " " + Model.loggedPeople.LastName)</span></h2></td></tr>
+                <tr><td class="text-center tdNomeGiorno">LUNEDI</td><td class="text-center tdNomeGiorno">MARTEDI</td><td class="text-center tdNomeGiorno">MERCOLEDI</td><td class="text-center tdNomeGiorno">GIOVEDI</td><td class="text-center tdNomeGiorno">VENERDI</td><td class="text-center tdNomeGiorno">SABATO</td><td class="text-center tdNomeGiorno">DOMENICA</td></tr>
+                @foreach (var s in Model.LavoroDelMese)
+                {
+                    <tr><td class="text-center" @Html.Raw((s.Lunedi == null ? string.Empty : "style=\"background-color:#84ed96;\" "))>@Html.Raw((s.Lunedi == null ? string.Empty : s.Lunedi.Numero.ToString()))</td><td class="text-center" @Html.Raw((s.Martedi == null ? string.Empty : "style=\"background-color:#84ed96;\" "))>@Html.Raw((s.Martedi == null ? string.Empty : s.Martedi.Numero.ToString()))</td><td class="text-center" @Html.Raw((s.Mercoledi == null ? string.Empty : "style=\"background-color:#84ed96;\" "))>@Html.Raw((s.Mercoledi == null ? string.Empty : s.Mercoledi.Numero.ToString()))</td><td class="text-center" @Html.Raw((s.Giovedi == null ? string.Empty : "style=\"background-color:#84ed96;\" "))>@Html.Raw((s.Giovedi == null ? string.Empty : s.Giovedi.Numero.ToString()))</td><td class="text-center" @Html.Raw((s.Venerdi == null ? string.Empty : "style=\"background-color:#84ed96;\" "))>@Html.Raw((s.Venerdi == null ? string.Empty : s.Venerdi.Numero.ToString()))</td><td class="text-center" @Html.Raw((s.Sabato == null ? string.Empty : "style=\"background-color:#00008B;color:#FFA500;\" "))>@Html.Raw((s.Sabato == null ? string.Empty :  s.Sabato.Numero.ToString()))</td><td class="text-center" @Html.Raw((s.Domenica == null ? string.Empty : "style=\"background-color:#FFA500;color:#00008B;\" "))>@Html.Raw((s.Domenica == null ? string.Empty : s.Domenica.Numero.ToString()))</td></tr>
+                    <tr>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Lunedi == null ? string.Empty : (s.Lunedi.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Lunedi.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Lunedi.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Lunedi.Data) }, null).ToHtmlString())))<br />@Html.Raw((s.Lunedi == null ? string.Empty : s.Lunedi.OrdinarioString))<br />@Html.Raw((s.Lunedi == null ? string.Empty : s.Lunedi.StraordinarioString))</td>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Martedi == null ? string.Empty : (s.Martedi.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Martedi.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Martedi.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Martedi.Data) }, null).ToHtmlString()))) <br />@Html.Raw((s.Martedi == null ? string.Empty : s.Martedi.OrdinarioString))<br />@Html.Raw((s.Martedi == null ? string.Empty : s.Martedi.StraordinarioString))</td>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Mercoledi == null ? string.Empty : (s.Mercoledi.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Mercoledi.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Mercoledi.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Mercoledi.Data) }, null).ToHtmlString())))<br />@Html.Raw((s.Mercoledi == null ? string.Empty : s.Mercoledi.OrdinarioString))<br />@Html.Raw((s.Mercoledi == null ? string.Empty : s.Mercoledi.StraordinarioString))</td>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Giovedi == null ? string.Empty : (s.Giovedi.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Giovedi.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Giovedi.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Giovedi.Data) }, null).ToHtmlString())))<br />@Html.Raw((s.Giovedi == null ? string.Empty : s.Giovedi.OrdinarioString))<br />@Html.Raw((s.Giovedi == null ? string.Empty : s.Giovedi.StraordinarioString))</td>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Venerdi == null ? string.Empty : (s.Venerdi.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Venerdi.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Venerdi.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Venerdi.Data) }, null).ToHtmlString())))<br />@Html.Raw((s.Venerdi == null ? string.Empty : s.Venerdi.OrdinarioString))<br />@Html.Raw((s.Venerdi == null ? string.Empty : s.Venerdi.StraordinarioString))</td>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Sabato == null ? string.Empty : (s.Sabato.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Sabato.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Sabato.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Sabato.Data) }, null).ToHtmlString())))<br />@Html.Raw((s.Sabato == null ? string.Empty : s.Sabato.OrdinarioString))<br />@Html.Raw((s.Sabato == null ? string.Empty : s.Sabato.StraordinarioString))</td>
+                        <td class="text-right tdGiornoOre">@Html.Raw((s.Domenica == null ? string.Empty : (s.Domenica.Ore == 0 ? string.Empty : Html.ActionLink(string.Format("{0:F2}", s.Domenica.Ore), "JobsWorkJournal", "Jobs", new { filterPeopleId = Model.PeopleId, filterBeginDate = string.Format("{0:yyyy-MM-dd}", s.Domenica.Data), filterEndDate = string.Format("{0:yyyy-MM-dd}", s.Domenica.Data) }, null).ToHtmlString())))<br />@Html.Raw((s.Domenica == null ? string.Empty : s.Domenica.OrdinarioString))<br />@Html.Raw((s.Domenica == null ? string.Empty : s.Domenica.StraordinarioString))</td>
+                    </tr>
+                }
+            </table>
+</div>
+

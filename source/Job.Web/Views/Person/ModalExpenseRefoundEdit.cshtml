@@ -1,0 +1,83 @@
+﻿@model Job.WebMvc.Models.Person.ModalExpenseRefoundEditModel
+
+<script type="text/javascript">
+    $(function () {
+        $('#dialogExpensePaymentRefoundModalEdit').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+        $('#dialogExpensePaymentRefoundModalEdit').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+            window.location.reload();
+        })
+    });
+    function dialogRefundExpenseInvModalEdit_save() {
+        var sendData = new Object();
+        sendData.Operation = "ExpensePaymentUpdate";
+        sendData.ExpensePaymentRefoundId = $('#dialogExpensePaymentRefoundId').val();
+        sendData.PeopleId = $('#dialogExpensePaymentRefoundPeople').val();
+        if (sendData.PeopleId == -1) {
+            alert("Indica la persona!");
+            return false;
+        }
+        sendData.Date = $('#dialogExpensePaymentRefoundDate').val();
+        sendData.Amount = $('#dialogExpensePaymentRefoundAmount').val();
+        sendData.GLAccount = $('#dialogExpensePaymentRefoundGLAccount').val();
+        sendData.Note = $('#dialogExpensePaymentRefoundNote').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/PersonSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ResultStatus == "OK") || (result.ResultStatus == undefined)) {
+                    $('#dialogExpensePaymentRefoundModalEdit').modal('hide');
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+</script>
+
+<div id="dialogExpensePaymentRefoundModalEdit" class="modal fade" role="dialog">
+    <div class="modal-content" style="width:520px;">
+        <div class="modal-header">
+            Aggiungi/Modifica richiesta di rimborso fattura
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="dialogExpensePaymentRefoundId" name="dialogExpensePaymentRefoundId" value="@Html.Raw(Model.Payment.Id)" />
+            <div>
+                <div style="float:left;width:80px;">Persona:</div><div>@Html.DropDownList("dialogExpensePaymentRefoundPeople", Model.DDLPerson, new { @style = "height:26px;" })</div>
+            </div>
+            <div style="margin-top:6px;">
+                <div style="float:left;width:80px;">Data:</div><div><input type="date" id="dialogExpensePaymentRefoundDate" name="dialogExpensePaymentRefoundDate" value="@Html.Raw(string.Format("{0:yyyy-MM-dd}", Model.Payment.Date))" /></div>
+            </div>
+            <div style="margin-top:6px;">
+                <div style="float:left;width:80px;">Importo:</div><div>€ <input type="text" id="dialogExpensePaymentRefoundAmount" name="dialogExpensePaymentRefoundAmount" style="text-align:right; padding-right:8px;" value="@Html.Raw(Model.Payment.Amount.ToString("F2"))" /></div>
+            </div>
+            <div style="margin-top:6px;">
+                <div style="float:left;width:80px;">Causale:</div><div>@Html.DropDownList("dialogExpensePaymentRefoundGLAccount", Model.DDLGLAccount, new { @style="height:26px;" })</div>
+            </div>
+            <div style="margin-top:6px;">
+                <div style="float:left;width:80px;">Note:</div><div><textarea id="dialogExpensePaymentRefoundNote" name="dialogExpensePaymentRefoundNote" style="width:320px;">@Html.Raw(Model.Payment.Note)</textarea></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="btn-group">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button class="btn btn-success" id="dialogRefundExpenseInvModalEdit_save" type="button" onclick="dialogRefundExpenseInvModalEdit_save();">
+                    <i class="fa fa-check"></i> Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

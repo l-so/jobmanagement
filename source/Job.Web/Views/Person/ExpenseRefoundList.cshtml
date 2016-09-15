@@ -1,0 +1,90 @@
+﻿@model Job.WebMvc.Models.Person.ExpenseRefoundIndexModel
+@{
+    ViewBag.Title = "ExpenseRefoundList";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+<script type="text/javascript">
+    function ExpensePaymentRefound_Edit(id)
+    {
+        var u = '@Url.Action("ModalExpenseRefoundEdit", "Person")';
+        $('#modal-placeholder').load(u + '/' + id);
+    }
+    function ExpensePaymentRefound_Delete(id)
+    {
+        alert('Delete ' + id);
+    }
+    function ExpensePaymentRefound_Post() {
+        alert('Post ' + $('#filterPeopleId').val() + ' ' + $('#filterYear').val() + '/' + $('#filterMonth').val());
+        var sendData = new Object();
+        sendData.Operation = "PostExpenseRefound";
+        sendData.PeopleId = $('#filterPeopleId').val();
+        sendData.Year = $('#filterYear').val();
+        sendData.Month = $('#filterMonth').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/PersonSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ResultStatus == "OK") || (result.ResultStatus == undefined)) {
+                    alert("Registrazione effettuata!");
+                    window.location.reload();
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+        
+    }
+</script>
+@using (Html.BeginForm("ExpenseRefoundList", "Person", FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+    @Html.DropDownList("filterPeopleId", Model.DDLPerson, new { @style="height:28px;" }) <select id="filterMonth" name="filterMonth" style="height:28px;">
+    <option value="99" @Html.Raw(Model.FilterMonth == 99 ? "selected" : string.Empty)>Intero anno</option>
+    <option value="1" @Html.Raw(Model.FilterMonth == 1 ? "selected" : string.Empty)>Gennaio</option>
+    <option value="2" @Html.Raw(Model.FilterMonth == 2 ? "selected" : string.Empty)>Febbraio</option>
+    <option value="3" @Html.Raw(Model.FilterMonth == 3 ? "selected" : string.Empty)>Marzo</option>
+    <option value="4" @Html.Raw(Model.FilterMonth == 4 ? "selected" : string.Empty)>Aprile</option>
+    <option value="5" @Html.Raw(Model.FilterMonth == 5 ? "selected" : string.Empty)>Maggio</option>
+    <option value="6" @Html.Raw(Model.FilterMonth == 6 ? "selected" : string.Empty)>Giugno</option>
+    <option value="7" @Html.Raw(Model.FilterMonth == 7 ? "selected" : string.Empty)>Luglio</option>
+    <option value="8" @Html.Raw(Model.FilterMonth == 8 ? "selected" : string.Empty)>Agosto</option>
+    <option value="9" @Html.Raw(Model.FilterMonth == 9 ? "selected" : string.Empty)>Settembre</option>
+    <option value="10" @Html.Raw(Model.FilterMonth == 10 ? "selected" : string.Empty)>Ottobre</option>
+    <option value="11" @Html.Raw(Model.FilterMonth == 11 ? "selected" : string.Empty)>Novembre</option>
+    <option value="12" @Html.Raw(Model.FilterMonth == 12 ? "selected" : string.Empty)>Dicembre</option>
+</select>
+<input id="filterYear" name="filterYear" value="@Html.Raw(Model.FilterYear)" style="text-align:right;padding-right:6px;width:80px;height:28px;" /> <button type="submit" class="btn btn-xs" name="filterButton" id="filterButton" value="f"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+}
+<div style="margin-top:6px;">
+    <button  class="btn btn-xs" onclick="ExpensePaymentRefound_Post();"><span class="glyphicon glyphicon-pencil"></span> Registra le spese visualizzate</button>
+</div>
+<table style="margin-top:24px;">
+    <thead>
+        <tr><th></th><th style="padding-left:12px;">Data</th><th style="padding-left:12px;">Persona</th><th style="padding-left:12px;">Motivo</th><th style="padding-left:12px;text-align:right;">Importo</th><th style="padding-left:12px;">Status</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model.ExpensePaymentRefoundList)
+        {
+
+            <tr> 
+            @if (e.Status == JobManagement.EFDataModel.ExpensePaymentRefound.STATUS_BOZZA)
+            {
+                <td><button type="button" class="btn btn-xs" onclick="ExpensePaymentRefound_Delete('@Html.Raw(e.Id)');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancella</button></td>
+                <td style="padding-left:12px;"><a href="#" onclick="ExpensePaymentRefound_Edit('@Html.Raw(e.Id)');">@Html.Raw(e.Date.Value.ToString("d"))</a></td>
+            }
+            else
+            {
+                <td></td>
+                <td style="padding-left:12px;"><a href="@Url.Action("ExpensePaymentRefound", "DisplayDocument", new { id = e.Id})">@Html.Raw(e.Date.Value.ToString("d"))</a></td>
+            }
+            <td style="padding-left:12px;">@Html.Raw(e.Person.FullName)</td><td style="padding-left:12px;">@Html.Raw(string.Format("[{0}] {1}" ,e.GLAccount.GLAccountCode,e.GLAccount.Name))</td><td style="padding-left:12px;text-align:right;">€ @Html.Raw(e.Amount)</td><td style="padding-left:12px;">@Html.Raw(e.StatusDescription)</td></tr>
+        }
+    </tbody>
+</table>

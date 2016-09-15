@@ -1,0 +1,48 @@
+﻿@model Job.WebMvc.Models.AppUser.AppUserIndexModel
+@{
+    ViewBag.Title = "Index";
+}
+<h2>Lista utenti applicativi</h2>
+<div>
+    <button type="button" class="btn-xs btn-default" data-id="" onclick="editUserInformation(this);"><span class="fa fa-plus" aria-hidden="true"></span> Nuovo utente</button>
+</div>
+<table class="table-condensed">
+    <thead>
+        <tr><th colspan="2">Utente</th><th>Email</th></tr>
+    </thead>
+    <tbody>
+        @foreach (Job.WebMvc.Identity.AppUser u in Model.Users) {
+            <tr><td><button type="button" class="btn-xs btn-default" data-id="@Html.Raw(u.Id)" onclick="editUserInformation(this);"><span class="fa fa-edit"></span></button>@Html.Raw(u.UserName)</td><td><button type="button" class="btn-xs btn-default" onclick="resetUserPassword(this);" data-id="@Html.Raw(u.Id)"><span class="fa fa-recycle"></span></button></td><td>@Html.Raw(u.Email)</td></tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+    function editUserInformation(btn) {
+        var id = btn.getAttribute("data-id");
+        if (id != null) {
+            if (id.trim() == '') {
+                id = null;
+            }
+        }
+        $('#modal-placeholder').empty();
+        if (id != null) {
+            $('#modal-placeholder').load('@Url.Content("~/AppUser/ModalAppUserEdit")/' + id);
+        } else {
+            $('#modal-placeholder').load('@Url.Content("~/AppUser/ModalAppUserEdit")');
+        }
+    }
+    function resetUserPassword(btn) {
+        var id = btn.getAttribute("data-id");
+        if (id != null) {
+            if (id.trim() == '') {
+                id = null;
+            }
+        }
+        $('#modal-placeholder').empty();
+        if (id != null) {
+            $('#modal-placeholder').load('@Url.Content("~/AppUser/ModalResetPassword")/' + id);
+        } else {
+            alert('Non ho capita a quale utente vuoi resettare la password, mi spiace!');
+        }
+    }
+</script>

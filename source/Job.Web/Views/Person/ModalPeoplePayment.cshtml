@@ -1,0 +1,97 @@
+﻿@model Job.WebMvc.Models.Person.ModalPeoplePaymentModel
+<script type="text/javascript">
+    $(function () {
+        $('#dialogModalPeoplePayment').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+        $('#dialogModalPeoplePayment').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+        });
+    });
+    function dlgPeoplePayment_calcTotal() {
+        var c = $('#dlgPeoplePaymentStipendio').val();
+        var t = $('#dlgPeoplePaymentTasse').val();
+        var i = $('#dlgPeoplePaymentINPS').val();
+        if (c == null || c.trim() == '') c = 0;
+        if (t == null || t.trim() == '') t = 0;
+        if (i == null || i.trim() == '') i = 0;
+        $('#dlgPeoplePaymentTotale').val((parseFloat(c) + parseFloat(t) + parseFloat(i)).toFixed(2));
+    }
+    function dlgPeoplePayment_save() {
+        var sendData = new Object();
+        sendData.Compenso = $('#dlgPeoplePaymentStipendio').val();
+        sendData.Tasse = $('#dlgPeoplePaymentTasse').val();
+        sendData.Inps = $('#dlgPeoplePaymentINPS').val();
+        sendData.Date = $('#dlgPeoplePaymentDate').val();
+        sendData.PeopleId = $('#dlgPeoplePaymentPeople').val();
+        sendData.Bank = $('#dlgPeoplePaymentBank').val();
+        if (sendData.Compenso == null || sendData.Compenso.trim() == '') sendData.Compenso = 0;
+        if (sendData.Tasse == null || sendData.Tasse.trim() == '') sendData.Tasse = 0;
+        if (sendData.Inps == null || sendData.Inps.trim() == '') sendData.Inps = 0;
+        if (sendData.Compenso + sendData.Tasse + sendData.Inps == 0) {
+            alert('Almeno un importo è obbligatorio');
+            return;
+        }
+        if (sendData.Date == null || sendData.Date.trim() == '') {
+            alert('La data è obbligatoria');
+            return;
+        }
+        if (sendData.PeopleId < 1) {
+            alert('Non capisco a chi và il pagamento');
+            return;
+        }
+        sendData.Operation = "PeoplePayment";
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/PersonSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ResultStatus == "OK") || (result.ResultStatus == undefined)) {
+                    $('#dialogModalPeoplePayment').modal('hide');
+                    window.location.reload(false);
+                } else {
+                    alert(result.Error);
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+</script>
+<style>
+
+</style>
+<div id="dialogModalPeoplePayment" class="modal fade" role="dialog" aria-labelledby="modal_edit_PersonCost" aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+            Pagamento a persona
+        </div>
+        <div class="modal-body">
+            <table>
+                <tr><td>DATA</td><td style="padding-left:12px;">PERSONA</td></tr>
+                <tr><td><input type="date" id="dlgPeoplePaymentDate" name="dlgPeoplePaymentDate" style="line-height:26px;" /></td><td style="padding-left:12px;">@Html.DropDownList("dlgPeoplePaymentPeople", Model.DDLPerson, new { @style = "height:26px;" })</td></tr>
+                <tr><td style="vertical-align:middle;padding-top:6px;">CONTO CORRENTE:</td><td style="padding-left:12px;padding-top:6px;">@Html.DropDownList("dlgPeoplePaymentBank", Model.DDLBankAccount, new { @style = "height:26px;" })</td></tr>
+                <tr><td style="vertical-align:middle;padding-top:6px;">STIPENDI/RIMBORSI</td><td style="padding-left:12px;padding-top:6px;">€ <input type="text" id="dlgPeoplePaymentStipendio" name="dlgPeoplePaymentStipendio"  style="line-height:26px;text-align:right;width:100px;padding-right:6px;" onblur="dlgPeoplePayment_calcTotal();"/></td></tr>
+                <tr><td style="vertical-align:middle;padding-top:6px;">TASSE</td><td style="padding-left:12px;padding-top:6px;">€ <input type="text" id="dlgPeoplePaymentTasse" name="dlgPeoplePaymentTasse"  style="line-height:26px;text-align:right;width:100px;padding-right:6px;" onblur="dlgPeoplePayment_calcTotal();"/></td></tr>
+                <tr><td style="vertical-align:middle;padding-top:6px;">INPS</td><td style="padding-left:12px;padding-top:6px;">€ <input type="text" id="dlgPeoplePaymentINPS" name="dlgPeoplePaymentINPS"  style="line-height:26px;text-align:right;width:100px;padding-right:6px;" onblur="dlgPeoplePayment_calcTotal();"/></td></tr>
+                <tr><td style="vertical-align:middle;padding-top:6px;">TOTALE</td><td style="padding-left:12px;padding-top:6px;">€ <input type="text" id="dlgPeoplePaymentTotale" name="dlgPeoplePaymentTotale"  style="line-height:26px;text-align:right;width:100px;padding-right:6px;" readonly/></td></tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <div class="btn-group">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button class="btn btn-success" id="dialogEditJob_confirm" type="button" onclick="dlgPeoplePayment_save();">
+                    <i class="fa fa-check"></i> Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

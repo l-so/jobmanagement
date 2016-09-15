@@ -1,0 +1,177 @@
+﻿@model Job.WebMvc.Models.ModalEditJobModel
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    $(function () {
+        $('#dialogEditJobCustomer').select2({ width: '100%' });
+        $('#dialogEditJob').modal({
+            backdrop: true,
+            keyboard: true,
+            show: true
+        });
+        $('#dialogEdiJobExpectedStartDate').datepicker({
+            firstDay: 1,
+            dateFormat: 'dd/mm/yy'
+        }).datepicker('setDate', '@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.Job.ExpectedStartDate))');
+
+        $('#dialogEdiJobExpectedFinishDate').datepicker({
+            firstDay: 1,
+            dateFormat: 'dd/mm/yy'
+        }).datepicker('setDate', '@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.Job.ExpectedFinishDate))');
+        $('#dialogEditJob').on('hidden.bs.modal', function () {
+            $('#modal-placeholder').empty();
+        })
+    });
+    function modal_edit_job_save() {
+        var sendData = new Object();
+        sendData.JobId = $('#dialogEditJobJobId').val();
+        sendData.CustomerId = $('#dialogEditJobCustomer').val();
+        if (sendData.CustomerId < 1) {
+            alert("Non correre...seleziona il cliente!");
+            return;
+        }
+        sendData.Status = $('#dialogEditJobStatus').val();
+        sendData.Year = $('#dialogEdiJobYear').val();
+        sendData.Description = $('#dialogEdiJobDescription').val();
+        sendData.ExpectedWorkHours = $('#dialogEdiJobExpectedWorkHours').val();
+        if (sendData.ExpectedWorkHours == null) {
+            alert("Devi inserire il tempo che pensi sia necessario.");
+            return false;
+        }
+        sendData.ExpectedCost = $('#dialogEdiJobExpectedCost').val();
+        sendData.ExpectedIncome = $('#dialogEdiJobExpectedIncome').val();
+        sendData.ExpectedStartDate = zzsDateToISOString($('#dialogEdiJobExpectedStartDate').datepicker('getDate'));
+        sendData.ExpectedFinishDate = zzsDateToISOString($('#dialogEdiJobExpectedFinishDate').datepicker('getDate'));
+
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("ModalEditJob", "Jobs")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if ((result.ErrorResult == "OK") || (result.ErrorResult == undefined)) {
+                    $('#dialogEditJob').modal('hide');
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+    function update_Profitability() {
+        var co = 30;
+        var eo = parseFloat($('#dialogEdiJobExpectedWorkHours').val());
+        if (eo == null) eo = 0;
+        if (isNaN(eo)) {
+            alert("Ore lavoro previste non è un numero");
+            eo = 0;
+        }
+        var ec = parseFloat($('#dialogEdiJobExpectedCost').val());
+        if (ec == null) ec = 0;
+        if (isNaN(ec)) {
+            alert("Costi previsti non è un numero");
+            ec = 0;
+        }
+        var ei = parseFloat($('#dialogEdiJobExpectedIncome').val());
+        if (ei == null) ei = 0;
+        if (isNaN(ei)) {
+            alert("Fatturato previsto non è un numero");
+            ei = 0;
+        }
+        var r = ei - ((eo * co) + ec);
+        $('#spanExpectedProfitability').html('[30 &#8364;/ora = ' + (eo * co).toFixed(2) + '] &#8364; ' + r.toFixed(2));
+    }
+</script>
+<style>
+    .row-margin-6top {
+        margin-top: 6px;
+    }
+    .myTextBox {
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.4;
+        color: #555;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;   
+    }
+</style>
+<div id="dialogEditJob" class="modal fade" role="dialog" aria-labelledby="modal_edit_job" aria-hidden="true">
+    <form class="modal-content">
+        <div class="modal-header">
+            Creazione/Modifica commessa
+        </div>
+        <div class="modal-body">
+            <input type="hidden" value="@Html.Raw(Model.Job.JobId)" id="dialogEditJobJobId" name="dialogEditJobJobId" />
+            <div class="row">
+                <div class="col-md-1">
+                    Cliente:
+                </div>
+                <div class="col-md-6">@Html.DropDownList("dialogEditJobCustomer", Model.DDLCustomerList)</div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-md-1">
+                    Commessa:
+                </div>
+                <div class="col-md-6">
+                    @if (Model.Job.JobId > 0) { 
+                        @Html.Raw(Model.Job.Code)
+                    }
+                    else
+                    { 
+                        @Html.TextBox("dialogEdiJobYear", Model.Job.Year, new { @class = "myTextBox", @style = "width:80px;" })
+                    } @Html.TextBox("dialogEdiJobDescription", Model.Job.Description, new { @class = "myTextBox", @style = "width:85%;", @placeholder = "Descrizione" })
+                </div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="col-md-1">
+                    Stato:
+                </div>
+                <div class="col-md-6">@Html.DropDownList("dialogEditJobStatus", Model.DDLStatusList, new { @class = "myTextBox" })</div>
+            </div>
+            <div class="row row-margin-6top">
+                <table style="margin-left:16px;">
+                    <thead>
+                        <tr style="border-bottom:1px solid;"><th colspan="7" style="padding-left:16px;text-align:center;">PREVISIONE</th></tr>
+                        <tr><th>Inizio</th><th style="padding-left:12px;">Fine</th><th style="padding-left:12px;">Ore</th><th colspan="2" style="padding-left:12px;">Costi</th><th colspan="2" style="padding-left:12px;">Fatturato</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.TextBox("dialogEdiJobExpectedStartDate", Model.Job.ExpectedStartDate)</td>
+                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedFinishDate", Model.Job.ExpectedFinishDate)</td>
+                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedWorkHours", Model.Job.ExpectedWorkHours)</td>
+                            <td style="padding-left:12px;">&#8364;</td>
+                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedCost", string.Format("{0:f2}", Model.Job.ExpectedCost))</td>
+                            <td style="padding-left:12px;">&#8364;</td>
+                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedIncome", string.Format("{0:f2}", Model.Job.ExpectedIncome), new { @class = "form-control" })</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div style="float:left;">
+                <div class="btn-group">
+                    <button class="btn btn-warning" type="button" onclick="modal_edit_jobworkjournal_delete();">
+                        <i class=" fa fa-times">
+                        </i> Delete
+                    </button>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button class="btn btn-success" id="dialogEditJob_confirm" type="button" onclick="modal_edit_job_save();">
+                    <i class="fa fa-check"></i> Salva
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

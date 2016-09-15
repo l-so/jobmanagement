@@ -1,0 +1,57 @@
+﻿@model Job.WebMvc.Models.GL.GLShowAccountModel
+@{
+    ViewBag.Title = "ShowAccount";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+@section sectionHeader {
+
+}
+<ol class="breadcrumb">
+    <li>Home</li>
+    <li>Piano dei conti</li>
+    <li class="active">Dettaglio conto</li>
+</ol>
+@using (Html.BeginForm("ShowAccount", "GL", FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+    <input id="filterAnno" name="filterYear" value="@Html.Raw(Model.FilterYear)" style="width:80px;text-align:right;padding-right:4px;height:26px;"/> 
+    <input type="hidden" id="filterAccountCode" name="filterAccountCode" value="@Html.Raw(Model.AccountCode)" />
+    <input type="submit" value="Filtra" id="filterSubmit" name="filterSubmit" />
+    <span style="line-height:32px; padding-left:24px; font-weight:700;">
+        @Html.Raw(Model.GLAccount.GLAccountCode + " " + Model.GLAccount.Name)
+    </span>
+}
+<br />
+<table>
+    <thead>
+        <tr><th>Data</th><th style="padding-left:12px;">Motivo</th><th style="padding-left:12px;">Documento</th><th style="padding-left:12px;">Dare</th><th style="padding-left:12px;">Avere</th></tr>
+    </thead>
+    @{ 
+        decimal debitPeriodTotal = 0;
+        decimal creditPeriodTotal = 0;
+    }
+    @foreach (var e in Model.GLAccountLineEntries)
+    {
+        debitPeriodTotal += (e.DebitCredit == "D" ? e.Amount : decimal.Zero);
+        creditPeriodTotal += (e.DebitCredit == "A" ? e.Amount : decimal.Zero);
+
+        <tr><td>@Html.Raw(string.Format("{0:dd/MM/yyyy}", e.GeneralJournalLines.Date))</td><td style="padding-left:12px;">@Html.Raw(e.GeneralJournalLines.Description)</td><td style="padding-left:12px;">
+            @if (!string.IsNullOrWhiteSpace(e.GeneralJournalLines.DocumentReference))
+            {
+            <a href="@Html.Raw(Url.Content(e.GeneralJournalLines.DocumentReference))">DocLink</a>
+            }
+            </td><td style="padding-left:12px;text-align:right;">@(e.DebitCredit == "D" ? "€ " + e.Amount.ToString("F2") : string.Empty)</td><td style="padding-left:12px;text-align:right;">@(e.DebitCredit == "A" ? "€ " + e.Amount.ToString("F2") : string.Empty)</td></tr>
+    }
+
+    <tr style="border-top:2px solid #000000;">
+        <td style="padding-top:6px;">ULTIMO</td>
+        <td colspan="2" style="padding-top:6px;">Totale: </td>
+        <td style="padding-left:12px;text-align:right;padding-top:6px;">@Html.Raw("€ " + debitPeriodTotal.ToString("F2"))</td>
+        <td style="padding-left:12px;text-align:right;padding-top:6px;">@Html.Raw("€ " + creditPeriodTotal.ToString("F2"))</td>
+    </tr>
+    <tr>
+        <td colspan="3"></td>
+        <td style="padding-left:12px;padding-top:6px;text-align:right;border-top:1px solid #000000;">@Html.Raw((debitPeriodTotal - creditPeriodTotal) > 0 ? "€ " + (debitPeriodTotal - creditPeriodTotal).ToString("F2") : string.Empty)</td>
+        <td style="padding-left:12px;padding-top:6px;text-align:right;border-top:1px solid #000000;">@Html.Raw((debitPeriodTotal - creditPeriodTotal) < 0 ? "€ " + (creditPeriodTotal - debitPeriodTotal).ToString("F2") : string.Empty)</td>
+    </tr>
+</table>
