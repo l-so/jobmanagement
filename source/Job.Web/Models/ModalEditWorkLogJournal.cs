@@ -20,7 +20,7 @@ namespace Job.WebMvc.Models
             {
                 this.WorkJournal = DataAccessLayer.DBJobs.getWorksJournalById(id.Value);
                 this.SelectedJobId = this.WorkJournal.JobId;
-                this.LoadJobsList(this.WorkJournal.JobId);
+                this.DDLJobs = DataAccessLayer.DBJobs.getDDLJobSelectListItem(this.SelectedJobId);
                 this.People = DataAccessLayer.DBPerson.getOne(peopleId);
                 this.DDLJobTask = DataAccessLayer.DBJobs.getJobTask(this.WorkJournal.JobTaskId);
             }
@@ -30,28 +30,13 @@ namespace Job.WebMvc.Models
                 this.WorkJournal.WorkJournalId = -1;
                 this.WorkJournal.Date = System.DateTime.Now.Date;
                 this.SelectedJobId = -1;
-                this.LoadJobsList((jobId.HasValue ? jobId.Value : -1));
+                this.DDLJobs = DataAccessLayer.DBJobs.getDDLJobSelectListItem((jobId.HasValue ? jobId.Value : -1));
                 this.People = DataAccessLayer.DBPerson.getOne(peopleId);
                 this.DDLJobTask = DataAccessLayer.DBJobs.getJobTask(null);
             }
             this.DDLPerson = DataAccessLayer.DBPerson.getDDLPerson(this.People.PeopleId);
         }
-        private void LoadJobsList(long jobId)
-        {
-            var list = new List<SelectListItem>();
-            var res = DataAccessLayer.DBJobs.getJobForDDL(jobId);
-            foreach (var c in res)
-            {
-                var item = new SelectListItem()
-                {
-                    Value = c.JobId.ToString(),
-                    Text = c.JobId.ToString() + " - " + c.Description,
-                    Selected = (c.JobId == jobId)
-                };
-                list.Add(item);
-            }
-            this.DDLJobs = list;
-        }
+
 
     }
 }

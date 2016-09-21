@@ -10,14 +10,16 @@
 namespace Job.EFDataModel
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class upPostExpensePaymentRefound_Result
+    public partial class JobWorkList
     {
-        public Nullable<int> ErrorNumber { get; set; }
-        public Nullable<int> ErrorSeverity { get; set; }
-        public Nullable<int> ErrorState { get; set; }
-        public string ErrorProcedure { get; set; }
-        public Nullable<int> ErrorLine { get; set; }
-        public string ErrorMessage { get; set; }
+        public Nullable<int> Year { get; set; }
+        public Nullable<int> Month { get; set; }
+        public long JobId { get; set; }
+        public Nullable<decimal> WorkedHour { get; set; }
+        public string TaskWhere { get; set; }
+        public int PeopleId { get; set; }
+        public Nullable<int> YearMonth { get; set; }
     }
 }

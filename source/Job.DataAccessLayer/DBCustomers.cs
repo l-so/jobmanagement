@@ -15,7 +15,26 @@ namespace Job.DataAccessLayer
             List<EFDataModel.Customers> result = new List<EFDataModel.Customers>();
             using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
             {
-                result = db.Customers.Where(c => c.Status == status || status == -1).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                switch (status)
+                {
+                    case -1:
+                        result = db.Customers.OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                        break;
+                    case EFDataModel.Customers.STATUS_ACTIVE:
+                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ACTIVE).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                        break;
+                    case EFDataModel.Customers.STATUS_ARCHIVED:
+                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ARCHIVED).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                        break;
+                    case EFDataModel.Customers.STATUS_INTERNAL:
+                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_INTERNAL).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                        break;
+                    case 200:
+                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ACTIVE || c.Status == EFDataModel.Customers.STATUS_ARCHIVED).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                        break;
+
+                }
+
             }
             return result;
         }

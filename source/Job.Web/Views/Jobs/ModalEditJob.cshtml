@@ -10,15 +10,6 @@
             keyboard: true,
             show: true
         });
-        $('#dialogEdiJobExpectedStartDate').datepicker({
-            firstDay: 1,
-            dateFormat: 'dd/mm/yy'
-        }).datepicker('setDate', '@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.Job.ExpectedStartDate))');
-
-        $('#dialogEdiJobExpectedFinishDate').datepicker({
-            firstDay: 1,
-            dateFormat: 'dd/mm/yy'
-        }).datepicker('setDate', '@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.Job.ExpectedFinishDate))');
         $('#dialogEditJob').on('hidden.bs.modal', function () {
             $('#modal-placeholder').empty();
         })
@@ -41,9 +32,6 @@
         }
         sendData.ExpectedCost = $('#dialogEdiJobExpectedCost').val();
         sendData.ExpectedIncome = $('#dialogEdiJobExpectedIncome').val();
-        sendData.ExpectedStartDate = zzsDateToISOString($('#dialogEdiJobExpectedStartDate').datepicker('getDate'));
-        sendData.ExpectedFinishDate = zzsDateToISOString($('#dialogEdiJobExpectedFinishDate').datepicker('getDate'));
-
         $.ajax({
             method: "POST",
             url: '@Url.Action("ModalEditJob", "Jobs")',
@@ -139,12 +127,10 @@
                 <table style="margin-left:16px;">
                     <thead>
                         <tr style="border-bottom:1px solid;"><th colspan="7" style="padding-left:16px;text-align:center;">PREVISIONE</th></tr>
-                        <tr><th>Inizio</th><th style="padding-left:12px;">Fine</th><th style="padding-left:12px;">Ore</th><th colspan="2" style="padding-left:12px;">Costi</th><th colspan="2" style="padding-left:12px;">Fatturato</th></tr>
+                        <tr><th style="padding-left:12px;">Ore</th><th colspan="2" style="padding-left:12px;">Costi</th><th colspan="2" style="padding-left:12px;">Fatturato</th></tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>@Html.TextBox("dialogEdiJobExpectedStartDate", Model.Job.ExpectedStartDate)</td>
-                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedFinishDate", Model.Job.ExpectedFinishDate)</td>
                             <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedWorkHours", Model.Job.ExpectedWorkHours)</td>
                             <td style="padding-left:12px;">&#8364;</td>
                             <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedCost", string.Format("{0:f2}", Model.Job.ExpectedCost))</td>

@@ -59,6 +59,8 @@ namespace Job.EFDataModel
         public virtual DbSet<JobTotalWorkedHours> JobTotalWorkedHours { get; set; }
         public virtual DbSet<JobTravelExpenseList> JobTravelExpenseList { get; set; }
         public virtual DbSet<TravelExpenseList> TravelExpenseList { get; set; }
+        public virtual DbSet<JobWorkList> JobWorkList { get; set; }
+        public virtual DbSet<JobCosts> JobCosts { get; set; }
     
         public virtual ObjectResult<spReportCustomerWork_Result> spReportCustomerWork(Nullable<int> customerId, Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
         {
@@ -94,15 +96,6 @@ namespace Job.EFDataModel
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spReportPeopleWork_Result>("spReportPeopleWork", peopleIdParameter, beginDateParameter, endDateParameter);
         }
     
-        public virtual int upBalanceCreate(Nullable<int> year)
-        {
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("Year", year) :
-                new ObjectParameter("Year", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upBalanceCreate", yearParameter);
-        }
-    
         public virtual int upCustomerDelete(Nullable<int> customerId)
         {
             var customerIdParameter = customerId.HasValue ?
@@ -112,7 +105,7 @@ namespace Job.EFDataModel
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upCustomerDelete", customerIdParameter);
         }
     
-        public virtual ObjectResult<upJobAdd_Result> upJobAdd(Nullable<long> customerId, string code, string description, Nullable<int> expectedWorkHours, Nullable<decimal> expectedIncome, Nullable<decimal> expectedCost, Nullable<System.DateTime> expectedStartDate, Nullable<System.DateTime> expectedFinishDate, Nullable<int> year, Nullable<byte> status)
+        public virtual ObjectResult<upJobAdd_Result> upJobAdd(Nullable<long> customerId, string code, string description, Nullable<int> expectedWorkHours, Nullable<decimal> expectedIncome, Nullable<decimal> expectedCost, Nullable<int> year, Nullable<byte> status)
         {
             var customerIdParameter = customerId.HasValue ?
                 new ObjectParameter("CustomerId", customerId) :
@@ -138,14 +131,6 @@ namespace Job.EFDataModel
                 new ObjectParameter("ExpectedCost", expectedCost) :
                 new ObjectParameter("ExpectedCost", typeof(decimal));
     
-            var expectedStartDateParameter = expectedStartDate.HasValue ?
-                new ObjectParameter("ExpectedStartDate", expectedStartDate) :
-                new ObjectParameter("ExpectedStartDate", typeof(System.DateTime));
-    
-            var expectedFinishDateParameter = expectedFinishDate.HasValue ?
-                new ObjectParameter("ExpectedFinishDate", expectedFinishDate) :
-                new ObjectParameter("ExpectedFinishDate", typeof(System.DateTime));
-    
             var yearParameter = year.HasValue ?
                 new ObjectParameter("Year", year) :
                 new ObjectParameter("Year", typeof(int));
@@ -154,7 +139,7 @@ namespace Job.EFDataModel
                 new ObjectParameter("Status", status) :
                 new ObjectParameter("Status", typeof(byte));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upJobAdd_Result>("upJobAdd", customerIdParameter, codeParameter, descriptionParameter, expectedWorkHoursParameter, expectedIncomeParameter, expectedCostParameter, expectedStartDateParameter, expectedFinishDateParameter, yearParameter, statusParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upJobAdd_Result>("upJobAdd", customerIdParameter, codeParameter, descriptionParameter, expectedWorkHoursParameter, expectedIncomeParameter, expectedCostParameter, yearParameter, statusParameter);
         }
     
         public virtual int upJobDelete(Nullable<int> jobId)
@@ -179,16 +164,16 @@ namespace Job.EFDataModel
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upOreMensiliLavorateGiornaliero_Result>("upOreMensiliLavorateGiornaliero", peopleIdParameter, beginDateParameter);
         }
     
-        public virtual ObjectResult<upPostExpensePaymentRefound_Result> upPostExpensePaymentRefound(Nullable<long> id)
+        public virtual int upPostExpensePaymentRefound(Nullable<long> id)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
                 new ObjectParameter("Id", typeof(long));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upPostExpensePaymentRefound_Result>("upPostExpensePaymentRefound", idParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upPostExpensePaymentRefound", idParameter);
         }
     
-        public virtual ObjectResult<upPostPaymentToPerson_Result> upPostPaymentToPerson(Nullable<System.DateTime> date, Nullable<int> peopleId, Nullable<decimal> compenso, Nullable<decimal> tasse, Nullable<decimal> iNPS, string bankAccount)
+        public virtual int upPostPaymentToPerson(Nullable<System.DateTime> date, Nullable<int> peopleId, Nullable<decimal> compenso, Nullable<decimal> tasse, Nullable<decimal> iNPS, string bankAccount)
         {
             var dateParameter = date.HasValue ?
                 new ObjectParameter("Date", date) :
@@ -214,7 +199,7 @@ namespace Job.EFDataModel
                 new ObjectParameter("BankAccount", bankAccount) :
                 new ObjectParameter("BankAccount", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upPostPaymentToPerson_Result>("upPostPaymentToPerson", dateParameter, peopleIdParameter, compensoParameter, tasseParameter, iNPSParameter, bankAccountParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upPostPaymentToPerson", dateParameter, peopleIdParameter, compensoParameter, tasseParameter, iNPSParameter, bankAccountParameter);
         }
     
         public virtual int upPostTravelExpense(string travelExpenseCode)

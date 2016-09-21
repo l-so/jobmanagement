@@ -74,7 +74,7 @@
         {
 
             <tr> 
-            @if (e.Status == JobManagement.EFDataModel.ExpensePaymentRefound.STATUS_BOZZA)
+            @if (e.Status == Job.EFDataModel.ExpensePaymentRefound.STATUS_BOZZA)
             {
                 <td><button type="button" class="btn btn-xs" onclick="ExpensePaymentRefound_Delete('@Html.Raw(e.Id)');"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancella</button></td>
                 <td style="padding-left:12px;"><a href="#" onclick="ExpensePaymentRefound_Edit('@Html.Raw(e.Id)');">@Html.Raw(e.Date.Value.ToString("d"))</a></td>

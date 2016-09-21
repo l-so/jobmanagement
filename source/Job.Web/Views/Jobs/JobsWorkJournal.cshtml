@@ -100,7 +100,7 @@
                             @if (firstRow)
                             {
                                 <text>
-                                <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", JobManagement.Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
+                                <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", Job.Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
                                 </text>
                                 firstRow = false;
                             }
@@ -124,7 +124,7 @@
                 {
                     <tr class="@Html.Raw(Job.WebMvc.Models.Jobs.JobsWorkJournalModel.getListRowStyle(e, rowPos))">
                         <td>&nbsp;</td>
-                        <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", JobManagement.Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
+                        <td class="tdWorkListDay">@Html.Raw(string.Format("{0} {1:dd/MM/yyyy}", Job.Code.UtiliMix.getThreeCharDayName(e.Date), e.Date))</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>

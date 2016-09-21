@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Job.EFDataModel;
 
 namespace Job.DataAccessLayer
 {
@@ -38,6 +39,65 @@ namespace Job.DataAccessLayer
             }
             return result;
         }
+
+        public static List<JobWorkList> getWorkedHours(long jobId)
+        {
+            List<JobWorkList> result = new List<JobWorkList>();
+            try
+            {
+                using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+                {
+                    result = db.JobWorkList.Where(l => l.JobId == jobId).OrderByDescending(l => l.YearMonth).ToList();
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
+        }
+
+        public static List<JobTravelExpenseList> JobTravelExpenses(long jobId)
+        {
+            List<JobTravelExpenseList> result = new List<JobTravelExpenseList>();
+            try
+            {
+                using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+                {
+                    result = db.JobTravelExpenseList.Where(l => l.JobId == jobId).OrderByDescending(jl => jl.Date).ToList();
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
+        }
+
         public static List<EFDataModel.WorksJournal> getWorksJournal(int peopleId, long customerId, DateTime beginDate, DateTime endDate)
         {
             List<EFDataModel.WorksJournal> result = new List<EFDataModel.WorksJournal>();
@@ -131,6 +191,36 @@ namespace Job.DataAccessLayer
             }
             return result;
         }
+        public static EFDataModel.Jobs Get(long jobId)
+        {
+            EFDataModel.Jobs result = new EFDataModel.Jobs();
+            try
+            {
+                result.JobId = -1;
+                result.CustomerId = -1;
+                using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+                {
+                    result = db.Jobs.Include(j => j.Customers).Include(j => j.JobCosts).Where(j => j.JobId == jobId).FirstOrDefault();
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return result;
+        }
         public static List<EFDataModel.Jobs> getJobOpen(long jobId)
         {
             List<EFDataModel.Jobs> result = new List<EFDataModel.Jobs>();
@@ -176,14 +266,21 @@ namespace Job.DataAccessLayer
                 {
                     db.Configuration.LazyLoadingEnabled = false;
                     db.Configuration.ProxyCreationEnabled = false;
-                    var r  = db.Jobs.Include(j => j.Customers).Include(j => j.JobStatus).Where(j => j.Status == 10 || j.JobId == jobId).ToList();
-                    foreach(var j in r)
+                    var r  = db.Jobs.Include(j => j.Customers).Include(j => j.JobStatus).Where(j => j.Status == Jobs.STATE_OPERATIVA || j.JobId == jobId).ToList();
+                    _result.Add(new SelectListItem()
+                    {
+                        Value = "-1",
+                        Text = "<Selezionare la commessa>",
+                        Selected = (jobId == -1)
+                    });
+
+                    foreach (var j in r)
                     {
                         
                         _result.Add(new SelectListItem()
                         {
                             Value = j.JobId.ToString(),
-                            Text = j.Description,
+                            Text = j.Code.ToString() + " " + j.Description,
                             Selected = (j.JobId == jobId)
                         });
                     }
@@ -208,22 +305,35 @@ namespace Job.DataAccessLayer
 
             return _result;
         }
-        public static List<EFDataModel.Jobs> getJobForDDL(long jobId)
+  
+       
+        public static List<System.Web.Mvc.SelectListItem> getJobCostGLAccount (string code)
         {
-            List<EFDataModel.Jobs> result = new List<EFDataModel.Jobs>();
-            try {
+            List<System.Web.Mvc.SelectListItem> _result = new List<System.Web.Mvc.SelectListItem>();
+            try
+            {
                 using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
                 {
                     db.Configuration.LazyLoadingEnabled = false;
                     db.Configuration.ProxyCreationEnabled = false;
-                    result = db.Jobs.Include(j => j.Customers).Include(j => j.JobStatus).Where(j => j.Status == 10 || j.JobId == jobId).ToList();
+                    var acc = db.GLAccount.Where(a => a.Type == "CJ").ToList();
+                    foreach (var a in acc)
+                    {
+
+                        _result.Add(new SelectListItem()
+                        {
+                            Value = a.GLAccountCode,
+                            Text = string.Format("{0} {1}", a.GLAccountCode, a.Name),
+                            Selected = (a.GLAccountCode == code)
+                        });
+                    }
                 }
-             }
+            }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
             {
                 throw e;
             }
-            catch (System.Data.Entity.Infrastructure.DbUpdateException e) 
+            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
             {
                 throw e;
             }
@@ -235,37 +345,8 @@ namespace Job.DataAccessLayer
             {
                 throw e;
             }
-            return result;
-        }
-        public static List<EFDataModel.Jobs> getJobForDDL()
-        {
-            List<EFDataModel.Jobs> result = new List<EFDataModel.Jobs>();
-            try {
-                using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
-                {
-                    db.Configuration.LazyLoadingEnabled = false;
-                    db.Configuration.ProxyCreationEnabled = false;
-                    result = db.Jobs.Include(j => j.Customers).Include(j => j.JobStatus).Where(j => j.Status == 10).ToList();
-                }
-                result.Insert(0, new EFDataModel.Jobs() { JobId = -1, Description = "<Seleziona una commessa>" });
-            }
-            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
-            {
-                throw e;
-            }
-            catch (System.Data.Entity.Infrastructure.DbUpdateException e) 
-            {
-                throw e;
-            }
-            catch (System.Data.Entity.Validation.DbEntityValidationException e)
-            {
-                throw e;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return result;
+            return _result;
+
         }
         public static List<EFDataModel.JobTasks> getJobTaskForDDL(bool productive)
         {
@@ -304,7 +385,7 @@ namespace Job.DataAccessLayer
                 {
                     if (job.JobId < 1)
                     {
-                        var r = db.upJobAdd(job.CustomerId, job.Code,job.Description,job.ExpectedWorkHours,job.ExpectedIncome,job.ExpectedCost,job.ExpectedStartDate,job.ExpectedFinishDate,job.Year,job.Status);
+                        var r = db.upJobAdd(job.CustomerId, job.Code,job.Description,job.ExpectedWorkHours,job.ExpectedIncome,job.ExpectedCost,job.Year,job.Status);
                     }
                     else
                     {

@@ -74,9 +74,9 @@
             } else {
                 id += m.toString() + peopleId.toString();
             }
-
             window.location.assign('@Url.Action("PostTravelExpenses", "TravelExpense")/' + id);
-
+            alert('Qui registro tutte le note spese non registrate del periodo!')
+            window.location.reload();
         }
         function displayTravelExpenseLine(teLine) {
 
@@ -161,20 +161,20 @@
         <div style="margin-top:6px;">
             <fieldset>
                 Rimborsi spese del mese di <select id="filterMonth">
-                    <option value="99">Intero anno</option>
-                    <option value="1">Gennaio</option>
-                    <option value="2">Febbraio</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Aprile</option>
-                    <option value="5">Maggio</option>
-                    <option value="6">Giugno</option>
-                    <option value="7">Luglio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Settembre</option>
-                    <option value="10">Ottobre</option>
-                    <option value="11">Novembre</option>
-                    <option value="12">Dicembre</option>
-                </select> <input id="filterYear" value="" style="height:21px;width:60px;line-height:inherit;padding: 0 0 0 0;margin: 0 0 0 0;"/> di @Html.DropDownList("filterPeople", Model.DDLPeople) <select id="filterStatus" name="filterStatus"><option value="0">Bozza</option><option value="1">Registrata</option><option value="999">Tutte</option></select> <button type="button" class="btn btn-xs" onclick="javascript: filterTravelExpenseList();"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+                    <option value="99" @Html.Raw(Model.TEFilterMonth == 99 ? "selected" : string.Empty)>Intero anno</option>
+                    <option value="1" @Html.Raw(Model.TEFilterMonth == 1 ? "selected" : string.Empty)>Gennaio</option>
+                    <option value="2" @Html.Raw(Model.TEFilterMonth == 2 ? "selected" : string.Empty)>Febbraio</option>
+                    <option value="3" @Html.Raw(Model.TEFilterMonth == 3 ? "selected" : string.Empty)>Marzo</option>
+                    <option value="4" @Html.Raw(Model.TEFilterMonth == 4 ? "selected" : string.Empty)>Aprile</option>
+                    <option value="5" @Html.Raw(Model.TEFilterMonth == 5 ? "selected" : string.Empty)>Maggio</option>
+                    <option value="6" @Html.Raw(Model.TEFilterMonth == 6 ? "selected" : string.Empty)>Giugno</option>
+                    <option value="7" @Html.Raw(Model.TEFilterMonth == 7 ? "selected" : string.Empty)>Luglio</option>
+                    <option value="8" @Html.Raw(Model.TEFilterMonth == 8 ? "selected" : string.Empty)>Agosto</option>
+                    <option value="9" @Html.Raw(Model.TEFilterMonth == 9 ? "selected" : string.Empty)>Settembre</option>
+                    <option value="10" @Html.Raw(Model.TEFilterMonth == 10 ? "selected" : string.Empty)>Ottobre</option>
+                    <option value="11" @Html.Raw(Model.TEFilterMonth == 11 ? "selected" : string.Empty)>Novembre</option>
+                    <option value="12" @Html.Raw(Model.TEFilterMonth == 12 ? "selected" : string.Empty)>Dicembre</option>
+                </select> <input id="filterYear" value="@Html.Raw(Model.TEFilterYear)" style="height:21px;width:60px;line-height:inherit;padding: 0 0 0 0;margin: 0 0 0 0;"/> di @Html.DropDownList("filterPeople", Model.DDLPeople) <select id="filterStatus" name="filterStatus"><option value="0" @Html.Raw(Model.TEFilterStatus == Job.EFDataModel.TravelExpenses.STATUS_BOZZA ? "selected" : string.Empty)>Bozza</option><option value="1"  @Html.Raw(Model.TEFilterStatus == Job.EFDataModel.TravelExpenses.STATUS_REGISTRATA ? "selected" : string.Empty)>Registrata</option><option value="999"  @Html.Raw(Model.TEFilterStatus == 999 ? "selected" : string.Empty)>Tutte</option></select> <button type="button" class="btn btn-xs" onclick="javascript: filterTravelExpenseList();"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
             </fieldset>
         </div>
         <ol class="list-inline">

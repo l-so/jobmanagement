@@ -50,10 +50,12 @@ namespace Job.WebMvc.Models.GL
                     Date = fromDate,
                     GLAccountCode = AccountCode,
                     GLAccount = DataAccessLayer.DBGeneralLedger.getGLAccountByCode(AccountCode),
+                    Type = "A",
                     GeneralJournalLines = new EFDataModel.GeneralJournalLines()
                     {
                         Date = fromDate,
-                        Description = "Valore apertura del periodo"
+                        Description = "Valore apertura del periodo",
+                        Type = "A"
                     }
                 };
                 if (totalDebit > totalCredit)
@@ -61,14 +63,18 @@ namespace Job.WebMvc.Models.GL
                     l.DebitCredit = "D";
                     l.Amount = totalDebit - totalCredit;
                     GLAccountLineEntries.Insert(0, l);
-                } else
+                }
+                if (totalCredit > totalDebit)
                 {
-                    if (totalCredit > totalDebit)
-                    {
+                    l.DebitCredit = "A";
+                    l.Amount = totalCredit - totalDebit;
+                    GLAccountLineEntries.Insert(0, l);
+                }
+                if (totalCredit == totalDebit)
+                {
                         l.DebitCredit = "A";
-                        l.Amount = totalCredit - totalDebit;
+                        l.Amount = 0;
                         GLAccountLineEntries.Insert(0, l);
-                    }
                 }
             }
         }

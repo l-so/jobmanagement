@@ -19,6 +19,7 @@ namespace Job.EFDataModel
         {
             this.ExpensePaymentRefound = new HashSet<ExpensePaymentRefound>();
             this.GeneralJournalLineEntries = new HashSet<GeneralJournalLineEntries>();
+            this.JobCosts = new HashSet<JobCosts>();
         }
     
         public string GLAccountCode { get; set; }
@@ -32,5 +33,7 @@ namespace Job.EFDataModel
         public virtual ICollection<ExpensePaymentRefound> ExpensePaymentRefound { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GeneralJournalLineEntries> GeneralJournalLineEntries { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JobCosts> JobCosts { get; set; }
     }
 }

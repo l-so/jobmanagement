@@ -14,19 +14,23 @@
         $('#dialogModalEditJobWorkJournal').on('hidden.bs.modal', function () {
             $('#modal-placeholder').empty();
         });
-        $('#dialogEditWorkLogDate').datepicker({
-            firstDay: 1,
-            dateFormat: 'dd/mm/yy'
-        }).datepicker('setDate','@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.WorkJournal.Date))');
     });
     function modal_edit_jobworkjournal_save() {
         var sendData = new Object();
         sendData.jobWorkJournalId = $('#dialogEditWorkLogJobWorkJournalId').val();
         sendData.jobId = $('#dialogEditWorkLogJob').val();
+        if (sendData.jobId == '-1') {
+            alert('Devi selezionare la comessa!');
+            return;
+        }
         sendData.peopleId = $('#dialogEditWorkLogPeopleId').val();
-        sendData.date = zzsDateToISOString($('#dialogEditWorkLogDate').datepicker('getDate'));
+        sendData.date = $('#dialogEditWorkLogDate').val();
         sendData.jobTaskId = $('#dialogEditWorkLogJobTaskId').val();
         sendData.workedHours = $('#dialogEditWorkLogUnit').val();
+        if (parseFloat(sendData.workedHours) < 1) {
+            alert('Devi inserire almeno un ora di lavoro!');
+            return;
+        }
         sendData.taskWhere = $('#dialogEditWorkLogWhere').val();
         sendData.annotation = $('#dialogEditWorkLogAnnotation').val();
         sendData.jobDimensionId = $('#dialogEditWorkLogJobDimension').val();
@@ -107,7 +111,7 @@
             </div>
             <div class="row row-margin-6top">
                 <div class="col-xs-1">Data:</div>
-                <div class="col-xs-2"><input type="text" id="dialogEditWorkLogDate" name="dialogEditWorkLogDate" class="form-control" /></div>
+                <div class="col-xs-2"><input type="date" id="dialogEditWorkLogDate" name="dialogEditWorkLogDate" class="form-control" value="@Html.Raw(string.Format("{0:yyyy-MM-dd}", Model.WorkJournal.Date))" /></div>
                 <div class="col-xs-1">Ore:</div>
                 <div class="col-xs-1">@Html.TextBox("dialogEditWorkLogUnit", Model.WorkJournal.WorkedHours, new { @class = "form-control text-right" })</div>
             </div>

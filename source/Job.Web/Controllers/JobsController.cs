@@ -53,9 +53,27 @@ namespace Job.WebMvc.Controllers
         public ActionResult Edit (long id)
         {
             Models.Jobs.JobsEditModel model = new Models.Jobs.JobsEditModel();
+            model.loadData(id);
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Edit(string jobId, string jobCode, string jobCustomerId, string jobDescription, string jobStatus, string jobExpectedWorkHours, string jobExpectedCost, string jobExpectedIncome)
+        {
+            EFDataModel.Jobs _job = new EFDataModel.Jobs();
+            _job.JobId = long.Parse(jobId);
+            _job.CustomerId = long.Parse(jobCustomerId);
+            _job.Status = byte.Parse(jobStatus);
+            _job.Code = jobCode;
+            _job.Description = jobDescription;
+            _job.ExpectedCost = decimal.Parse(jobExpectedCost);
+            _job.ExpectedIncome = decimal.Parse(jobExpectedIncome);
+            _job.ExpectedWorkHours = int.Parse(jobExpectedWorkHours);
+            DataAccessLayer.DBJobs.Update(_job);
+            Models.Jobs.JobsEditModel model = new Models.Jobs.JobsEditModel();
+            model.loadData(_job.JobId);
+            return View(model);
+        }
         public ActionResult JobsWorkJournal(int? filterPeopleId, long? filterCustomerId, DateTime? filterBeginDate, DateTime? filterEndDate)
         {
             Models.Jobs.JobsWorkJournalModel model = new Models.Jobs.JobsWorkJournalModel();

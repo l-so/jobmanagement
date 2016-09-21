@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="JobModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="JobModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -179,6 +179,16 @@
           <Property Name="TravelExpenseCode" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="TimeStamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
+        <EntityType Name="JobCosts">
+          <Key>
+            <PropertyRef Name="JobCostId" />
+          </Key>
+          <Property Name="JobCostId" Type="int" Nullable="false" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="GLAccountCode" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
         <EntityType Name="Jobs">
           <Key>
             <PropertyRef Name="JobId" />
@@ -187,15 +197,11 @@
           <Property Name="CustomerId" Type="bigint" Nullable="false" />
           <Property Name="Code" Type="nvarchar" MaxLength="20" />
           <Property Name="Description" Type="nvarchar" MaxLength="512" Nullable="false" />
-          <Property Name="ExpectedIncome" Type="decimal" Precision="18" Scale="4" Nullable="false" />
-          <Property Name="ExpectedCost" Type="decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ExpectedIncome" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ExpectedCost" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="ExpectedWorkHours" Type="int" Nullable="false" />
           <Property Name="Status" Type="tinyint" Nullable="false" />
           <Property Name="Year" Type="int" />
-          <Property Name="ExpectedStartDate" Type="date" />
-          <Property Name="ExpectedFinishDate" Type="date" />
-          <Property Name="StartDate" Type="date" />
-          <Property Name="FinishDate" Type="date" />
         </EntityType>
         <EntityType Name="JobStatus">
           <Key>
@@ -391,6 +397,21 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Property Name="TravelExpenseTotal" Type="decimal" Precision="38" Scale="4" />
           <Property Name="Amount" Type="decimal" Precision="38" Scale="6" />
           <Property Name="PeopleId" Type="int" />
+        </EntityType>
+        <!--Errori trovati durante la generazione:
+avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Job.Job.JobWorkList'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
+        <EntityType Name="JobWorkList">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="YearMonth" Type="int" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="JobId" Type="bigint" Nullable="false" />
+          <Property Name="WorkedHour" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="TaskWhere" Type="nvarchar" MaxLength="160" />
+          <Property Name="PeopleId" Type="int" Nullable="false" />
         </EntityType>
         <!--Errori trovati durante la generazione:
 avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Job.Job.TravelExpenseList'. La chiave è stata dedotta e la definizione è stata creata come tabella/visualizzazione di sola lettura.-->
@@ -610,6 +631,30 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_JobCosts_GLAccount">
+          <End Role="GLAccount" Type="Self.GLAccount" Multiplicity="1" />
+          <End Role="JobCosts" Type="Self.JobCosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GLAccount">
+              <PropertyRef Name="GLAccountCode" />
+            </Principal>
+            <Dependent Role="JobCosts">
+              <PropertyRef Name="GLAccountCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobCosts_Jobs">
+          <End Role="Jobs" Type="Self.Jobs" Multiplicity="1" />
+          <End Role="JobCosts" Type="Self.JobCosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="JobCosts">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_JobTravelExpenses_Jobs">
           <End Role="Jobs" Type="Self.Jobs" Multiplicity="1" />
           <End Role="JobTravelExpenses" Type="Self.JobTravelExpenses" Multiplicity="*" />
@@ -740,9 +785,6 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Parameter Name="BeginDate" Type="date" Mode="In" />
           <Parameter Name="EndDate" Type="date" Mode="In" />
         </Function>
-        <Function Name="upBalanceCreate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Job">
-          <Parameter Name="Year" Type="int" Mode="In" />
-        </Function>
         <Function Name="upCustomerDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Job">
           <Parameter Name="customerId" Type="int" Mode="In" />
         </Function>
@@ -753,8 +795,6 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Parameter Name="ExpectedWorkHours" Type="int" Mode="In" />
           <Parameter Name="ExpectedIncome" Type="decimal" Mode="In" />
           <Parameter Name="ExpectedCost" Type="decimal" Mode="In" />
-          <Parameter Name="ExpectedStartDate" Type="date" Mode="In" />
-          <Parameter Name="ExpectedFinishDate" Type="date" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="Status" Type="tinyint" Mode="In" />
         </Function>
@@ -815,6 +855,7 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <EntitySet Name="GLExpensePaymentRefound" EntityType="Self.GLExpensePaymentRefound" Schema="Job" store:Type="Tables" />
           <EntitySet Name="GLPerson" EntityType="Self.GLPerson" Schema="Job" store:Type="Tables" />
           <EntitySet Name="GLTravelExpense" EntityType="Self.GLTravelExpense" Schema="Job" store:Type="Tables" />
+          <EntitySet Name="JobCosts" EntityType="Self.JobCosts" Schema="Job" store:Type="Tables" />
           <EntitySet Name="Jobs" EntityType="Self.Jobs" Schema="Job" store:Type="Tables" />
           <EntitySet Name="JobStatus" EntityType="Self.JobStatus" Schema="Job" store:Type="Tables" />
           <EntitySet Name="JobTasks" EntityType="Self.JobTasks" Schema="Job" store:Type="Tables" />
@@ -875,6 +916,17 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
     [JobTravelExpenseList].[Amount] AS [Amount], 
     [JobTravelExpenseList].[PeopleId] AS [PeopleId]
     FROM [Job].[JobTravelExpenseList] AS [JobTravelExpenseList]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="JobWorkList" EntityType="Self.JobWorkList" store:Type="Views" store:Schema="Job">
+            <DefiningQuery>SELECT 
+    [JobWorkList].[YearMonth] AS [YearMonth], 
+    [JobWorkList].[Year] AS [Year], 
+    [JobWorkList].[Month] AS [Month], 
+    [JobWorkList].[JobId] AS [JobId], 
+    [JobWorkList].[WorkedHour] AS [WorkedHour], 
+    [JobWorkList].[TaskWhere] AS [TaskWhere], 
+    [JobWorkList].[PeopleId] AS [PeopleId]
+    FROM [Job].[JobWorkList] AS [JobWorkList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="TravelExpenseList" EntityType="Self.TravelExpenseList" store:Type="Views" store:Schema="Job">
             <DefiningQuery>SELECT 
@@ -955,6 +1007,14 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <End Role="JobStatus" EntitySet="JobStatus" />
             <End Role="Jobs" EntitySet="Jobs" />
           </AssociationSet>
+          <AssociationSet Name="FK_JobCosts_GLAccount" Association="Self.FK_JobCosts_GLAccount">
+            <End Role="GLAccount" EntitySet="GLAccount" />
+            <End Role="JobCosts" EntitySet="JobCosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobCosts_Jobs" Association="Self.FK_JobCosts_Jobs">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="JobCosts" EntitySet="JobCosts" />
+          </AssociationSet>
           <AssociationSet Name="FK_JobTravelExpenses_Jobs" Association="Self.FK_JobTravelExpenses_Jobs">
             <End Role="Jobs" EntitySet="Jobs" />
             <End Role="JobTravelExpenses" EntitySet="JobTravelExpenses" />
@@ -996,8 +1056,7 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <End Role="TravelExpensesLines" EntitySet="TravelExpensesLines" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="JobModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1168,6 +1227,7 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Property Name="EndTotal" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ExpensePaymentRefound" Relationship="Self.FK_ExpensePaymentRefound_GLAccount" FromRole="GLAccount" ToRole="ExpensePaymentRefound" />
           <NavigationProperty Name="GeneralJournalLineEntries" Relationship="Self.FK_GeneralJournalLineEntries_GLAccount" FromRole="GLAccount" ToRole="GeneralJournalLineEntries" />
+          <NavigationProperty Name="JobCosts" Relationship="JobModel.FK_JobCosts_GLAccount" FromRole="GLAccount" ToRole="JobCosts" />
         </EntityType>
         <EntityType Name="GLExpensePaymentRefound">
           <Key>
@@ -1210,19 +1270,16 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Property Name="CustomerId" Type="Int64" Nullable="false" />
           <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ExpectedIncome" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
-          <Property Name="ExpectedCost" Type="Decimal" Precision="18" Scale="4" Nullable="false" />
+          <Property Name="ExpectedIncome" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ExpectedCost" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="ExpectedWorkHours" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Byte" Nullable="false" />
           <Property Name="Year" Type="Int32" />
-          <Property Name="ExpectedStartDate" Type="DateTime" Precision="0" />
-          <Property Name="ExpectedFinishDate" Type="DateTime" Precision="0" />
-          <Property Name="StartDate" Type="DateTime" Precision="0" />
-          <Property Name="FinishDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Customers" Relationship="Self.FK_Job_Customer" FromRole="Jobs" ToRole="Customers" />
           <NavigationProperty Name="JobStatus" Relationship="Self.FK_Job_JobState" FromRole="Jobs" ToRole="JobStatus" />
           <NavigationProperty Name="JobTravelExpenses" Relationship="Self.FK_JobTravelExpenses_Jobs" FromRole="Jobs" ToRole="JobTravelExpenses" />
           <NavigationProperty Name="WorksJournal" Relationship="Self.FK_JobWorkJournal_Job" FromRole="Jobs" ToRole="WorksJournal" />
+          <NavigationProperty Name="JobCosts" Relationship="JobModel.FK_JobCosts_Jobs" FromRole="Jobs" ToRole="JobCosts" />
         </EntityType>
         <EntityType Name="JobStatus">
           <Key>
@@ -1905,6 +1962,16 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <End Role="TravelExpenses" EntitySet="TravelExpenses" />
             <End Role="TravelExpensesLines" EntitySet="TravelExpensesLines" />
           </AssociationSet>
+          <EntitySet Name="JobWorkList" EntityType="JobModel.JobWorkList" />
+          <EntitySet Name="JobCosts" EntityType="JobModel.JobCosts" />
+          <AssociationSet Name="FK_JobCosts_GLAccount" Association="JobModel.FK_JobCosts_GLAccount">
+            <End Role="GLAccount" EntitySet="GLAccount" />
+            <End Role="JobCosts" EntitySet="JobCosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobCosts_Jobs" Association="JobModel.FK_JobCosts_Jobs">
+            <End Role="Jobs" EntitySet="Jobs" />
+            <End Role="JobCosts" EntitySet="JobCosts" />
+          </AssociationSet>
           <FunctionImport Name="spReportCustomerWork" ReturnType="Collection(JobModel.spReportCustomerWork_Result)">
             <Parameter Name="CustomerId" Mode="In" Type="Int32" />
             <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
@@ -1914,9 +1981,6 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <Parameter Name="PeopleId" Mode="In" Type="Int32" />
             <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="upBalanceCreate">
-            <Parameter Name="Year" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="upCustomerDelete">
             <Parameter Name="customerId" Mode="In" Type="Int32" />
@@ -1928,8 +1992,6 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <Parameter Name="ExpectedWorkHours" Mode="In" Type="Int32" />
             <Parameter Name="ExpectedIncome" Mode="In" Type="Decimal" />
             <Parameter Name="ExpectedCost" Mode="In" Type="Decimal" />
-            <Parameter Name="ExpectedStartDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ExpectedFinishDate" Mode="In" Type="DateTime" />
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="Status" Mode="In" Type="Byte" />
           </FunctionImport>
@@ -1940,10 +2002,10 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <Parameter Name="PeopleId" Mode="In" Type="Int32" />
             <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <FunctionImport Name="upPostExpensePaymentRefound" ReturnType="Collection(JobModel.upPostExpensePaymentRefound_Result)">
+          <FunctionImport Name="upPostExpensePaymentRefound">
             <Parameter Name="Id" Mode="In" Type="Int64" />
           </FunctionImport>
-          <FunctionImport Name="upPostPaymentToPerson" ReturnType="Collection(JobModel.upPostPaymentToPerson_Result)">
+          <FunctionImport Name="upPostPaymentToPerson">
             <Parameter Name="Date" Mode="In" Type="DateTime" />
             <Parameter Name="PeopleId" Mode="In" Type="Int32" />
             <Parameter Name="Compenso" Mode="In" Type="Decimal" />
@@ -1974,6 +2036,55 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
             <Parameter Name="Total" Mode="In" Type="Decimal" />
           </FunctionImport>
         </EntityContainer>
+        <EntityType Name="JobWorkList">
+          <Key>
+            <PropertyRef Name="JobId" />
+            <PropertyRef Name="PeopleId" />
+          </Key>
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="WorkedHour" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="TaskWhere" Type="String" MaxLength="160" FixedLength="false" Unicode="true" />
+          <Property Name="PeopleId" Type="Int32" Nullable="false" />
+          <Property Name="YearMonth" Type="Int32" />
+        </EntityType>
+        <EntityType Name="JobCosts">
+          <Key>
+            <PropertyRef Name="JobCostId" />
+          </Key>
+          <Property Name="JobCostId" Type="Int32" Nullable="false" />
+          <Property Name="JobId" Type="Int64" Nullable="false" />
+          <Property Name="GLAccountCode" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Note" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GLAccount" Relationship="JobModel.FK_JobCosts_GLAccount" FromRole="JobCosts" ToRole="GLAccount" />
+          <NavigationProperty Name="Jobs" Relationship="JobModel.FK_JobCosts_Jobs" FromRole="JobCosts" ToRole="Jobs" />
+        </EntityType>
+        <Association Name="FK_JobCosts_GLAccount">
+          <End Type="JobModel.GLAccount" Role="GLAccount" Multiplicity="1" />
+          <End Type="JobModel.JobCosts" Role="JobCosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GLAccount">
+              <PropertyRef Name="GLAccountCode" />
+            </Principal>
+            <Dependent Role="JobCosts">
+              <PropertyRef Name="GLAccountCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobCosts_Jobs">
+          <End Type="JobModel.Jobs" Role="Jobs" Multiplicity="1" />
+          <End Type="JobModel.JobCosts" Role="JobCosts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Jobs">
+              <PropertyRef Name="JobId" />
+            </Principal>
+            <Dependent Role="JobCosts">
+              <PropertyRef Name="JobId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <ComplexType Name="spReportCustomerWork_Result">
           <Property Type="Int64" Name="WorkJournalId" Nullable="true" />
           <Property Type="Int64" Name="JobId" Nullable="true" />
@@ -2004,8 +2115,8 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Property Type="Int64" Name="CustomerId" Nullable="false" />
           <Property Type="String" Name="Code" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="Description" Nullable="false" MaxLength="512" />
-          <Property Type="Decimal" Name="ExpectedIncome" Nullable="false" Precision="18" Scale="4" />
-          <Property Type="Decimal" Name="ExpectedCost" Nullable="false" Precision="18" Scale="4" />
+          <Property Type="Decimal" Name="ExpectedIncome" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="ExpectedCost" Nullable="false" Precision="18" Scale="2" />
           <Property Type="Int32" Name="ExpectedWorkHours" Nullable="false" />
           <Property Type="Byte" Name="Status" Nullable="false" />
           <Property Type="Int32" Name="Year" Nullable="true" />
@@ -2014,22 +2125,6 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
           <Property Type="Int32" Name="ResId" Nullable="true" />
           <Property Type="DateTime" Name="Date" Nullable="true" />
           <Property Type="Decimal" Name="Ore" Nullable="true" Precision="5" Scale="2" />
-        </ComplexType>
-        <ComplexType Name="upPostExpensePaymentRefound_Result">
-          <Property Type="Int32" Name="ErrorNumber" Nullable="true" />
-          <Property Type="Int32" Name="ErrorSeverity" Nullable="true" />
-          <Property Type="Int32" Name="ErrorState" Nullable="true" />
-          <Property Type="String" Name="ErrorProcedure" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="ErrorLine" Nullable="true" />
-          <Property Type="String" Name="ErrorMessage" Nullable="true" MaxLength="4000" />
-        </ComplexType>
-        <ComplexType Name="upPostPaymentToPerson_Result">
-          <Property Type="Int32" Name="ErrorNumber" Nullable="true" />
-          <Property Type="Int32" Name="ErrorSeverity" Nullable="true" />
-          <Property Type="Int32" Name="ErrorState" Nullable="true" />
-          <Property Type="String" Name="ErrorProcedure" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="ErrorLine" Nullable="true" />
-          <Property Type="String" Name="ErrorMessage" Nullable="true" MaxLength="4000" />
         </ComplexType>
         <ComplexType Name="upTravelExpenseAdd_Result">
           <Property Type="String" Name="TravelExpenseCode" Nullable="false" MaxLength="20" />
@@ -2247,11 +2342,7 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
                 <ScalarProperty Name="ExpectedWorkHours" ColumnName="ExpectedWorkHours" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="ExpectedStartDate" ColumnName="ExpectedStartDate" />
-                <ScalarProperty Name="ExpectedFinishDate" ColumnName="ExpectedFinishDate" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
-              </MappingFragment>
+                </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="JobStatus">
@@ -2460,6 +2551,30 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="JobWorkList">
+            <EntityTypeMapping TypeName="JobModel.JobWorkList">
+              <MappingFragment StoreEntitySet="JobWorkList">
+                <ScalarProperty Name="YearMonth" ColumnName="YearMonth" />
+                <ScalarProperty Name="PeopleId" ColumnName="PeopleId" />
+                <ScalarProperty Name="TaskWhere" ColumnName="TaskWhere" />
+                <ScalarProperty Name="WorkedHour" ColumnName="WorkedHour" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobCosts">
+            <EntityTypeMapping TypeName="JobModel.JobCosts">
+              <MappingFragment StoreEntitySet="JobCosts">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GLAccountCode" ColumnName="GLAccountCode" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="JobCostId" ColumnName="JobCostId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="spReportCustomerWork" FunctionName="JobModel.Store.spReportCustomerWork">
             <ResultMapping>
               <ComplexTypeMapping TypeName="JobModel.spReportCustomerWork_Result">
@@ -2493,7 +2608,6 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="upBalanceCreate" FunctionName="JobModel.Store.upBalanceCreate" />
           <FunctionImportMapping FunctionImportName="upCustomerDelete" FunctionName="JobModel.Store.upCustomerDelete" />
           <FunctionImportMapping FunctionImportName="upJobAdd" FunctionName="JobModel.Store.upJobAdd">
             <ResultMapping>
@@ -2520,30 +2634,8 @@ avviso 6002: Nessuna chiave primaria definita per la tabella/visualizzazione 'Jo
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="upPostExpensePaymentRefound" FunctionName="JobModel.Store.upPostExpensePaymentRefound">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="JobModel.upPostExpensePaymentRefound_Result">
-                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
-                <ScalarProperty Name="ErrorSeverity" ColumnName="ErrorSeverity" />
-                <ScalarProperty Name="ErrorState" ColumnName="ErrorState" />
-                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
-                <ScalarProperty Name="ErrorLine" ColumnName="ErrorLine" />
-                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="upPostPaymentToPerson" FunctionName="JobModel.Store.upPostPaymentToPerson">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="JobModel.upPostPaymentToPerson_Result">
-                <ScalarProperty Name="ErrorNumber" ColumnName="ErrorNumber" />
-                <ScalarProperty Name="ErrorSeverity" ColumnName="ErrorSeverity" />
-                <ScalarProperty Name="ErrorState" ColumnName="ErrorState" />
-                <ScalarProperty Name="ErrorProcedure" ColumnName="ErrorProcedure" />
-                <ScalarProperty Name="ErrorLine" ColumnName="ErrorLine" />
-                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="upPostExpensePaymentRefound" FunctionName="JobModel.Store.upPostExpensePaymentRefound" />
+          <FunctionImportMapping FunctionImportName="upPostPaymentToPerson" FunctionName="JobModel.Store.upPostPaymentToPerson" />
           <FunctionImportMapping FunctionImportName="upPostTravelExpense" FunctionName="JobModel.Store.upPostTravelExpense" />
           <FunctionImportMapping FunctionImportName="upTravelExpenseAdd" FunctionName="JobModel.Store.upTravelExpenseAdd">
             <ResultMapping>

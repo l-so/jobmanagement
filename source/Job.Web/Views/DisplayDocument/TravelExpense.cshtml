@@ -7,7 +7,7 @@
 <div style="margin-top:6px;">
     <table>
         <tr><td>NOTA SPESE</td><td style="padding-left:24px;">PERSONA</td><td style="padding-left:24px;">DATA</td><td style="padding-left:24px;">STATUS</td></tr>
-        <tr><td>@Html.Raw(Model.TExpense.TravelExpenseCode)</td><td style="padding-left:24px;">@Html.Raw(string.Format("{0} {1}", Model.TExpense.Person.LastName, Model.TExpense.Person.FirstName))</td><td style="padding-left:24px;">@Html.Raw(Model.TExpense.Date.ToString("d"))</td><td style="padding-left:24px;">@Html.Raw(Model.TExpense.getStatusDescription(Model.TExpense.Status))</td></tr>
+        <tr><td>@Html.Raw(Model.TExpense.TravelExpenseCode)</td><td style="padding-left:24px;">@Html.Raw(string.Format("{0} {1}", Model.TExpense.Person.LastName, Model.TExpense.Person.FirstName))</td><td style="padding-left:24px;">@Html.Raw(Model.TExpense.Date.ToString("d"))</td><td style="padding-left:24px;">@Html.Raw(Model.TExpense.getStatusDescription())</td></tr>
         <tr><td>TOTALE</td><td style="padding-left:24px;">DAL</td><td style="padding-left:24px;">AL</td><td>Vedi attività</td></tr>
         <tr><td> &#8364; <span id="spanTravelExpenseTotal">@Html.Raw(string.Format("{0:N2}", Model.TEList.Total.Value))</span></td><td style="padding-left:24px;"><span id="spanTravelExpenseBeginDate">@Html.Raw(Model.TEList.BeginDate.HasValue ? string.Format("{0:d}", Model.TEList.BeginDate.Value) : string.Empty)</span></td><td style="padding-left:24px;"><span id="spanTravelExpenseEndDate">@Html.Raw(Model.TEList.EndDate.HasValue ? string.Format("{0:d}", Model.TEList.EndDate.Value) : string.Empty)</span></td></tr>
         <tr><td colspan="4">@Html.Raw(Model.TExpense.Annotation)</td></tr>
@@ -21,7 +21,7 @@
         @foreach (var t in Model.TELine)
         {
             <tr><td>@Html.Raw(t.Date.ToString("d"))</td><td style="padding-left:8px;">@Html.Raw(t.TravelExpenseLineCategories.Description)</td><td style="padding-left:8px;">@Html.Raw(t.Amount.ToString("C"))</td></tr>
-            if (t.TravelExpenseLineCategoryId == JobManagement.EFDataModel.TravelExpenses.CATEGORY_RIMBKM)
+            if (t.TravelExpenseLineCategoryId == Job.EFDataModel.TravelExpenses.CATEGORY_RIMBKM)
             {
             <tr><td></td><td colspan="2"  style="padding-left:8px;">@Html.Raw(t.CarPlate + " " + t.CarDescription + " €/KM " + t.CarKmCost + " KM " + t.CarKm)</td></tr>
             }

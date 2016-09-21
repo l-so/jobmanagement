@@ -19,6 +19,7 @@ namespace Job.EFDataModel
         {
             this.JobTravelExpenses = new HashSet<JobTravelExpenses>();
             this.WorksJournal = new HashSet<WorksJournal>();
+            this.JobCosts = new HashSet<JobCosts>();
         }
     
         public long JobId { get; set; }
@@ -30,10 +31,6 @@ namespace Job.EFDataModel
         public int ExpectedWorkHours { get; set; }
         public byte Status { get; set; }
         public Nullable<int> Year { get; set; }
-        public Nullable<System.DateTime> ExpectedStartDate { get; set; }
-        public Nullable<System.DateTime> ExpectedFinishDate { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> FinishDate { get; set; }
     
         public virtual Customers Customers { get; set; }
         public virtual JobStatus JobStatus { get; set; }
@@ -41,5 +38,7 @@ namespace Job.EFDataModel
         public virtual ICollection<JobTravelExpenses> JobTravelExpenses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorksJournal> WorksJournal { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JobCosts> JobCosts { get; set; }
     }
 }

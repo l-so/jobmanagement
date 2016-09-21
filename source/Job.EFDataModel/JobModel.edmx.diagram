@@ -63,6 +63,10 @@
         <AssociationConnector Association="JobModel.FK_TravelExpenseLine_TravelExpenseLineCategories" ManuallyRouted="false" />
         <AssociationConnector Association="JobModel.FK_TravelExpense_TravelExpenseStatus" ManuallyRouted="false" />
         <AssociationConnector Association="JobModel.FK_TravelExpenseLine_TravelExpense" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="JobModel.JobWorkList" Width="1.5" PointX="13.375" PointY="15.75" />
+        <EntityTypeShape EntityType="JobModel.JobCosts" Width="1.5" PointX="5.25" PointY="19.5" />
+        <AssociationConnector Association="JobModel.FK_JobCosts_GLAccount" />
+        <AssociationConnector Association="JobModel.FK_JobCosts_Jobs" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

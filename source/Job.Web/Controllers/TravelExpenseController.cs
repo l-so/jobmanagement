@@ -56,8 +56,7 @@ namespace Job.WebMvc.Controllers
             int y = int.Parse(id.Substring(0, 4));
             int m = int.Parse(id.Substring(4, 2));
             int p = int.Parse(id.Substring(6));
-            Models.TravelExpense.TravelExpensePostTravelExpensesModel model = new Models.TravelExpense.TravelExpensePostTravelExpensesModel();
-            return View(model);
+            return RedirectToActionPermanent("Index", new { filterMonth = m, filterYear = y, filterPeopleId = p, status = EFDataModel.TravelExpenses.STATUS_REGISTRATA });
         }
     }
 }

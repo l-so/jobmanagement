@@ -10,14 +10,17 @@
 namespace Job.EFDataModel
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class upPostPaymentToPerson_Result
+    public partial class JobCosts
     {
-        public Nullable<int> ErrorNumber { get; set; }
-        public Nullable<int> ErrorSeverity { get; set; }
-        public Nullable<int> ErrorState { get; set; }
-        public string ErrorProcedure { get; set; }
-        public Nullable<int> ErrorLine { get; set; }
-        public string ErrorMessage { get; set; }
+        public int JobCostId { get; set; }
+        public long JobId { get; set; }
+        public string GLAccountCode { get; set; }
+        public decimal Amount { get; set; }
+        public string Note { get; set; }
+    
+        public virtual GLAccount GLAccount { get; set; }
+        public virtual Jobs Jobs { get; set; }
     }
 }

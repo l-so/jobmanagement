@@ -485,7 +485,7 @@
         <div style="margin-top:6px;">
             <table>
                 <tr><td>NOTA SPESE</td><td style="padding-left:24px;">PERSONA</td><td style="padding-left:24px;">DATA</td><td style="padding-left:24px;">STATUS</td></tr>
-                <tr><td><a onclick="edt_TravelExpenseHeader('@Html.Raw(Model.TravelExpense.TravelExpenseCode)')">@Html.Raw(Model.TravelExpense.TravelExpenseCode)</a></td><td style="padding-left:24px;">@Html.Raw(string.Format("{0} {1}", Model.TravelExpense.Person.LastName, Model.TravelExpense.Person.FirstName))</td><td style="padding-left:24px;">@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.TravelExpense.Date))</td><td style="padding-left:24px;">@Html.Raw(Model.TravelExpense.getStatusDescription(Model.TravelExpense.Status))</td></tr>
+                <tr><td><a onclick="edt_TravelExpenseHeader('@Html.Raw(Model.TravelExpense.TravelExpenseCode)')">@Html.Raw(Model.TravelExpense.TravelExpenseCode)</a></td><td style="padding-left:24px;">@Html.Raw(string.Format("{0} {1}", Model.TravelExpense.Person.LastName, Model.TravelExpense.Person.FirstName))</td><td style="padding-left:24px;">@Html.Raw(string.Format("{0:dd/MM/yyyy}", Model.TravelExpense.Date))</td><td style="padding-left:24px;">@Html.Raw(Model.TravelExpense.getStatusDescription())</td></tr>
                 <tr><td>TOTALE</td><td style="padding-left:24px;">DAL</td><td colspan="2" style="padding-left:24px;">AL</td></tr>
                 <tr><td> &#8364; <span id="spanTravelExpenseTotal">@Html.Raw(string.Format("{0:N2}", (Model.TravelExpenseList.Total.HasValue ? Model.TravelExpenseList.Total.Value : 0)))</span></td><td  style="padding-left:24px;"><span id="spanTravelExpenseBeginDate">@Html.Raw(Model.TravelExpenseList.BeginDate.HasValue ? string.Format("{0:d}", Model.TravelExpenseList.BeginDate.Value) : string.Empty)</span></td><td style="padding-left:24px;"><span id="spanTravelExpenseEndDate">@Html.Raw(Model.TravelExpenseList.EndDate.HasValue ? string.Format("{0:d}", Model.TravelExpenseList.EndDate.Value) : string.Empty)</span></td></tr>
                 <tr><td colspan="4">@Html.Raw(Model.TravelExpense.Annotation)</td></tr>
@@ -493,7 +493,7 @@
 
         </div>
         <div style="margin-top:12px;">
-            @if (Model.TravelExpense.Status == JobManagement.EFDataModel.TravelExpenses.STATUS_BOZZA)
+            @if (Model.TravelExpense.Status == Job.EFDataModel.TravelExpenses.STATUS_BOZZA)
             {
                 <a href="#" onclick="assign_ToJobs();">Assegna a commessa</a>
             }
@@ -505,7 +505,7 @@
             </table>
         </div>
         <div style="margin-top:12px;">
-            @if (Model.TravelExpense.Status == JobManagement.EFDataModel.TravelExpenses.STATUS_BOZZA)
+            @if (Model.TravelExpense.Status == Job.EFDataModel.TravelExpenses.STATUS_BOZZA)
             { 
                 <a href="#" onclick="add_TravelExpenseLine();">Nuova riga...</a>
             }

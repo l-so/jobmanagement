@@ -28,7 +28,8 @@
         sendData.Province = $('#dialogEditCustomerProvince').val();
         sendData.State = $('#dialogEditCustomerState').val();
         sendData.Country = $('#dialogEditCustomerCountry').val();
-        sendData.BusinessGroup = $('#dialogEditCustomerBusinessGroup').val();
+        sendData.Salutation = $('#dialogEditCustomerSalutation').val();
+        sendData.CustomerBusinessGroupId = $('#dialogEditCustomerBusinessGroup').val();
         $.ajax({
             method: "POST",
             url: '@Url.Action("ModalEditCustomer", "Customer")',
@@ -81,7 +82,13 @@
         <div class="modal-body">
             <input type="hidden" value="@Html.Raw(Model.Customer.CustomerId.ToString())" id="dialogEditCustomerCustomerId" name="dialogEditCustomerCustomerId" />
             <div class="row row-margin-6top">
-                <div class="divColText">Nome :</div>
+                <div class="divColText">&nbsp;</div>
+                <div class="divColField">
+                    @Html.TextBox("dialogEditCustomerSalutation", Model.Customer.Salutation, new { @class = "form-control", @placeholder = "Cortesia" })
+                </div>
+            </div>
+            <div class="row row-margin-6top">
+                <div class="divColText" style="font-weight:700;">Nome :</div>
                 <div class="divColField">
                     @Html.TextBox("dialogEditCustomerName", Model.Customer.Name, new { @class = "form-control", @placeholder = "Cognome/Ragione sociale" })
                 </div>
@@ -124,7 +131,7 @@
             </div>
             <div class="row row-margin-6top">
                 <div class="divColText">Status</div>
-                <div class="divColField"><select id="dialogEditCustomerStatus" name="dialogEditCustomerStatus" class = "form-control"><option value="0" @Html.Raw((Model.Customer.Status == JobManagement.EFDataModel.Customers.STATUS_ACTIVE ? "selected" : string.Empty))>ATTIVO</option><option value="1" @Html.Raw((Model.Customer.Status == JobManagement.EFDataModel.Customers.STATUS_ARCHIVED ? "selected" : string.Empty))>ARCHIVIATO</option><option value="2" @Html.Raw((Model.Customer.Status == JobManagement.EFDataModel.Customers.STATUS_INTERNAL ? "selected" : string.Empty))>INTERNO</option></select></div>
+                <div class="divColField"><select id="dialogEditCustomerStatus" name="dialogEditCustomerStatus" class = "form-control"><option value="0" @Html.Raw((Model.Customer.Status == Job.EFDataModel.Customers.STATUS_ACTIVE ? "selected" : string.Empty))>ATTIVO</option><option value="1" @Html.Raw((Model.Customer.Status == Job.EFDataModel.Customers.STATUS_ARCHIVED ? "selected" : string.Empty))>ARCHIVIATO</option><option value="2" @Html.Raw((Model.Customer.Status == Job.EFDataModel.Customers.STATUS_INTERNAL ? "selected" : string.Empty))>INTERNO</option></select></div>
             </div>
         </div>
         <div class="modal-footer">

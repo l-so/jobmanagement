@@ -11,6 +11,7 @@
             Customers r = new Customers();
             r.Status = Customers.STATUS_ACTIVE;
             r.CustomerId = -1;
+            r.Salutation = "Spett.le";
             return r;
         }
     }

@@ -105,6 +105,9 @@
     <Compile Include="GLTravelExpense.cs">
       <DependentUpon>JobModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="JobCosts.cs">
+      <DependentUpon>JobModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="JobList.cs">
       <DependentUpon>JobModel.tt</DependentUpon>
     </Compile>
@@ -144,6 +147,9 @@
     <Compile Include="JobTravelExpenses.cs">
       <DependentUpon>JobModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="JobWorkList.cs">
+      <DependentUpon>JobModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Person.cs">
       <DependentUpon>JobModel.tt</DependentUpon>
     </Compile>
@@ -176,12 +182,6 @@
       <DependentUpon>JobModel.tt</DependentUpon>
     </Compile>
     <Compile Include="upOreMensiliLavorateGiornaliero_Result.cs">
-      <DependentUpon>JobModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="upPostExpensePaymentRefound_Result.cs">
-      <DependentUpon>JobModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="upPostPaymentToPerson_Result.cs">
       <DependentUpon>JobModel.tt</DependentUpon>
     </Compile>
     <Compile Include="upTravelExpenseAdd_Result.cs">
