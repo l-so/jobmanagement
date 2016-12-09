@@ -166,7 +166,6 @@
     <Compile Include="Controllers\NotifyController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ReceipsAndPaymentsController.cs" />
-    <Compile Include="Controllers\WorkController.cs" />
     <Compile Include="Models\GL\GLEntryListModel.cs" />
     <Compile Include="Models\Jobs\EditDialogJobTaskModel.cs" />
     <Compile Include="Models\Jobs\EditDialogWorksModel.cs" />
@@ -205,8 +204,6 @@
     <Compile Include="Models\TravelExpense\TravelExpenseEditModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpensePostTravelExpensesModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseIndexModel.cs" />
-    <Compile Include="Models\Work\WorkEditWeekModel.cs" />
-    <Compile Include="Models\Work\WorkIndexModel.cs" />
     <Compile Include="Reports\ReportViewer.aspx.cs">
       <DependentUpon>ReportViewer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1654,9 +1651,6 @@
     <Content Include="Views\Person\ModalPeoplePayment.cshtml" />
     <Content Include="Views\Person\ModalExpenseRefoundEdit.cshtml" />
     <Content Include="Views\DisplayDocument\ExpensePaymentRefound.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Work\Index.cshtml" />
-    <Content Include="Views\Work\EditWeek.cshtml" />
     <Content Include="Views\Person\EditDialogPartnerPayment.cshtml" />
     <Content Include="Views\Person\EditDialogPartnerTaxPayment.cshtml" />
     <Content Include="Views\Person\PaymentRefoundRequestList.cshtml" />
@@ -1668,10 +1662,6 @@
     <Content Include="Views\Person\EditDialogPrePaymentRefound.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\01-Job.Logic\01-Job.Logic.csproj">
-      <Project>{c598c6e9-6e51-4c16-b4b3-9523759e4409}</Project>
-      <Name>01-Job.Logic</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Job.Code\04-Job.Code.csproj">
       <Project>{b4e5d9fd-9d8a-49b9-9e4b-e3556aad61f9}</Project>
       <Name>04-Job.Code</Name>
