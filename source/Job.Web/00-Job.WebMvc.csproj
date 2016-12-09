@@ -13,9 +13,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Job.WebMvc</RootNamespace>
     <AssemblyName>Job.WebMvc</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -161,13 +161,23 @@
     <Content Include="App_Code\api\TravelExpenseLineSvcController.cs" />
     <Content Include="App_Code\api\PersonSvcController.cs" />
     <Content Include="App_Code\api\AppUserSvcController.cs" />
+    <Content Include="App_Code\api\JobSvcController.cs" />
     <Compile Include="Controllers\GLController.cs" />
+    <Compile Include="Controllers\NotifyController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Controllers\ReceipsAndPaymentsController.cs" />
+    <Compile Include="Controllers\WorkController.cs" />
+    <Compile Include="Models\GL\GLEntryListModel.cs" />
+    <Compile Include="Models\Jobs\EditDialogJobTaskModel.cs" />
+    <Compile Include="Models\Jobs\EditDialogWorksModel.cs" />
+    <Compile Include="Models\Person\EditDialogPartnerPaymentModel.cs" />
+    <Compile Include="Models\Person\EditDialogPartnerTaxPaymentModel.cs" />
+    <Compile Include="Models\Person\EditDialogRefoundRequestModel.cs" />
     <Compile Include="Models\Person\ExpenseRefoundIndexModel.cs" />
     <Compile Include="Models\DisplayDocument\DisplayExpensePaymentRefoundModel.cs" />
     <Compile Include="Models\Person\ModalExpenseRefoundEditModel.cs" />
     <Compile Include="Models\Person\ModalPeoplePaymentModel.cs" />
+    <Compile Include="Models\Person\PaymentRefoundRequestListModel.cs" />
     <Compile Include="Models\Person\PersonEditModalModel.cs" />
     <Compile Include="Models\Person\PersonIndexModel.cs" />
     <Compile Include="Models\DisplayDocument\DisplayTravelExpenseModel.cs" />
@@ -195,6 +205,8 @@
     <Compile Include="Models\TravelExpense\TravelExpenseEditModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpensePostTravelExpensesModel.cs" />
     <Compile Include="Models\TravelExpense\TravelExpenseIndexModel.cs" />
+    <Compile Include="Models\Work\WorkEditWeekModel.cs" />
+    <Compile Include="Models\Work\WorkIndexModel.cs" />
     <Compile Include="Reports\ReportViewer.aspx.cs">
       <DependentUpon>ReportViewer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -216,7 +228,7 @@
     <Compile Include="Identity\AppUserManager.cs" />
     <Compile Include="Identity\IdentityHelper.cs" />
     <Compile Include="Models\CustomerIndexModel.cs" />
-    <Compile Include="Models\JobIndexModel.cs" />
+    <Compile Include="Models\Jobs\JobIndexModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\AppUser\ModalAppUserEditModel.cs" />
     <Compile Include="Models\Customer\ModalEditCustomerModel.cs" />
@@ -1455,6 +1467,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\w3.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome-4.5.0\css\font-awesome.css" />
     <Content Include="fonts\font-awesome-4.5.0\css\font-awesome.min.css" />
@@ -1566,19 +1579,19 @@
     <Content Include="Scripts\i18n\vi.js" />
     <Content Include="Scripts\i18n\zh-CN.js" />
     <Content Include="Scripts\i18n\zh-TW.js" />
-    <None Include="Scripts\jquery-3.1.0.intellisense.js" />
-    <Content Include="Scripts\jquery-3.1.0.js" />
-    <Content Include="Scripts\jquery-3.1.0.min.js" />
-    <Content Include="Scripts\jquery-3.1.0.slim.js" />
-    <Content Include="Scripts\jquery-3.1.0.slim.min.js" />
-    <Content Include="Scripts\jquery-3.1.0.slim.min.map" />
-    <Content Include="Scripts\jquery-3.1.0.min.map" />
-    <Content Include="Scripts\jquery-ui-1.12.0.js" />
-    <Content Include="Scripts\jquery-ui-1.12.0.min.js" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery-ui-i18n.js" />
     <Content Include="Scripts\jquery-ui-i18n.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -1620,7 +1633,6 @@
     <Content Include="Views\Shared\_SpaceLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Jobs\Index.cshtml" />
-    <Content Include="Views\Jobs\ModalEditJobWorkJournal.cshtml" />
     <Content Include="Views\Jobs\ModalEditJob.cshtml" />
     <Content Include="Views\Customer\ModalEditCustomer.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
@@ -1641,21 +1653,36 @@
     <Content Include="Views\Person\Index.cshtml" />
     <Content Include="Views\Person\ModalPeoplePayment.cshtml" />
     <Content Include="Views\Person\ModalExpenseRefoundEdit.cshtml" />
-    <Content Include="Views\Person\ExpenseRefoundList.cshtml" />
     <Content Include="Views\DisplayDocument\ExpensePaymentRefound.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Work\Index.cshtml" />
+    <Content Include="Views\Work\EditWeek.cshtml" />
+    <Content Include="Views\Person\EditDialogPartnerPayment.cshtml" />
+    <Content Include="Views\Person\EditDialogPartnerTaxPayment.cshtml" />
+    <Content Include="Views\Person\PaymentRefoundRequestList.cshtml" />
+    <Content Include="Views\Jobs\EditDialogJobTask.cshtml" />
+    <Content Include="Views\Notify\NotifyError.cshtml" />
+    <Content Include="Views\Jobs\EditDialogWorks.cshtml" />
+    <Content Include="Views\Jobs\Edit - Copia.cshtml" />
+    <Content Include="Views\GL\GLEntryList.cshtml" />
+    <Content Include="Views\Person\EditDialogPrePaymentRefound.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Job.Code\03-Job.Code.csproj">
+    <ProjectReference Include="..\..\01-Job.Logic\01-Job.Logic.csproj">
+      <Project>{c598c6e9-6e51-4c16-b4b3-9523759e4409}</Project>
+      <Name>01-Job.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Job.Code\04-Job.Code.csproj">
       <Project>{b4e5d9fd-9d8a-49b9-9e4b-e3556aad61f9}</Project>
-      <Name>03-Job.Code</Name>
+      <Name>04-Job.Code</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Job.DataAccessLayer\01-Job.DataAccessLayer.csproj">
+    <ProjectReference Include="..\Job.DataAccessLayer\02-Job.DataAccessLayer.csproj">
       <Project>{01f70f70-8507-44d5-9a57-07a3086d7e22}</Project>
-      <Name>01-Job.DataAccessLayer</Name>
+      <Name>02-Job.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Job.EFDataModel\02-Job.EFDataModel.csproj">
+    <ProjectReference Include="..\Job.EFDataModel\03-Job.EFDataModel.csproj">
       <Project>{ec1b02d2-9c61-47b2-9618-18972b39b994}</Project>
-      <Name>02-Job.EFDataModel</Name>
+      <Name>03-Job.EFDataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -1680,7 +1707,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56935</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://idefix/Job</IISUrl>
+          <IISUrl>http://localhost:56935/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

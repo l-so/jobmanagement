@@ -16,7 +16,7 @@
     function modal_edit_customer_save() {
         var sendData = new Object();
         sendData.CustomerId = $('#dialogEditCustomerCustomerId').val();
-        sendData.Status = $('#dialogEditCustomerStatus').val();
+        sendData.IsActive = $('#dialogEditCustomerStatus').prop('checked');
         sendData.Name = $('#dialogEditCustomerName').val();
         sendData.Name2 = $('#dialogEditCustomerNome2').val();
         sendData.VatNumber = $('#dialogEditCustomerPIva').val();
@@ -42,6 +42,7 @@
             success: function (result) {
                 if (result.ErrorResult == "OK") {
                     $('#dialogEditCustomer').modal('hide');
+                    windows.location.reload();
                 } else {
                     alert(result.ErrorMessage);
                 }
@@ -131,7 +132,7 @@
             </div>
             <div class="row row-margin-6top">
                 <div class="divColText">Status</div>
-                <div class="divColField"><select id="dialogEditCustomerStatus" name="dialogEditCustomerStatus" class = "form-control"><option value="0" @Html.Raw((Model.Customer.Status == Job.EFDataModel.Customers.STATUS_ACTIVE ? "selected" : string.Empty))>ATTIVO</option><option value="1" @Html.Raw((Model.Customer.Status == Job.EFDataModel.Customers.STATUS_ARCHIVED ? "selected" : string.Empty))>ARCHIVIATO</option><option value="2" @Html.Raw((Model.Customer.Status == Job.EFDataModel.Customers.STATUS_INTERNAL ? "selected" : string.Empty))>INTERNO</option></select></div>
+                <div class="divColField"><input type="checkbox" id="dialogEditCustomerStatus" name="dialogEditCustomerStatus" @Html.Raw(Model.Customer.IsActive ? "checked" : string.Empty)/> ATTIVO</div>
             </div>
         </div>
         <div class="modal-footer">

@@ -130,7 +130,7 @@ namespace Job.WebMvc.Controllers.api
                         DataAccessLayer.DBPayment.PeoplePayment(d, id, co, t, i, b);
                         break;
                     case "ExpensePaymentUpdate":
-                        EFDataModel.ExpensePaymentRefound epr = new EFDataModel.ExpensePaymentRefound();
+                        EFDataModel.PrePaymentRefound epr = new EFDataModel.PrePaymentRefound();
                         epr.Id = long.Parse(values["ExpensePaymentRefoundId"]);
                         epr.PeopleId = int.Parse(values["PeopleId"]);
                         epr.Date = DateTime.Parse(values["Date"]).Date;
@@ -192,11 +192,13 @@ namespace Job.WebMvc.Controllers.api
                         }
                         _response.Data = Newtonsoft.Json.JsonConvert.SerializeObject(p);
                     break;
-                    case "PostExpenseRefound":
+                    case "PostExpenseRefoundMonth":
                         int peopleId = int.Parse(values["PeopleId"]);
                         int year = int.Parse(values["Year"]);
                         int month = int.Parse(values["Month"]);
                         DataAccessLayer.DBPerson.ExpensePaymentRefoundRegister(peopleId, year, month);
+                        break;
+                    case "PostExpenseRefound":
                         break;
                 }                
             }

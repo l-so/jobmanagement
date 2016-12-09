@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="height:6px;background-color:#ea5d05;"></div>
+<div class="w3-container">
+    <ul class="w3-navbar w3-light-grey">
+        <li>@Html.ActionLink("Home", "HomePage", "Home")</li>
+        <li><a href="#">Link 1</a></li>
+        <li class="w3-dropdown-hover">
+            <a href="#">Dropdown</a>
+            <div class="w3-dropdown-content w3-white w3-card-4">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                <a href="#">Link 3</a>
+            </div>
+        </li>
+        <li class="w3-dropdown-hover">
+            <a href="#">Configurazione</a>
+            <div class="w3-dropdown-content w3-white w3-card-4">
+                <a href="#">Link 1</a>
+                <a href="#">Link 2</a>
+                @Html.ActionLink("Utenti", "Index", "IdentityUsers")
+            </div>
+        </li>
+        <li class="w3-dropdown-hover w3-right">
+            <a class="w3-green" href="#">Lorenzo Soncini</a>
+            <div class="w3-dropdown-content w3-white w3-card-4">
+                <a href="#">Profilo</a>
+                <a href="#">Reset parola di passaggio</a>
+                @Html.ActionLink("Esci", "Logout", "Home")
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="w3-container">
+    Campi in testata per filtro: Anno - Mese - Risorsa
+</div>
+<div class="w3-container">
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">Lunedi</div>
+        <div class="w3-col m1 w3-center">Martedi</div>
+        <div class="w3-col m1 w3-center">Mercoledi</div>
+        <div class="w3-col m1 w3-center">Giovedi</div>
+        <div class="w3-col m1 w3-center">Venerdi</div>
+        <div class="w3-col m1 w3-center w3-grey">Sabato</div>
+        <div class="w3-col m1 w3-center w3-grey">Domenica</div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">1</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">2</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">3</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">4</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">5</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;">6</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;margin-bottom:0;padding-bottom:0;">7</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">1</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">2</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">3</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">4</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">5</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;">6</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;margin-bottom:0;padding-bottom:0;">7</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">1</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">2</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">3</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">4</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">5</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;">6</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;margin-bottom:0;padding-bottom:0;">7</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">1</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">2</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">3</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">4</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">5</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;">6</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;margin-bottom:0;padding-bottom:0;">7</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">1</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">2</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">3</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">4</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">5</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;">6</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;margin-bottom:0;padding-bottom:0;">7</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+    </div>
+    <div class="w3-row">
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">1</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">2</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">3</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">4</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center">
+            <div class="w3-center" style="border-bottom:2px solid #003264;margin-right:24px;margin-left:24px;">5</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;">6</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+        <div class="w3-col m1 w3-center w3-grey">
+            <div class="w3-center" style="border-bottom:2px solid #ea5d05;margin-right:24px;margin-left:24px;margin-bottom:0;padding-bottom:0;">7</div>
+            <div class="w3-right" style="padding-right:36px;">8,00</div><br />
+            <div class="w3-right" style="padding-right:36px;">12,00</div>
+        </div>
+    </div>
+</div>

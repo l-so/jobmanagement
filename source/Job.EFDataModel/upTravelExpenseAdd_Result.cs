@@ -19,8 +19,9 @@ namespace Job.EFDataModel
         public byte Status { get; set; }
         public int PeopleId { get; set; }
         public Nullable<System.DateTime> PostDate { get; set; }
-        public Nullable<int> PostGeneralJournalLineId { get; set; }
-        public Nullable<decimal> PaidAmount { get; set; }
-        public Nullable<byte> PaidStatus { get; set; }
+        public Nullable<decimal> InvoiceAmount { get; set; }
+        public Nullable<System.DateTime> FromDate { get; set; }
+        public Nullable<System.DateTime> ToDate { get; set; }
+        public decimal Amount { get; set; }
     }
 }

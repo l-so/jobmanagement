@@ -70,6 +70,38 @@ namespace Job.DataAccessLayer
             return _result;
         }
 
+        public static List<GeneralJournalLines> getEntry(DateTime fromDate, DateTime toDate)
+        {
+            List<GeneralJournalLines> _result = null;
+            try
+            {
+                using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())
+                {
+                    ctx.Configuration.LazyLoadingEnabled = false;
+                    ctx.Configuration.ProxyCreationEnabled = false;
+                    _result = ctx.GeneralJournalLines.Include("GeneralJournalLineEntries").Include("GeneralJournalLineEntries.GLAccount").Where(l => l.Date >= fromDate.Date && l.Date <= toDate).OrderBy(l => l.Date).ToList();
+                }
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+            {
+                throw e;
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            {
+                throw e;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return _result;
+        }
+
         public static decimal getGLAccountTotal(DateTime endDate, string accountCode, string debitCredit)
         {
             DateTime beginDate = new DateTime(endDate.Year, 1, 1);
@@ -149,7 +181,7 @@ namespace Job.DataAccessLayer
                 {
                     ctx.Configuration.LazyLoadingEnabled = false;
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    var r = ctx.GLAccount.Where(a => a.Type == "E" && a.SubType.Trim() == "C").ToList();
+                    var r = ctx.GLAccount.Where(a => a.EconomicoPatrimoniale == "E" && a.TotaleAnalitico == "A" && a.CostoRicavo == "C").ToList();
                     foreach (var a in r)
                     {
                         _result.Add(new System.Web.Mvc.SelectListItem()

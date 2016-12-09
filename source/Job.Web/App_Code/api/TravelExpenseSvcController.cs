@@ -53,21 +53,42 @@ namespace Job.WebMvc.Controllers.api
                         List<EFDataModel.TravelExpensesLines> lines = DataAccessLayer.DBTravelExpense.getLines(travelExpenseCode);
                         _response.Data = Newtonsoft.Json.JsonConvert.SerializeObject(lines);
                         break;
-                    case "PostTravelExpenseRequest":
+                    case "TravelExpenseUpdateHeader":
                         travelExpenseCode = values["TravelExpenseCode"];
-                        string rr = DataAccessLayer.DBTravelExpense.PostTravelExpenseRequest(travelExpenseCode);
-                        _response.Data = rr;
+                        string note = values["Note"];
+                        decimal invAmount = string.IsNullOrWhiteSpace(values["InvoiceAmount"]) ? decimal.Zero : decimal.Parse(values["InvoiceAmount"]);
+                        DataAccessLayer.DBTravelExpense.UpdateHeader(travelExpenseCode, note, invAmount);
                         break;
-                    case "AssignJob":
+                    case "GetTravelExpenseRegisterConfirmData":
                         travelExpenseCode = values["TravelExpenseCode"];
-                        long jobid = long.Parse(values["JobId"]);
-                        short tp = short.Parse(values["TotalPercent"]);
-                        DataAccessLayer.DBTravelExpense.AssignJob(travelExpenseCode, jobid, tp);
+                        string workIdList = values["WorkIdList"];
+                        string[] js = workIdList.Split('#');
+                        List<string> j = new List<string>();
+                        bool e = true;
+                        foreach(var a in js)
+                        {
+                            foreach(var aa in j)
+                            {
+                                if (aa == a)
+                                {
+                                    e = false;
+                                }
+                            }
+                            if (e)
+                            {
+                                j.Add(a);
+                            } else
+                            {
+                                e = true;
+                            }
+                        }
+                        Job.Code.RegisterGetConfirmDataResult rrr = DataAccessLayer.DBTravelExpense.RegisterGetConfirmData(travelExpenseCode, j);
+                        _response.Data = Newtonsoft.Json.JsonConvert.SerializeObject(rrr);
                         break;
-
-                    case "LoadJobs":
+                    case "TravelExpenseRegisterConfirm":
                         travelExpenseCode = values["TravelExpenseCode"];
-                        _response.Data = DataAccessLayer.DBTravelExpense.getAssignedJob(travelExpenseCode);
+                        string registerData = values["RegisterData"];
+                        _response.Data = DataAccessLayer.DBTravelExpense.Register(registerData);
                         break;
                 }
             }

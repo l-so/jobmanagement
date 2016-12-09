@@ -14,7 +14,7 @@ namespace Job.EFDataModel
     public partial class upJobAdd_Result
     {
         public long JobId { get; set; }
-        public long CustomerId { get; set; }
+        public Nullable<long> CustomerId { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
         public decimal ExpectedIncome { get; set; }

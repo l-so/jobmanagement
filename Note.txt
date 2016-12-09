@@ -1,21 +1,20 @@
-
-- Nelle spese di trasferta aggiungere la riga fattura
-	VendorName -> Descrizione
-	Pagato da -> [PaidBy] Fare una tabella con i nome ed i relativi conti in SP
-							Banco Pololare
-							ZZSoft Carta Credito
-							
-							
-
-
-var: finanziaria attiva DARE  
+var: finanziaria attiva DARE  (DEBIT)
 aumenti di crediti - diminuzioni di debiti - aumenti di denaro 
-
-var finanziaria passiva AVERE 
+var finanziaria passiva AVERE (CREDIT)
 diminuzione di crediti - aumenti di debiti - diminuzioni di denaro 
-
-var. economica negativa DARE 
+var. economica negativa DARE (DEBIT)
 costi - rettifiche sui ricavi 
-
-var. economica positiva AVERE 
+var. economica positiva AVERE (CREDIT)
 ricavi - rettifiche sui costi 
+*****************************************************************************************************
+Rimborso fatture pagate da soci
+Tabella: PrePaymentRefound
+CRUD dei dati se status 0
+Se status 1 = resistrata e dati in sola lettura
+
+Pagamento a soci
+Da completare il salvataggio e registrarlo
+
+Pagamento tasse soci
+Da completare
+

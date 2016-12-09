@@ -18,15 +18,17 @@ namespace Job.EFDataModel
         public long CustomerId { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
-        public decimal ExpectedIncome { get; set; }
-        public decimal ExpectedCost { get; set; }
-        public int ExpectedWorkHours { get; set; }
         public byte Status { get; set; }
-        public Nullable<int> Year { get; set; }
-        public Nullable<decimal> TotalHours { get; set; }
+        public long Year { get; set; }
         public string StatusDescription { get; set; }
         public string CustomerName { get; set; }
         public string CustomerName2 { get; set; }
         public string CustomerFullName { get; set; }
+        public Nullable<decimal> ActualHours { get; set; }
+        public Nullable<System.DateTime> ActualBegin { get; set; }
+        public Nullable<System.DateTime> ActualEnd { get; set; }
+        public Nullable<decimal> ExpectedIncome { get; set; }
+        public Nullable<decimal> ExpectedCost { get; set; }
+        public Nullable<int> ExpectedWorks { get; set; }
     }
 }

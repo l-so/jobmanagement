@@ -17,10 +17,9 @@ namespace Job.EFDataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Person()
         {
-            this.ExpensePaymentRefound = new HashSet<ExpensePaymentRefound>();
-            this.GLPerson = new HashSet<GLPerson>();
             this.WorksJournal = new HashSet<WorksJournal>();
             this.TravelExpenses = new HashSet<TravelExpenses>();
+            this.PrePaymentRefound = new HashSet<PrePaymentRefound>();
         }
     
         public int PeopleId { get; set; }
@@ -37,11 +36,6 @@ namespace Job.EFDataModel
         public string CarDescription { get; set; }
         public decimal CarKmCost { get; set; }
         public bool IdentityDefault { get; set; }
-        public string DebitAccount { get; set; }
-        public string CreditAccount { get; set; }
-        public string CopensoAccount { get; set; }
-        public string TasseAccount { get; set; }
-        public string INPSAccount { get; set; }
         public Nullable<decimal> MondayExpectedHours { get; set; }
         public Nullable<decimal> TuesdayExpectedHours { get; set; }
         public Nullable<decimal> WendsdayExpectedHours { get; set; }
@@ -49,16 +43,16 @@ namespace Job.EFDataModel
         public Nullable<decimal> FridayExpectedHours { get; set; }
         public Nullable<decimal> SaturdayExpectedHours { get; set; }
         public Nullable<decimal> SundayExpectedHours { get; set; }
-        public string TravelExpenseAccount { get; set; }
+        public string PersonBusinessAccountId { get; set; }
+        public Nullable<decimal> CompensoMensile { get; set; }
     
         public virtual AspNetUsers AspNetUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExpensePaymentRefound> ExpensePaymentRefound { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GLPerson> GLPerson { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorksJournal> WorksJournal { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TravelExpenses> TravelExpenses { get; set; }
+        public virtual PersonBusinessAccount PersonBusinessAccount { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PrePaymentRefound> PrePaymentRefound { get; set; }
     }
 }

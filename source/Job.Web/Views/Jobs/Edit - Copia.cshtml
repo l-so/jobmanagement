@@ -1,0 +1,122 @@
+﻿@model Job.WebMvc.Models.Jobs.JobsEditModel
+@{
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+<style>
+    .zzsTabContainer {
+        display: none;
+    }
+</style>
+
+<ol class="breadcrumb">
+    <li>Home</li>
+    <li>@Html.ActionLink("Elenco commesse","Index")</li>
+    <li class="active">Codice commessa</li>
+</ol>
+<div class="w3-container">
+    <form method="post">
+        <div class="w3-row" style="line-height:32px;">
+            <div class="w3-col s1">Codice :</div><div class="w3-col m2">@Html.Raw(Model.Job.Code)@Html.Hidden("jobId", Model.Job.JobId)@Html.Hidden("jobCode", Model.Job.Code)</div>
+        </div>
+        <div class="w3-row" style="line-height:32px;">
+            <div class="w3-col s1">Cliente :</div><div class="w3-col m2">@Html.DropDownList("jobCustomerId", Model.DDLCustomers, new { @class = "w3-input" })</div>
+        </div>
+        <div class="w3-row" style="line-height:32px;">
+            <div class="w3-col s1">Descrizione :</div><div class="w3-col m10">@Html.TextBox("jobDescription", Model.Job.Description, new { @class = "w3-input", @style="height:32px;" })</div>
+        </div>
+        <div class="w3-row" style="line-height:32px;">
+            <div class="w3-col s1">Status :</div><div class="w3-col m1">@Html.DropDownList("jobStatus", Model.DDLStatus, new { @class = "w3-input" })</div>
+        </div>
+        <div class="w3-row" style="margin-top:4px;padding-top:4px;">
+            <div class="w3-col s1">&#160;</div><div class="w3-col m1"><button type="submit" class="w3-btn w3-green">Aggiorna testata</button></div>
+</div>
+    </form>
+</div>
+<div class="w3-container">
+    <div class="w3-row">
+
+        <a href="javascript:void(0)" onclick="showTab(event, 'tabTask')" class="testbtn">
+            <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Attività</div>
+        </a>
+
+        <a href="javascript:void(0)" onclick="showTab(event, 'tabBalance')" style="width:200px;">
+            <div class="w3-third tablink w3-bottombar w3-hover-light-grey w3-padding">Bilancio</div>
+        </a>
+
+    </div>
+    <div id="tabTask" class="w3-container zzsTabContainer">
+        <div style="line-height:32px;">
+            <div style="float:left;width:100px;"><a href="#" onclick="edit_jobtask(@Html.Raw(Model.Job.JobId),null)">Aggiungi...</a></div><br />
+        </div>
+        <table class="w3-table w3-striped w3-bordered">
+            <thead>
+                <tr>
+                    <th>Numero</th>
+                    <th>Descrizione</th>
+                    <th>Ore prev.</th>
+                    <th>Costi prev.</th>
+                    <th>Fatt. ora prev.</th>
+                    <th>Fatturato prev.</th>
+                </tr>
+            </thead>
+            <tbody>
+                                @foreach (var t in Model.TaskList)
+                                {
+                                    <tr>
+                                        <td><a href="#" onclick="edit_jobtask(@Html.Raw(Model.Job.JobId),@Html.Raw(t.JobTaskId));">@Html.Raw(t.JobTaskId)</a></td>
+                                        <td>@Html.Raw(t.Description)</td>
+                                        <td>@Html.Raw(t.ExpectedHoursOfWork)</td>
+                                        <td>@Html.Raw(t.ExpectedCost)</td>
+                                        <td>@Html.Raw(t.IncomePerHour)</td>
+                                        <td>@Html.Raw(t.ExpectedInvoice)</td>
+                                    </tr>
+                                        }
+
+</tbody>
+        </table>
+    </div>
+    <div id="tabBalance" class="w3-container zzsTabContainer">
+        <div style="margin-top:8px;margin-bottom:24px;">
+            <div style="float:left;width:320px;">Totale ore lavorate :</div><div style="float:left;width:80px;text-align:right;">@Html.Raw(Model.totalWorkedHours.ToString("N2"))</div>
+        </div>
+        <br />
+        <div style="margin-top:8px;margin-bottom:24px;">
+            <button type="submit" class="btn btn-xs" onclick="add_dialogEditJobCost();"><span class="fa fa-plus" aria-hidden="true"></span> Aggiungi...</button>
+        </div>
+        @foreach (var c in Model.Job.JobBalance)
+        {
+        <div style="width:480px;padding: 4px;">
+            <div style="float:left;width:320px;">@Html.Raw(string.Format("[{0}] {1}", c.GLAccount.GLAccountCode, c.GLAccount.Name))</div><div style="float:left;width:80px;text-align:right;">@Html.Raw(c.Amount.ToString("c"))</div>
+        </div>
+        }
+    </div>
+</div>
+
+    @section sectionScripts {
+        <script type="text/javascript">
+            function edit_jobtask(jobId, jobTaskCode) {
+                var dlgUrl = '@Url.Content("~/Jobs/EditDialogJobTask")';
+                if (jobTaskCode == null) {
+                    dlgUrl += '?jobId=' + jobId.toString();
+                } else {
+                    dlgUrl += '?jobId=' + jobId.toString() + '&taskId=' + jobTaskCode.toString();
+                }
+                $('#modal-placeholder').load(dlgUrl);
+            }
+            function showTab(evt, tabName) {
+                var i, x, tablinks;
+                x = document.getElementsByClassName("zzsTabContainer");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablink");
+                for (i = 0; i < x.length; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" w3-border-red", " w3-bordered-gray");
+                }
+                document.getElementById(tabName).style.display = "block";
+                evt.currentTarget.firstElementChild.className += " w3-border-red";
+            }
+            var mybtn = document.getElementsByClassName("testbtn")[0];
+            mybtn.click();
+        </script>
+    }

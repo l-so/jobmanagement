@@ -4,69 +4,64 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b8a277ed2e5749789b5da1f43d2c22eb" Name="Diagram1" ZoomLevel="76">
-        <EntityTypeShape EntityType="JobModel.AspNetRoles" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.AspNetUserClaims" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.AspNetUserLogins" Width="1.5" PointX="3" PointY="11" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.AspNetUserRoles" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.AspNetUsers" Width="1.5" PointX="0.75" PointY="12.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.AutoNumberBase" Width="1.5" PointX="5.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.BankAccounts" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.CustomerBusinessGroup" Width="1.5" PointX="1.5" PointY="22.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.Customers" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.ExpensePaymentRefound" Width="1.5" PointX="5.25" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.GeneralJournalLineEntries" Width="1.5" PointX="10.5" PointY="18.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.GeneralJournalLines" Width="1.5" PointX="8.25" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.GLAccount" Width="1.5" PointX="3" PointY="28.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.GLExpensePaymentRefound" Width="1.5" PointX="7.5" PointY="19.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.GLPerson" Width="1.5" PointX="8.25" PointY="16.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.GLTravelExpense" Width="1.5" PointX="10.5" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.Jobs" Width="1.5" PointX="3" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobStatus" Width="1.5" PointX="0.75" PointY="17.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobTasks" Width="1.5" PointX="3" PointY="26.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobTravelExpenses" Width="1.5" PointX="10.5" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.Person" Width="1.5" PointX="3" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.TravelExpenseLineCategories" Width="1.5" PointX="11.25" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.TravelExpenses" Width="1.5" PointX="8.25" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.TravelExpensesLines" Width="1.5" PointX="13.5" PointY="11.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.TravelExpenseStatus" Width="1.5" PointX="6" PointY="8.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.UnitOfMeasure" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.WorksJournal" Width="1.5" PointX="5.25" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobList" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobTotalPeopleWorkedHours" Width="1.5" PointX="11.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobTotalWorkedHours" Width="1.5" PointX="12.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.JobTravelExpenseList" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="JobModel.TravelExpenseList" Width="1.5" PointX="14.75" PointY="5.75" IsExpanded="true" />
-        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_People_AspNetUsers" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_Customers_CustomerBusinessGroup" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_Job_Customer" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_ExpensePaymentRefound_GLAccount" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_ExpensePaymentRefound_Person" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GLExpensePaymentRefound_ExpensePaymentRefound" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GeneralJournalLineEntries_GeneralJournalLines" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GeneralJournalLineEntries_GLAccount" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GLExpensePaymentRefound_GeneralJournalLines" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GLPPerson_GeneralJournalLines" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GLTravelExpense_GeneralJournalLines" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GLPPerson_Person" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_GLTravelExpense_TravelExpenses" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_Job_JobState" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_JobTravelExpenses_Jobs" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_JobWorkJournal_Job" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_JobWorkJournal_JobTask" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_JobTravelExpenses_TravelExpenses" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_JobWorkJournal_Person" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_TravelExpense_People" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_TravelExpenseLine_TravelExpenseLineCategories" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_TravelExpense_TravelExpenseStatus" ManuallyRouted="false" />
-        <AssociationConnector Association="JobModel.FK_TravelExpenseLine_TravelExpense" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="JobModel.JobWorkList" Width="1.5" PointX="13.375" PointY="15.75" />
-        <EntityTypeShape EntityType="JobModel.JobCosts" Width="1.5" PointX="5.25" PointY="19.5" />
-        <AssociationConnector Association="JobModel.FK_JobCosts_GLAccount" />
-        <AssociationConnector Association="JobModel.FK_JobCosts_Jobs" />
+      <Diagram DiagramId="7194d83bfa9b4866868b6fc690ac273c" Name="Diagram1" ZoomLevel="58">
+        <EntityTypeShape EntityType="JobModel.AspNetRoles" Width="1.5" PointX="10.75" PointY="2.875" />
+        <EntityTypeShape EntityType="JobModel.AspNetUserClaims" Width="1.5" PointX="3" PointY="18.875" />
+        <EntityTypeShape EntityType="JobModel.AspNetUserLogins" Width="1.5" PointX="3" PointY="9.375" />
+        <EntityTypeShape EntityType="JobModel.AspNetUserRoles" Width="1.5" PointX="13" PointY="2.875" />
+        <EntityTypeShape EntityType="JobModel.AspNetUsers" Width="1.5" PointX="0.75" PointY="9.625" />
+        <EntityTypeShape EntityType="JobModel.AutoNumberBase" Width="1.5" PointX="0.75" PointY="2.625" />
+        <EntityTypeShape EntityType="JobModel.BankAccounts" Width="1.5" PointX="2.75" PointY="2.625" />
+        <EntityTypeShape EntityType="JobModel.CustomerBusinessGroup" Width="1.5" PointX="4.5" PointY="23.125" />
+        <EntityTypeShape EntityType="JobModel.Customers" Width="1.5" PointX="6.75" PointY="22" />
+        <EntityTypeShape EntityType="JobModel.GeneralJournalLineEntries" Width="1.5" PointX="8.25" PointY="2.125" />
+        <EntityTypeShape EntityType="JobModel.GeneralJournalLines" Width="1.5" PointX="6" PointY="0.75" />
+        <EntityTypeShape EntityType="JobModel.GLAccount" Width="1.5" PointX="6" PointY="4.25" />
+        <EntityTypeShape EntityType="JobModel.Jobs" Width="1.5" PointX="9" PointY="23.625" />
+        <EntityTypeShape EntityType="JobModel.JobStatus" Width="1.5" PointX="6.75" PointY="27.125" />
+        <EntityTypeShape EntityType="JobModel.JobTasks" Width="1.5" PointX="9" PointY="14.5" />
+        <EntityTypeShape EntityType="JobModel.Person" Width="2.75" PointX="6" PointY="8.5" />
+        <EntityTypeShape EntityType="JobModel.TravelExpenseLineCategories" Width="1.5" PointX="11.25" PointY="6.75" />
+        <EntityTypeShape EntityType="JobModel.TravelExpenses" Width="1.5" PointX="8.25" PointY="9.875" />
+        <EntityTypeShape EntityType="JobModel.TravelExpensesLines" Width="1.5" PointX="13.5" PointY="10" />
+        <EntityTypeShape EntityType="JobModel.TravelExpenseStatus" Width="1.5" PointX="6" PointY="15.875" />
+        <EntityTypeShape EntityType="JobModel.UnitOfMeasure" Width="1.5" PointX="0.75" PointY="5.625" />
+        <EntityTypeShape EntityType="JobModel.WorksJournal" Width="1.5" PointX="11.25" PointY="10.125" />
+        <EntityTypeShape EntityType="JobModel.JobTotalPeopleWorkedHours" Width="1.5" PointX="2.75" PointY="5.625" />
+        <EntityTypeShape EntityType="JobModel.JobWorkList" Width="1.5" PointX="15.75" PointY="2.625" />
+        <EntityTypeShape EntityType="JobModel.TravelExpenseList" Width="1.5" PointX="15.75" PointY="6.625" />
+        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" />
+        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="JobModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="JobModel.FK_People_AspNetUsers" />
+        <AssociationConnector Association="JobModel.FK_Customers_CustomerBusinessGroup" />
+        <AssociationConnector Association="JobModel.FK_GeneralJournalLineEntries_GeneralJournalLines" />
+        <AssociationConnector Association="JobModel.FK_GeneralJournalLineEntries_GLAccount" />
+        <AssociationConnector Association="JobModel.FK_Job_JobState" />
+        <AssociationConnector Association="JobModel.FK_JobWorkJournal_Job" />
+        <AssociationConnector Association="JobModel.FK_JobWorkJournal_Person" />
+        <AssociationConnector Association="JobModel.FK_TravelExpense_People" />
+        <AssociationConnector Association="JobModel.FK_TravelExpenseLine_TravelExpenseLineCategories" />
+        <AssociationConnector Association="JobModel.FK_TravelExpense_TravelExpenseStatus" />
+        <AssociationConnector Association="JobModel.FK_TravelExpenseLine_TravelExpense" />
+        <AssociationConnector Association="JobModel.FK_Job_Customer" />
+        <EntityTypeShape EntityType="JobModel.PersonBusinessAccount" Width="1.5" PointX="0.75" PointY="15" />
+        <AssociationConnector Association="JobModel.FK_Person_PersonBusinessAccount1" />
+        <EntityTypeShape EntityType="JobModel.JobBalance" Width="1.5" PointX="11.25" PointY="19.75" />
+        <EntityTypeShape EntityType="JobModel.JobBusinessGroup" Width="1.5" PointX="16.375" PointY="10.75" />
+        <AssociationConnector Association="JobModel.FK_JobBalance_GLAccount" />
+        <AssociationConnector Association="JobModel.FK_JobBalance_Jobs" />
+        <AssociationConnector Association="JobModel.FK_WorksJournal_JobTasks" />
+        <AssociationConnector Association="JobModel.FK_JobTasks_Jobs" />
+        <EntityTypeShape EntityType="JobModel.JobList" Width="1.5" PointX="13.875" PointY="14.25" />
+        <EntityTypeShape EntityType="JobModel.PrePaymentRefound" Width="1.5" PointX="11.5" PointY="14.375" />
+        <AssociationConnector Association="JobModel.FK_PrePaymentRefound_GLAccount" />
+        <AssociationConnector Association="JobModel.FK_PrePaymentRefound_Person" />
+        <EntityTypeShape EntityType="JobModel.DocumentType" Width="1.5" PointX="3.75" PointY="12.875" />
+        <AssociationConnector Association="JobModel.FK_GeneralJournalLines_GeneralJournalLineEntryDocType" />
+        <AssociationConnector Association="JobModel.FK_JobBalance_DocumentType" />
+        <EntityTypeShape EntityType="JobModel.JobActual" Width="1.5" PointX="16.375" PointY="13.75" />
+        <EntityTypeShape EntityType="JobModel.JobExpected" Width="1.5" PointX="16.375" PointY="16.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

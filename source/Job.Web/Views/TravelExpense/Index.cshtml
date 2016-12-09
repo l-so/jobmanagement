@@ -158,7 +158,7 @@
             <li>@Html.ActionLink("[Home]", "Index", "Home")</li>
             <li class="active">Elenco rimborsi spese</li>
         </ol>
-        <div style="margin-top:6px;">
+        <div style="line-height:32px;">
             <fieldset>
                 Rimborsi spese del mese di <select id="filterMonth">
                     <option value="99" @Html.Raw(Model.TEFilterMonth == 99 ? "selected" : string.Empty)>Intero anno</option>
@@ -177,11 +177,12 @@
                 </select> <input id="filterYear" value="@Html.Raw(Model.TEFilterYear)" style="height:21px;width:60px;line-height:inherit;padding: 0 0 0 0;margin: 0 0 0 0;"/> di @Html.DropDownList("filterPeople", Model.DDLPeople) <select id="filterStatus" name="filterStatus"><option value="0" @Html.Raw(Model.TEFilterStatus == Job.EFDataModel.TravelExpenses.STATUS_BOZZA ? "selected" : string.Empty)>Bozza</option><option value="1"  @Html.Raw(Model.TEFilterStatus == Job.EFDataModel.TravelExpenses.STATUS_REGISTRATA ? "selected" : string.Empty)>Registrata</option><option value="999"  @Html.Raw(Model.TEFilterStatus == 999 ? "selected" : string.Empty)>Tutte</option></select> <button type="button" class="btn btn-xs" onclick="javascript: filterTravelExpenseList();"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
             </fieldset>
         </div>
-        <ol class="list-inline">
-            <li><button type="button" class="btn btn-xs" onclick="edit_travelexpense('NEW');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuovo rimborso...</button></li>
-            <li></li>
-            <li><button type="button" class="btn btn-xs" data-id="-1" onclick="closemonth_travelexpense();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chiusura del mese!</button></li>
-        </ol>
+        <div style="line-height:32px;">
+            <ol class="list-inline">
+                <li><button type="button" class="btn btn-xs" onclick="edit_travelexpense('NEW');"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nuovo rimborso...</button></li>
+                <li style="padding-left:12px;"><button type="button" class="btn btn-xs" data-id="-1" onclick="closemonth_travelexpense();"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Chiusura del mese!</button></li>
+            </ol>
+        </div>
         <div style="margin-top:6px;">
             <table>
                 <thead>

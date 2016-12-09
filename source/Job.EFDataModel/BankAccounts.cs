@@ -17,5 +17,7 @@ namespace Job.EFDataModel
         public string Code { get; set; }
         public string BankName { get; set; }
         public string IBAN { get; set; }
+        public string BalanceAssets { get; set; }
+        public string BalanceLiabilities { get; set; }
     }
 }

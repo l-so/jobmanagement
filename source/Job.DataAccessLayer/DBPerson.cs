@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Job.EFDataModel;
+using System.Data.SqlClient;
+using System.Web.Configuration;
+
 namespace Job.DataAccessLayer
 {
     public class DBPerson
@@ -28,24 +31,6 @@ namespace Job.DataAccessLayer
                         };
                         list.Add(item);
                     }
-                    if (peopleId < 1)
-                    {
-                        list.Insert(0, new System.Web.Mvc.SelectListItem()
-                        {
-                            Value = "-1",
-                            Text = "<Selezionare la persona>",
-                            Selected = true
-                        });
-                    }
-                    else
-                    {
-                        list.Insert(0, new System.Web.Mvc.SelectListItem()
-                        {
-                            Value = "-1",
-                            Text = "<Selezionare la persona>",
-                            Selected = false
-                        });
-                    }
                 }
             }
             catch (Exception e)
@@ -55,16 +40,16 @@ namespace Job.DataAccessLayer
             return list;
         }
 
-        public static List<ExpensePaymentRefound> getExpensePaymentRefound(int peopleId, DateTime fromDate, DateTime toDate)
+        public static List<PrePaymentRefound> getExpensePaymentRefound(int peopleId, DateTime fromDate, DateTime toDate)
         {
-            List<ExpensePaymentRefound> _result = null;
+            List<PrePaymentRefound> _result = null;
             try
             {
                 using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())
                 {
                     ctx.Configuration.LazyLoadingEnabled = false;
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    _result = ctx.ExpensePaymentRefound.Include("Person").Include("GLAccount").Where(e => e.Date >= fromDate && e.Date <= toDate && (e.PeopleId == peopleId || peopleId == -1)).OrderBy(e => e.Date).ToList();
+                    _result = ctx.PrePaymentRefound.Include("Person").Include("GLAccount").Where(e => e.Date >= fromDate && e.Date <= toDate && (e.PeopleId == peopleId || peopleId == -1)).OrderBy(e => e.Date).ToList();
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
@@ -98,21 +83,21 @@ namespace Job.DataAccessLayer
             return _result;
         }
 
-        public static ExpensePaymentRefound getExpensePaymentRefound(long id)
+        public static PrePaymentRefound getExpensePaymentRefound(long id)
         {
-            ExpensePaymentRefound _result = null;
+            PrePaymentRefound _result = null;
             try
             {
                 using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())
                 {
                     ctx.Configuration.LazyLoadingEnabled = false;
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    _result = ctx.ExpensePaymentRefound.Find(id);
+                    _result = ctx.PrePaymentRefound.Find(id);
                     if (_result != null)
                     {
                         _result.GLAccount = DataAccessLayer.DBGeneralLedger.getGLAccountByCode(_result.GLAccountCode);
                         _result.GLAccount.GeneralJournalLineEntries.Clear();
-                        _result.GLAccount.ExpensePaymentRefound.Clear();
+                        _result.GLAccount.PrePaymentRefound.Clear();
                     }
                 }
             }
@@ -181,7 +166,20 @@ namespace Job.DataAccessLayer
                     ctx.Configuration.LazyLoadingEnabled = false;
                     ctx.Configuration.ProxyCreationEnabled = false;
                     per = ctx.Person.Find(peopleId);
-                    per.AspNetUsers = null;
+                    if (per.AspNetUsers != null)
+                    {
+                        per.AspNetUsers.Person.Clear();
+                    }
+                    else
+                    {
+                        per.AspNetUsers = ctx.AspNetUsers.Find(per.IdentityId);
+                        per.AspNetUsers.Person.Clear();
+                    }
+                    per.TravelExpenses.Clear();
+                    per.WorksJournal.Clear();
+                    per.PersonBusinessAccount = ctx.PersonBusinessAccount.Where(a => a.Code == per.PersonBusinessAccountId).FirstOrDefault();
+                    per.PersonBusinessAccount.Person.Clear();
+                    //per.AspNetUsers = null;
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
@@ -203,9 +201,9 @@ namespace Job.DataAccessLayer
             return per;
         }
 
-        public static ExpensePaymentRefound ExpensePaymentRefoundCreate(ExpensePaymentRefound epr)
+        public static PrePaymentRefound ExpensePaymentRefoundCreate(PrePaymentRefound epr)
         {
-            ExpensePaymentRefound _result = null;
+            PrePaymentRefound _result = null;
             try
             {
                 using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())
@@ -263,12 +261,12 @@ namespace Job.DataAccessLayer
             }
             try
             {
-                List<EFDataModel.ExpensePaymentRefound> epr;
+                List<EFDataModel.PrePaymentRefound> epr;
                 using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())
                 {
                     ctx.Configuration.LazyLoadingEnabled = false;
                     ctx.Configuration.ProxyCreationEnabled = false;
-                    epr = ctx.ExpensePaymentRefound.Where(e => e.Date >= fromDate && e.Date <= toDate && e.PeopleId == peopleId).ToList();
+                    epr = ctx.PrePaymentRefound.Where(e => e.Date >= fromDate && e.Date <= toDate && e.PeopleId == peopleId).ToList();
                 }
                 using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())
                 {
@@ -308,9 +306,9 @@ namespace Job.DataAccessLayer
             }
         }
 
-        public static ExpensePaymentRefound ExpensePaymentRefoundUpdate(ExpensePaymentRefound epr)
+        public static PrePaymentRefound ExpensePaymentRefoundUpdate(PrePaymentRefound epr)
         {
-            ExpensePaymentRefound _result = null;
+            PrePaymentRefound _result = null;
             try
             {
                 using (EFDataModel.JobEntities ctx = new EFDataModel.JobEntities())

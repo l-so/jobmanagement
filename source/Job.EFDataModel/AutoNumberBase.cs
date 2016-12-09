@@ -19,5 +19,6 @@ namespace Job.EFDataModel
         public int LastUsedNumber { get; set; }
         public int Year { get; set; }
         public string Prefix { get; set; }
+        public Nullable<int> BaseNumber { get; set; }
     }
 }

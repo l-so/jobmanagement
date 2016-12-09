@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Job.EFDataModel;
+using System.Web.Configuration;
+using System.Data.SqlClient;
 
 namespace Job.DataAccessLayer
 {
@@ -69,34 +69,45 @@ namespace Job.DataAccessLayer
             return result;
         }
 
-        public static List<JobTravelExpenseList> JobTravelExpenses(long jobId)
+        public static decimal getTotalWorkedHours(long id)
         {
-            List<JobTravelExpenseList> result = new List<JobTravelExpenseList>();
-            try
+            decimal _result = 0;
+            string cnnString = WebConfigurationManager.ConnectionStrings["JobSQLConnectionString"].ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(cnnString))
             {
-                using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+                try
                 {
-                    result = db.JobTravelExpenseList.Where(l => l.JobId == jobId).OrderByDescending(jl => jl.Date).ToList();
+                    cnn.Open();
+                    string sqlCmd = "SELECT SUM([WorkedHours]) as Ore FROM [Job].[WorksJournal] WHERE [JobId] = @JobId;";
+                    SqlCommand cmdTotalHours = new SqlCommand(sqlCmd, cnn);
+                    cmdTotalHours.CommandType = System.Data.CommandType.Text;
+                    cmdTotalHours.Parameters.Add("@JobId", System.Data.SqlDbType.BigInt);
+                    cmdTotalHours.Parameters["@JobId"].Value = id;
+                    object o = cmdTotalHours.ExecuteScalar();
+                    if (o != null)
+                    {
+                        if (o != System.DBNull.Value)
+                        {
+                            _result = Convert.ToDecimal(o);
+                        }
+                    }
+                }
+                catch (SqlException)
+                {
+                    throw;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                finally
+                {
+                    cnn.Close();
                 }
             }
-            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
-            {
-                throw e;
-            }
-            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
-            {
-                throw e;
-            }
-            catch (System.Data.Entity.Validation.DbEntityValidationException e)
-            {
-                throw e;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return result;
+            return _result;
         }
+        
 
         public static List<EFDataModel.WorksJournal> getWorksJournal(int peopleId, long customerId, DateTime beginDate, DateTime endDate)
         {
@@ -200,7 +211,10 @@ namespace Job.DataAccessLayer
                 result.CustomerId = -1;
                 using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
                 {
-                    result = db.Jobs.Include(j => j.Customers).Include(j => j.JobCosts).Where(j => j.JobId == jobId).FirstOrDefault();
+                    result = db.Jobs.Include(j => j.Customers).Where(j => j.JobId == jobId).FirstOrDefault();
+                    List<EFDataModel.JobBalance> jb = db.JobBalance.Include(jj => jj.GLAccount).Where(jj => jj.JobId == jobId).ToList();
+                    result.JobBalance.Clear();
+                    result.JobBalance = jb;
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
@@ -307,57 +321,47 @@ namespace Job.DataAccessLayer
         }
   
        
-        public static List<System.Web.Mvc.SelectListItem> getJobCostGLAccount (string code)
+
+        //public static List<EFDataModel.JobTasks> getJobTaskForDDL(bool productive)
+        //{
+        //    List<EFDataModel.JobTasks> result = new List<EFDataModel.JobTasks>();
+        //    try 
+        //    {
+        //        using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+        //        {
+        //            db.Configuration.ProxyCreationEnabled = false;
+        //            db.Configuration.LazyLoadingEnabled = false;
+        //            result = db.JobTasks.ToList();
+        //        }
+        //    }
+        //    catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
+        //    {
+        //        throw e;
+        //    }
+        //    catch (System.Data.Entity.Infrastructure.DbUpdateException e)
+        //    {
+        //        throw e;
+        //    }
+        //    catch (System.Data.Entity.Validation.DbEntityValidationException e)
+        //    {
+        //        throw e;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //    return result;
+        //}
+        public static List<EFDataModel.JobTasks> getJobTask(long jId)
         {
-            List<System.Web.Mvc.SelectListItem> _result = new List<System.Web.Mvc.SelectListItem>();
+            List<EFDataModel.JobTasks> result = new List<EFDataModel.JobTasks>();
             try
             {
                 using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
                 {
-                    db.Configuration.LazyLoadingEnabled = false;
-                    db.Configuration.ProxyCreationEnabled = false;
-                    var acc = db.GLAccount.Where(a => a.Type == "CJ").ToList();
-                    foreach (var a in acc)
-                    {
-
-                        _result.Add(new SelectListItem()
-                        {
-                            Value = a.GLAccountCode,
-                            Text = string.Format("{0} {1}", a.GLAccountCode, a.Name),
-                            Selected = (a.GLAccountCode == code)
-                        });
-                    }
-                }
-            }
-            catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
-            {
-                throw e;
-            }
-            catch (System.Data.Entity.Infrastructure.DbUpdateException e)
-            {
-                throw e;
-            }
-            catch (System.Data.Entity.Validation.DbEntityValidationException e)
-            {
-                throw e;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return _result;
-
-        }
-        public static List<EFDataModel.JobTasks> getJobTaskForDDL(bool productive)
-        {
-            List<EFDataModel.JobTasks> result = new List<EFDataModel.JobTasks>();
-            try 
-            {
-                using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
-                {
                     db.Configuration.ProxyCreationEnabled = false;
                     db.Configuration.LazyLoadingEnabled = false;
-                    result = db.JobTasks.Where(j => j.NoWorkTask != productive).ToList();
+                    result = db.JobTasks.Where(t =>t.JobId == jId).OrderBy(t => t.JobTaskId).ToList();
                 }
             }
             catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException e)
@@ -378,6 +382,7 @@ namespace Job.DataAccessLayer
             }
             return result;
         }
+
         public static void Update(EFDataModel.Jobs job) {
             try 
             {
@@ -385,7 +390,7 @@ namespace Job.DataAccessLayer
                 {
                     if (job.JobId < 1)
                     {
-                        var r = db.upJobAdd(job.CustomerId, job.Code,job.Description,job.ExpectedWorkHours,job.ExpectedIncome,job.ExpectedCost,job.Year,job.Status);
+                        var r = db.upJobAdd(job.CustomerId, job.Code,job.Description,job.Year,job.Status);
                     }
                     else
                     {
@@ -433,21 +438,7 @@ namespace Job.DataAccessLayer
             }
             return r;
         }
-        public static void UpdateJobWorkLog(EFDataModel.WorksJournal WorksJournal)
-        {
-            using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
-            {
-                if (WorksJournal.WorkJournalId < 1)
-                {
-                    db.Entry(WorksJournal).State = EntityState.Added;
-                }
-                else
-                {
-                    db.Entry(WorksJournal).State = EntityState.Modified;
-                }
-                db.SaveChanges();
-            }
-        }
+
         public static IEnumerable<EFDataModel.Jobs> getJobByCustomer(long? customerId)
         {
             List<EFDataModel.Jobs> result = new List<EFDataModel.Jobs>();
@@ -541,7 +532,7 @@ namespace Job.DataAccessLayer
                 List<EFDataModel.JobTasks> tasks = null;
                 using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
                 {
-                    tasks = db.JobTasks.Where(t => t.NoWorkTask == false).ToList<EFDataModel.JobTasks>();
+                    tasks = db.JobTasks.ToList<EFDataModel.JobTasks>();
                 }
                 if (tasks != null)
                 {
@@ -572,7 +563,7 @@ namespace Job.DataAccessLayer
                 List<EFDataModel.JobTasks> tasks = null;
                 using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
                 {
-                    tasks = db.JobTasks.Where(t => t.NoWorkTask == true).ToList<EFDataModel.JobTasks>();
+                    tasks = db.JobTasks.ToList<EFDataModel.JobTasks>();
                 }
                 if (tasks != null)
                 {
@@ -594,7 +585,7 @@ namespace Job.DataAccessLayer
             }
             return list;
         }
-        public static List<EFDataModel.JobList> getJobList(long custId, short[] filterStatus)
+        public static List<EFDataModel.JobList> getJobList(long custId, byte[] filterStatus)
         {
             List<EFDataModel.JobList> result = new List<EFDataModel.JobList>();
             try
@@ -605,11 +596,11 @@ namespace Job.DataAccessLayer
                     db.Configuration.ProxyCreationEnabled = false;
                     if ((filterStatus.Length < 1) && (custId < 1))
                     { 
-                        result = db.JobList.ToList<EFDataModel.JobList>();
+                        result = db.JobList.ToList();
                     }
                     if (custId > 0 && (filterStatus.Length > 0))
                     {
-                        result = db.JobList.Where(j => j.CustomerId == custId && filterStatus.Contains(j.Status)).ToList<EFDataModel.JobList>();
+                        result = db.JobList.Where(j => j.CustomerId == custId).ToList<EFDataModel.JobList>();
                     }
                     if ((custId > 0) && (filterStatus.Length < 1))
                     {
@@ -617,7 +608,7 @@ namespace Job.DataAccessLayer
                     }
                     if ((custId < 1) && (filterStatus.Length > 0))
                     {
-                        result = db.JobList.Where(j => filterStatus.Contains(j.Status)).ToList<EFDataModel.JobList>();
+                        result = (from j in db.JobList select j).ToList();
                     }
                 }
             }
@@ -630,6 +621,14 @@ namespace Job.DataAccessLayer
                 throw e;
             }
             catch (System.Data.Entity.Validation.DbEntityValidationException e)
+            {
+                throw e;
+            }
+            catch (System.InvalidOperationException e)
+            {
+                throw e;
+            }
+            catch (System.ArgumentException e)
             {
                 throw e;
             }
@@ -725,6 +724,70 @@ namespace Job.DataAccessLayer
                 throw;
             }
             return list;
+        }
+
+
+        public static void Create(int year, long? customerId, string description, byte status)
+        {
+            string cnnString = WebConfigurationManager.ConnectionStrings["JobSQLConnectionString"].ConnectionString;
+            using (SqlConnection cnn = new SqlConnection(cnnString))
+            {
+                SqlTransaction trn;
+                cnn.Open();
+                trn = cnn.BeginTransaction();
+
+                try
+                {
+                    // Command Objects for the transaction
+                    SqlCommand getId = new SqlCommand("[Job].[upGetElementNumber]", cnn);
+                    getId.CommandType = System.Data.CommandType.StoredProcedure;
+                    getId.Transaction = trn;
+                    getId.Parameters.Add(new SqlParameter("@Element", System.Data.SqlDbType.NVarChar, 50));
+                    getId.Parameters["@Element"].Value = "Job.Code";
+                    getId.Parameters.Add(new SqlParameter("@Year", System.Data.SqlDbType.Int));
+                    getId.Parameters["@Year"].Value = year;
+                    getId.Parameters.Add(new SqlParameter("@ResultId", System.Data.SqlDbType.NVarChar, 20));
+                    getId.Parameters["@ResultId"].Direction = System.Data.ParameterDirection.Output;
+                    int r = getId.ExecuteNonQuery();
+                    string jobCode = Convert.ToString(getId.Parameters["@ResultId"].Value);
+                    if (string.IsNullOrWhiteSpace(jobCode))
+                    {
+                        trn.Rollback();
+                    }
+                    string sqlCmd = "INSERT INTO[Job].[Jobs] ([CustomerId], [Code], [Description], [Status], [Year]) ";
+                    sqlCmd += "VALUES (@CustomerId, @Code, @Description, @Status, @Year);";
+                    SqlCommand createJob = new SqlCommand(sqlCmd, cnn);
+                    createJob.CommandType = System.Data.CommandType.Text;
+                    createJob.Transaction = trn;
+                    createJob.Parameters.Add(new SqlParameter("@CustomerId", System.Data.SqlDbType.BigInt));
+                    createJob.Parameters["@CustomerId"].Value = customerId;
+                    createJob.Parameters.Add(new SqlParameter("@Code", System.Data.SqlDbType.NVarChar, 20));
+                    createJob.Parameters["@Code"].Value = jobCode;
+                    createJob.Parameters.Add(new SqlParameter("@Description", System.Data.SqlDbType.NVarChar, 512));
+                    createJob.Parameters["@Description"].Value = description;
+                    createJob.Parameters.Add(new SqlParameter("@Status", System.Data.SqlDbType.TinyInt));
+                    createJob.Parameters["@Status"].Value = status;
+                    createJob.Parameters.Add(new SqlParameter("@Year", System.Data.SqlDbType.Int));
+                    createJob.Parameters["@Year"].Value = year;
+                    createJob.ExecuteNonQuery();
+                    trn.Commit();
+                }
+                catch (SqlException)
+                {
+                    trn.Rollback();
+                    throw;
+                }
+                catch (Exception)
+                {
+                    trn.Rollback();
+                    throw;
+                }
+                finally
+                {
+                    cnn.Close();
+                    cnn.Dispose();
+                }
+            }
         }
     }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Job.EFDataModel
 {
-    public partial class ExpensePaymentRefound
+    public partial class PrePaymentRefound
     {
         public const byte STATUS_BOZZA = 0;
         public const byte STATUS_REGISTRATA = 1;

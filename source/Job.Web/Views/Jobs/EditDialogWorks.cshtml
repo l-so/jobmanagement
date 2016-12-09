@@ -1,0 +1,230 @@
+﻿@model Job.WebMvc.Models.Jobs.EditDialogWorksModel
+@{
+    Layout = null;
+}
+<style>
+    .inputField {
+        background-color: #ffffff;
+        border-width: 1px;
+        border-color: #cccccc;
+        border-radius: 3px;
+        border-style: solid;
+        box-sizing: border-box;
+        color: #000000;
+        height: 26px;
+        padding: 3px 6px 3px 6px;
+    }
+
+    .field {
+        align-items: flex-start;
+        height: 34px;
+        padding: 4px 3px 4px 3px;
+        font-size: .9em;
+    }
+</style>
+<div id="modalMainDialog" class="w3-modal">
+    <div class="w3-modal-content">
+        <header class="w3-container w3-teal">
+            <span onclick="close_ModalMainDialog()" class="w3-closebtn">&times;</span>
+            <h4><span id="modalMainDialogTitle"></span></h4>
+        </header>
+        <div class="w3-container" style="padding-top:6px;">
+            @Html.Hidden("dialogWorkJournalId", Model.WorkJournal.WorkJournalId)
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Persona</span>@Html.DropDownList("dialogPeopleId", Model.DDLPerson, new { @class = "inputField" })
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Commessa</span>@Html.DropDownList("dialogJobId", Model.DDLJobs, new { @onchange = "load_Tasks();", @class = "inputField" })
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Attività</span>@Html.DropDownList("dialogTaskId", Model.DDLJobTask, new { @class = "inputField" })
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Data</span><input type="date" id="dialogWorkDate" name="dialogWorkDate" class="inputField" value="@Html.Raw(string.Format("{0:yyyy-MM-dd}",Model.WorkJournal.Date))" />
+                <span style="display:inline-block;width:80px;">Ore</span><input type="text" id="dialogWorkedHours" name="dialogWorkedHours" class="inputField" value="@Html.Raw(Model.WorkJournal.WorkedHours)" />
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Dove:</span><input type="text" id="dialogWorkWhere" name="dialogWorkWhere" class="inputField" value="@Html.Raw(Model.WorkJournal.TaskWhere)" style="width:420px;" />
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Note:</span><input type="text" id="dialogNote" name="dialogNote" class="inputField" style="width:420px;" value="@Html.Raw(Model.WorkJournal.Annotation)" />
+            </div>
+        </div>
+        <footer class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+            <button onclick="delete_ModalMainDialog();" type="button" class="w3-left w3-btn w3-red">Cancella</button>
+            <button onclick="save_ModalMainDialog();" type="button" class="w3-right w3-btn w3-green" style="margin-left:24px;">Salva</button>
+            <button onclick="close_ModalMainDialog();" type="button" class="w3-right w3-btn w3-yellow">Annulla</button>
+        </footer>
+    </div>
+</div>
+<script type="text/javascript">
+    function open_ModalMainDialog() {
+        $('#modalMainDialogTitle').html('Aggiungi/Modifica attività svolta');
+        document.getElementById('modalMainDialog').style.display = 'block';
+    }
+    function close_ModalMainDialog() {
+        document.getElementById('modalMainDialog').style.display = 'none';
+        $('#modal-placeholder').empty();
+        window.location.reload(true);
+    }
+    function save_ModalMainDialog() {
+        if (check_ModalMainDialogData()) {
+            var sendData = new Object();
+            sendData.Operation = 'UpdateWorksLine'
+            sendData.WorkJournalId = $('#dialogWorkJournalId').val();
+            sendData.PeopleId = $('#dialogPeopleId').val();
+            sendData.JobId = $('#dialogJobId').val();
+            sendData.TaskId = $('#dialogTaskId').val();
+            sendData.Date = $('#dialogWorkDate').val();
+            sendData.Hours = $('#dialogWorkedHours').val();
+            sendData.Where = $('#dialogWorkWhere').val();
+            sendData.Note = $('#dialogNote').val();
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/JobSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus == "OK") {
+                        close_ModalMainDialog();
+                    } else {
+                        alert(result.ErrorMessage);
+                    }
+                }
+            });
+        }
+    }
+    function delete_ModalMainDialog() {
+        if (confirm('Sei certo di volermi cancellare?')) {
+            var sendData = new Object();
+            sendData.Operation = 'DeleteWorksLine'
+            sendData.WorkJournalId = $('#dialogWorkJournalId').val();
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/JobSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus == "OK") {
+                        close_ModalMainDialog();
+                    } else {
+                        alert(result.ErrorMessage);
+                    }
+                }
+            });
+        }
+    }
+    function check_ModalMainDialogData() {
+        if ($('#dialogJobId').val() == '-1') {
+            alert('Devi selezionare la comessa!');
+            return false;
+        }
+        if (($('#dialogTaskId').val() == null) || ($('#dialogTaskId').val() == ""))
+        {
+            alert('Devi selezionare l\'attività!');
+            return false;
+        }
+        var t = $('#dialogWorkedHours').val();
+        if (t == null) {
+            alert("Ore risultano null!");
+            return false;
+        }
+        if (t.trim() == "") {
+            alert("Ore risultano vuote!");
+            return false;
+        }
+        // 48 al 57 sono cifre
+        // 68 e 71 sono G D
+        // 100 e 103 sono g d
+        // 46 .
+        var firstPart = t.substring(0, t.length - 1);
+        var lastCharCode = t.charCodeAt(t.length - 1);
+        if (!((lastCharCode >= 48 && lastCharCode <= 57) || lastCharCode == 68 || lastCharCode == 71 || lastCharCode == 100 || lastCharCode == 103))
+        {
+            alert('Le ore devono essere un intero. I giorni devono terminare con G|g|D|d ed usare il punto come separatore decimale!')
+            return false;
+        }
+        // i primi caratteri possono essere solo cifre o .
+        var s_charcode = 0;
+        for (var s_i = 0; s_i < firstPart.length; s_i++) {
+            s_charcode = firstPart.charCodeAt(s_i);
+            if (!((s_charcode >= 48 && s_charcode <= 57) || s_charcode == 46)) {
+                alert('FP Le ore devono essere un intero. I giorni devono terminare con G|g|D|d ed usare il punto come separatore decimale!')
+                return false;
+            }
+        }
+        if (isNaN(parseFloat(t))) {
+            alert("Ore risultano NaN (Not a Number)!");
+            return false;
+        }
+        if (parseFloat(t).toString() != t) {
+            if (lastCharCode == 68 || lastCharCode == 71 || lastCharCode == 100 || lastCharCode == 103) {
+                var whs = t.substring(0, t.length - 1);
+                var tt = parseFloat(whs);
+                if (isNaN(tt)) {
+                    alert("Non capisco il numero di giorni: risulta NaN (Not a Number)!");
+                    return false;
+                }
+                if (tt.toString() != whs) {
+                    alert("Non capisco il numero di giorni: tt.toString() != whs!");
+                    return false;
+                }
+                if (tt % .125 != 0) {
+                    alert("Non capisco la frazione di giorno. Valori ammessi .125 (1ora) .25 (2ore) .375 (3ore) .50(4ore) .625(5ore) .75(6ore) .875(7ore)");
+                    return false;
+                }
+
+                if (tt > 5) {
+                    alert("Al massimo puoi fare 5 giorni in un colpo!");
+                    return false;
+                }
+            }
+        } else {
+            if (parseInt(t).toString() != t) {
+                alert("Non puoi inserire frazioni di ore!");
+                return false;
+            }
+            if (parseInt(t) > 8) {
+                if (!confirm("Sei sicuro di aver lavorato + di 8 ore ? Confermi " + t))
+                    return false;
+            }
+        }
+        return true;
+    }
+    function load_Tasks() {
+        var sendData = new Object();
+        sendData.Operation = 'GetJobTask'
+        sendData.JobId = $('#dialogJobId').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/JobSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if (result.ResultStatus == "OK") {
+                    var resData = JSON.parse(result.Data);
+                    $('#dialogTaskId').html('');
+                    $('#dialogTaskId').append('<option value="" selected>Seleziona un\'attività...</option>');
+                    $.each(resData, function (key, val) {
+                        $('#dialogTaskId').append('<option value="' + val.JobTaskId + '">' + val.JobTaskId + ' ' + val.Description + '</option>');
+                    })
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+    open_ModalMainDialog();
+</script>

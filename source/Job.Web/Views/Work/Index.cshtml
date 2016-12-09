@@ -1,0 +1,248 @@
+﻿@model Job.WebMvc.Models.Work.WorkIndexModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="w3-container">
+    @using (Html.BeginForm("Index", "Work", FormMethod.Get))
+    {
+        @Html.AntiForgeryToken()
+        <div class="w3-row-padding" style="margin-top:8px;">
+            <div class="w3-third" style="width:80px;height:64px;">
+                <input type="text" id="filterYear" name="filterYear" class="w3-input" value="@Html.Raw(Model.FilterYear)" />
+                <label>Anno</label>
+            </div>
+            <div class="w3-third" style="width:120px;height:64px;">
+                <select id="filterMonth" name="filterMonth" class="w3-select">
+                    <option value="1" @Html.Raw(Model.FilterMonth == 1 ? "selected" : string.Empty)>Gennaio</option>
+                    <option value="2" @Html.Raw(Model.FilterMonth == 2 ? "selected" : string.Empty)>Febbraio</option>
+                    <option value="3" @Html.Raw(Model.FilterMonth == 3 ? "selected" : string.Empty)>Marzo</option>
+                    <option value="4" @Html.Raw(Model.FilterMonth == 4 ? "selected" : string.Empty)>Aprile</option>
+                    <option value="5" @Html.Raw(Model.FilterMonth == 5 ? "selected" : string.Empty)>Maggio</option>
+                    <option value="6" @Html.Raw(Model.FilterMonth == 6 ? "selected" : string.Empty)>Giugno</option>
+                    <option value="7" @Html.Raw(Model.FilterMonth == 7 ? "selected" : string.Empty)>Luglio</option>
+                    <option value="8" @Html.Raw(Model.FilterMonth == 8 ? "selected" : string.Empty)>Agosto</option>
+                    <option value="9" @Html.Raw(Model.FilterMonth == 9 ? "selected" : string.Empty)>Settembre</option>
+                    <option value="10" @Html.Raw(Model.FilterMonth == 10 ? "selected" : string.Empty)>Ottobre</option>
+                    <option value="11" @Html.Raw(Model.FilterMonth == 11 ? "selected" : string.Empty)>Novembre</option>
+                    <option value="12" @Html.Raw(Model.FilterMonth == 12 ? "selected" : string.Empty)>Dicembre</option>
+                </select>
+                <label>Mese</label>
+            </div>
+            <div class="w3-third" style="width:240px;height:64px;">
+                @Html.DropDownList("filterPeople", Model.DDLPerson, new { @class = "w3-select" })
+                <label>Persona</label>
+            </div>
+            <div class="w3-third"  style="width:120px;height:64px;margin-top:15px;">
+                <button type="submit" class="w3-btn w3-blue-grey"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+            </div>
+        </div>
+    }
+</div>
+<table style="width:780px;border-collapse:separate;border-spacing:8px 0;">
+    <tr>
+        <th style="width:80px;"></th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Lunedi</th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Martedi</th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Mercoledi</th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Giovedi</th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Venerdi</th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Sabato</th>
+        <th style="width:100px;text-align:center;padding:0;margin:0;">Domenica</th>
+    </tr>
+    @for (int i = 0; i < Model.WorkedHours.Weeks.Length; i++)
+    {
+        var week = Model.WorkedHours.Weeks[i];
+        if (week != null)
+        {
+            if (week.Week != null)
+            {
+        <tr>
+            <td rowspan="3" style="vertical-align:middle;width:80px;">
+                <form id="frmEditWeek1" name="frmEditWeek1" action="/Work/EditWeek" method="post">
+                    <input type="hidden" id="peopleId" name="peopleId" />
+                    <input type="hidden" id="weekStartDay" name="weekStartDay" value="@Html.Raw(string.Format("{0:yyyy-MM-dd}", week.FirstDate.Date))" />
+                    <button type="button" class="w3-btn w3-blue-grey" onclick="$('#peopleId').val($('#filterPeople').val()); $('#frmEditWeek1').submit();">Edit</button>
+                </form>
+            </td>
+            @if (week.Week[(int)DayOfWeek.Monday] != null)
+            {
+                <td class="w3-center" style="border-bottom:2px solid #003264;margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Monday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+            @if (week.Week[(int)DayOfWeek.Tuesday] != null)
+            {
+                <td class="w3-center" style="border-bottom:2px solid #003264;margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Tuesday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+            @if (week.Week[(int)DayOfWeek.Wednesday] != null)
+            {
+                <td class="w3-center" style="border-bottom:2px solid #003264;margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Wednesday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+            @if (week.Week[(int)DayOfWeek.Thursday] != null)
+            {
+                <td class="w3-center" style="border-bottom:2px solid #003264;margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Thursday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+            @if (week.Week[(int)DayOfWeek.Friday] != null)
+            {
+                <td class="w3-center" style="border-bottom:2px solid #003264;margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Friday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+            @if (week.Week[(int)DayOfWeek.Saturday] != null)
+            {
+                <td class="w3-center w3-grey" style="border-bottom:2px solid #ea5d05;margin-right:4px;margin-left:4px;margin-bottom:0;padding-bottom:0;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Saturday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+            @if (week.Week[(int)DayOfWeek.Sunday] != null)
+            {
+                <td class="w3-center w3-grey" style="border-bottom:2px solid #ea5d05;margin-right:4px;margin-left:4px;margin-bottom:0;padding-bottom:0;">@Html.Raw(string.Format("{0:dd}", week.Week[(int)DayOfWeek.Sunday].Date))</td>
+            }
+            else
+            {
+                <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+            }
+        </tr>
+        <tr>
+        @if (week.Week[(int)DayOfWeek.Monday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Monday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Tuesday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Tuesday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Wednesday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Wednesday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Thursday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Thursday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Friday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Friday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Saturday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Saturday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Sunday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Sunday].ExpectedHours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+    </tr>
+        <tr>
+        @if (week.Week[(int)DayOfWeek.Monday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Monday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Tuesday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Tuesday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Wednesday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Wednesday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Thursday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Thursday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Friday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Friday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Saturday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Saturday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+        @if (week.Week[(int)DayOfWeek.Sunday] != null)
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;">@Html.Raw(string.Format("{0:F2}", week.Week[(int)DayOfWeek.Sunday].Hours))</td>
+        }
+        else
+        {
+            <td class="w3-center" style="margin-right:4px;margin-left:4px;"></td>
+        }
+    </tr>
+            }
+        }
+    }
+</table>
+   
+

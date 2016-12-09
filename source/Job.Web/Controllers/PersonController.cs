@@ -37,5 +37,48 @@ namespace Job.WebMvc.Controllers
             model.loadData(id);
             return PartialView(model);
         }
+        public ActionResult EditModal(string id)
+        {
+            Models.Person.PersonEditModalModel model = new Models.Person.PersonEditModalModel();
+            model.LoadModelData(string.IsNullOrWhiteSpace(id) ? (int?)null : int.Parse(id));
+            return PartialView(model);
+        }
+
+        // Pagamento ad un socio PartnerPayment
+        public ActionResult EditDialogPartnerPayment()
+        {
+            
+            Models.Person.EditDialogPartnerPaymentModel model = new Models.Person.EditDialogPartnerPaymentModel();
+            model.People = User.Identity.GetPeople();
+            model.LoadModelData();
+            return PartialView(model);
+        }
+        // Pagamento tasse ed INPS al posto del socio PartnerTaxPayment
+        public ActionResult EditDialogPartnerTaxPayment()
+        {
+            Models.Person.EditDialogPartnerTaxPaymentModel model = new Models.Person.EditDialogPartnerTaxPaymentModel();
+            model.People = User.Identity.GetPeople();
+            model.LoadModelData();
+            return PartialView(model);
+        }
+        // Richiesta rimborsi fatture o altro intestato a ZZSoft
+        public ActionResult PaymentRefoundRequestList(string filterMonth, string filterYear, string filterRequestBy)
+        {
+            Models.Person.PaymentRefoundRequestListModel model = new Models.Person.PaymentRefoundRequestListModel();
+            model.FilterMonth = string.IsNullOrWhiteSpace(filterMonth) ? System.DateTime.Now.Month : int.Parse(filterMonth);
+            model.FilterYear = string.IsNullOrWhiteSpace(filterYear) ? System.DateTime.Now.Year : int.Parse(filterYear);
+            // Prendere il PeopleLoggato dalla cache
+            model.FilterRequestById = string.IsNullOrWhiteSpace(filterRequestBy) ? User.Identity.GetPeople().PeopleId : int.Parse(filterRequestBy);
+            model.LoadModelData();
+            return View(model);
+        }
+
+        public ActionResult EditDialogPrePaymentRefound(string id)
+        {
+            Models.Person.EditDialogPrePaymentRefoundModel model = new Models.Person.EditDialogPrePaymentRefoundModel();
+            model.People = User.Identity.GetPeople();
+            model.LoadModelData(id);
+            return PartialView(model);
+        }
     }
 }

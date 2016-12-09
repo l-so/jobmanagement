@@ -25,5 +25,6 @@ namespace Job.EFDataModel
         public Nullable<System.DateTime> BeginDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
         public Nullable<decimal> Total { get; set; }
+        public Nullable<decimal> InvoiceAmount { get; set; }
     }
 }

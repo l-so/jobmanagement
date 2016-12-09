@@ -4,9 +4,7 @@
     {
         public const byte STATUS_BOZZA = 0;
         public const byte STATUS_REGISTRATA = 1;
-        public const string POST_ACCOUNT = "63.01.01";
         public const int CATEGORY_RIMBKM = 50;
-
         public string getStatusDescription()
         {
             switch (this.Status)

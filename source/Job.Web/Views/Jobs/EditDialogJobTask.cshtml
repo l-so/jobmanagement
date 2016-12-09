@@ -1,0 +1,79 @@
+﻿@model Job.WebMvc.Models.Jobs.EditDialogJobTaskModel
+@{
+    Layout = null;
+}
+<div id="modalMainDialog" class="w3-modal">
+    <div class="w3-modal-content">
+        <header class="w3-container w3-teal">
+            <span onclick="close_ModalMainDialog()" class="w3-closebtn">&times;</span>
+            <h4><span id="modalMainDialogTitle"></span></h4>
+        </header>
+        <div class="w3-container" style="padding-top:6px;">
+            @Html.Hidden("dialogJobId", Model.Task.JobId)
+            <div style="line-height:32px;">
+                <div style="float:left;width:140px;">Commessa:</div><div>@Html.Raw(Model.Task.Jobs.Code + " " + Model.Task.Jobs.Description)</div>
+            </div>
+            <div style="line-height:32px;">
+                <div style="float:left;width:140px;">Attività:</div><div style="float:left;width:140px;">@Html.TextBox("dialogTaskCode", Model.Task.JobTaskId, new { @maxlength = "10", @class = "w3-input", @style = "height:28px;width:100px;" })<label>Numero</label></div><div style="margin-left:12px;">@Html.TextBox("dialogTaskDescription", Model.Task.Description, new { @class = "w3-input", @maxlength = "75", @style = "height:28px;width:360px;" })<label>Descrizione</label></div>
+            </div>
+            <div style="line-height:32px;">
+                <div style="float:left;width:140px;">Previste ore/costi:</div><div style="float:left;width:140px;">@Html.TextBox("dialogTaskExpectedWorks", Model.Task.ExpectedHoursOfWork, new { @maxlength = "10", @class = "w3-input", @style = "height:28px;width:100px;" })<label>Ore</label></div><div style="margin-left:12px;">@Html.TextBox("dialogTaskExpectedCost", Model.Task.ExpectedCost, new { @maxlength = "10", @class = "w3-input", @style = "height:28px;width:100px;text-align:right;padding-right:6px;" })<label>Costi &#8364;</label></div>
+            </div>
+            <div style="line-height:32px;">
+                <div style="float:left;width:140px;">Fatturato previsto:</div><div style="float:left;width:140px;">@Html.TextBox("dialogTaskExpectedIncome", Model.Task.ExpectedInvoice, new { @maxlength = "10", @class = "w3-input", @style = "height:28px;width:80px;text-align:right;padding-right:6px;" })<label>Fatturato &#8364;</label></div><div style="margin-left:12px;">@Html.TextBox("dialogTaskExpectedHourIncome", Model.Task.IncomePerHour, new { @maxlength = "10", @class = "w3-input", @style = "height:28px;text-align:right;padding-right:6px;width:100px;" })<label>Ora &#8364;</label></div>
+            </div>
+        </div>
+        <footer class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+            <button onclick="close_ModalMainDialog();" type="button" class="w3-btn w3-red">Cancel</button>
+            <button onclick="save_ModalMainDialog();" type="button" class="w3-right w3-btn w3-green">Salva</button>
+            <button onclick="delete_ModalMainDialog();" type="button" class="w3-right w3-btn w3-orange" style="margin-left:32px;margin-right:32px;">Cancella</button>
+            
+        </footer>       
+    </div>
+</div>
+<script type="text/javascript">
+    function open_ModalMainDialog() {
+        $('#modalMainDialogTitle').html('Aggiungi/Modifica attività');
+        document.getElementById('modalMainDialog').style.display = 'block';
+    }
+    function close_ModalMainDialog() {
+        document.getElementById('modalMainDialog').style.display = 'none';
+        $('#modal-placeholder').empty();
+        window.location.reload(true);
+    }
+    function save_ModalMainDialog() {
+        var sendData = new Object();
+        sendData.Operation = 'UpdateJobTask'
+        sendData.JobId = $('#dialogJobId').val();
+        sendData.TaskCode = $('#dialogTaskCode').val();
+        sendData.TaskDescription = $('#dialogTaskDescription').val();
+        sendData.TaskExpectedIncome = $('#dialogTaskExpectedIncome').val();
+        sendData.TaskExpectedWorks = $('#dialogTaskExpectedWorks').val();
+        sendData.TaskExpectedCost = $('#dialogTaskExpectedCost').val();
+        sendData.TaskExpectedHourIncome = $('#dialogTaskExpectedHourIncome').val();
+        $.ajax({
+            method: "POST",
+            url: '@Url.Content("~/api/JobSvc")',
+            data: JSON.stringify(sendData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            error: function (response) {
+                alert(response.responseText);
+            },
+            success: function (result) {
+                if (result.ResultStatus == "OK") {
+                    close_ModalMainDialog();
+                } else {
+                    alert(result.ErrorMessage);
+                }
+            }
+        });
+    }
+    function delete_ModalMainDialog() {
+        if (confirm("Sicuro di prodere alla cancellazione ?"))
+        {
+            alert("Cancello!");
+        }
+    }
+    open_ModalMainDialog();
+</script>

@@ -1,0 +1,53 @@
+﻿@model Job.WebMvc.Models.Person.PaymentRefoundRequestListModel
+@{
+    ViewBag.Title = "PaymentRefoundRequestList";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+<div class="w3-container">
+    <h4>Elenco richieste di rimborso</h4>
+
+        @using (Html.BeginForm("PaymentRefoundRequestList", "Person", FormMethod.Get))
+        {
+            <div class="w3-row" style="margin-top:8px;">
+                <div class="w3-third" style="width:80px;height:64px;margin-right:8px;">
+                    <input type="text" id="filterYear" name="filterYear" class="w3-input" value="@Html.Raw(Model.FilterYear)" />
+                    <label>Anno</label>
+                </div>
+                <div class="w3-third" style="width:120px;height:64px;margin-right:8px;">
+                    <select id="filterMonth" name="filterMonth" class="w3-select">
+                        <option value="1" @Html.Raw(Model.FilterMonth == 1 ? "selected" : string.Empty)>Gennaio</option>
+                        <option value="2" @Html.Raw(Model.FilterMonth == 2 ? "selected" : string.Empty)>Febbraio</option>
+                        <option value="3" @Html.Raw(Model.FilterMonth == 3 ? "selected" : string.Empty)>Marzo</option>
+                        <option value="4" @Html.Raw(Model.FilterMonth == 4 ? "selected" : string.Empty)>Aprile</option>
+                        <option value="5" @Html.Raw(Model.FilterMonth == 5 ? "selected" : string.Empty)>Maggio</option>
+                        <option value="6" @Html.Raw(Model.FilterMonth == 6 ? "selected" : string.Empty)>Giugno</option>
+                        <option value="7" @Html.Raw(Model.FilterMonth == 7 ? "selected" : string.Empty)>Luglio</option>
+                        <option value="8" @Html.Raw(Model.FilterMonth == 8 ? "selected" : string.Empty)>Agosto</option>
+                        <option value="9" @Html.Raw(Model.FilterMonth == 9 ? "selected" : string.Empty)>Settembre</option>
+                        <option value="10" @Html.Raw(Model.FilterMonth == 10 ? "selected" : string.Empty)>Ottobre</option>
+                        <option value="11" @Html.Raw(Model.FilterMonth == 11 ? "selected" : string.Empty)>Novembre</option>
+                        <option value="12" @Html.Raw(Model.FilterMonth == 12 ? "selected" : string.Empty)>Dicembre</option>
+                    </select>
+                    <label>Mese</label>
+                </div>
+                <div class="w3-third" style="width:360px;height:64px;margin-right:8px;">
+                    @Html.DropDownList("filterRequestBy", Model.DDLPerson, new { @class = "w3-select" })
+                    <label>Persona</label>
+                </div>
+                <div class="w3-third" style="width:120px;height:64px;margin-top:15px;margin-right:8px;">
+                    <button type="submit" class="w3-btn w3-blue-grey"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filtra</button>
+                </div>
+            </div>
+        }
+    <div class="w3-container">
+        <table class="w3-table">
+            <thead>
+                <tr><th>Data</th><th>Richiesto da</th><th>Motivo</th><th>Importo</th><th>Stato</th></tr>
+            </thead>
+            @foreach (var r in Model.Requests)
+            {
+                <tr><td>@Html.Raw(r.Date.ToString("d"))</td><td>@Html.Raw(r.Person.FullName)</td><td>@Html.Raw(r.GLAccount.GLAccountCode + " " + r.GLAccount.Name)</td><td>@Html.Raw(r.Amount.ToString("c"))</td><td>@Html.Raw(r.Status)</td></tr>
+            }
+        </table>
+    </div>
+</div>

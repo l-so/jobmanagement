@@ -28,5 +28,21 @@ namespace Job.WebMvc.Controllers
             model.loadData();
             return View(model);
         }
+        public ActionResult GLEntryList(string filterYear, string filterPeriod)
+        {
+            // Mostra il singolo conto
+            Models.GL.GLEntryListModel model = new Models.GL.GLEntryListModel();
+            model.FilterYear = (string.IsNullOrWhiteSpace(filterYear) ? DateTime.Now.Year : int.Parse(filterYear));
+            model.FilterPeriod = (string.IsNullOrWhiteSpace(filterPeriod) ? short.Parse("99") : short.Parse(filterPeriod));
+            model.loadData();
+            return View(model);
+        }
+        public ActionResult GLEntryEdit(string entryId)
+        {
+            // Mostra il singolo conto
+            Models.GL.GLShowAccountModel model = new Models.GL.GLShowAccountModel();
+
+            return View(model);
+        }
     }
 }

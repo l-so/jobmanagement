@@ -17,23 +17,24 @@ namespace Job.EFDataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public GLAccount()
         {
-            this.ExpensePaymentRefound = new HashSet<ExpensePaymentRefound>();
             this.GeneralJournalLineEntries = new HashSet<GeneralJournalLineEntries>();
-            this.JobCosts = new HashSet<JobCosts>();
+            this.JobBalance = new HashSet<JobBalance>();
+            this.PrePaymentRefound = new HashSet<PrePaymentRefound>();
         }
     
         public string GLAccountCode { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
-        public string SubType { get; set; }
         public string BeginTotal { get; set; }
         public string EndTotal { get; set; }
+        public string EconomicoPatrimoniale { get; set; }
+        public string TotaleAnalitico { get; set; }
+        public string CostoRicavo { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ExpensePaymentRefound> ExpensePaymentRefound { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GeneralJournalLineEntries> GeneralJournalLineEntries { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JobCosts> JobCosts { get; set; }
+        public virtual ICollection<JobBalance> JobBalance { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PrePaymentRefound> PrePaymentRefound { get; set; }
     }
 }

@@ -14,13 +14,13 @@
 @using (Html.BeginForm("ShowAccount", "GL", FormMethod.Get))
 {
     @Html.AntiForgeryToken()
-    <input id="filterAnno" name="filterYear" value="@Html.Raw(Model.FilterYear)" style="width:80px;text-align:right;padding-right:4px;height:26px;"/>
+    <input id="filterYear" name="filterYear" value="@Html.Raw(Model.FilterYear)" style="width:80px;text-align:right;padding-right:4px;height:26px;"/>
     <select id="filterPeriod" name="filterPeriod" style="height:26px;padding-right:4px;padding-left:4px;">
         <option value="99" @Html.Raw(Model.FilterPeriod == 99 ? "selected" : string.Empty)>Intero anno</option>
-        <option value="1" @Html.Raw(Model.FilterPeriod == 1 ? "selected" : string.Empty)>I Trimestre</option>
-        <option value="2" @Html.Raw(Model.FilterPeriod == 2 ? "selected" : string.Empty)>II Trimestre</option>
-        <option value="3" @Html.Raw(Model.FilterPeriod == 3 ? "selected" : string.Empty)>III Trimestre</option>
-        <option value="4" @Html.Raw(Model.FilterPeriod == 4 ? "selected" : string.Empty)>IV Trimestre</option>
+        <option value="1" @Html.Raw(Model.FilterPeriod == 1 ? "selected" : string.Empty)>I Trimestre (GENNAIO - MARZO)</option>
+        <option value="2" @Html.Raw(Model.FilterPeriod == 2 ? "selected" : string.Empty)>II Trimestre (APRILE - GIUGNO)</option>
+        <option value="3" @Html.Raw(Model.FilterPeriod == 3 ? "selected" : string.Empty)>III Trimestre (LUGLIO - SETTEMBRE)</option>
+        <option value="4" @Html.Raw(Model.FilterPeriod == 4 ? "selected" : string.Empty)>IV Trimestre (OTTOBRE - DICEMBRE)</option>
     </select>
     <input type="hidden" id="filterAccountCode" name="filterAccountCode" value="@Html.Raw(Model.AccountCode)" />
     <input type="submit" value="Filtra" id="filterSubmit" name="filterSubmit" />
@@ -29,9 +29,9 @@
     </span>
 }
 <br />
-<table>
+<table class="w3-table">
     <thead>
-        <tr><th>Data</th><th></th><th style="padding-left:12px;">Motivo</th><th style="padding-left:12px;">Documento</th><th style="padding-left:12px;">Dare</th><th style="padding-left:12px;">Avere</th></tr>
+        <tr><th>Data</th><th>&#160;</th><th>Motivo</th><th>Doc. tipo</th><th>Doc. codice</th><th>Dare</th><th>Avere</th></tr>
     </thead>
     @{ 
         decimal debitPeriodTotal = 0;
@@ -41,23 +41,22 @@
     {
         debitPeriodTotal += (e.DebitCredit == "D" ? e.Amount : decimal.Zero);
         creditPeriodTotal += (e.DebitCredit == "A" ? e.Amount : decimal.Zero);
-
-        <tr><td>@Html.Raw(string.Format("{0:dd/MM/yyyy}", e.GeneralJournalLines.Date))</td><td style="padding-left:12px;">@Html.Raw(e.Type)</td><td style="padding-left:12px;">@Html.Raw(e.GeneralJournalLines.Description)</td><td style="padding-left:12px;">
-            @if (!string.IsNullOrWhiteSpace(e.GeneralJournalLines.DocumentReference))
-            {
-            <a href="@Html.Raw(Url.Content(e.GeneralJournalLines.DocumentReference))">DocLink</a>
-            }
-            </td><td style="padding-left:12px;text-align:right;">@(e.DebitCredit == "D" ? "€ " + e.Amount.ToString("F2") : string.Empty)</td><td style="padding-left:12px;text-align:right;">@(e.DebitCredit == "A" ? "€ " + e.Amount.ToString("F2") : string.Empty)</td></tr>
+        <tr><td>@Html.Raw(string.Format("{0:dd/MM/yyyy}", e.GeneralJournalLines.Date))</td>
+            <td>@Html.Raw(e.Type)</td>
+            <td>@Html.Raw(e.GeneralJournalLines.Description)</td>
+            <td>@Html.Raw(e.GeneralJournalLines.DocumentType != null ? e.GeneralJournalLines.DocumentType.Description : "&#160;")</td>
+            <td>@Html.Raw(e.GeneralJournalLines.EntryDocCode != null ? e.GeneralJournalLines.EntryDocCode : "&#160;")</td>
+            <td style="text-align:right;">@(e.DebitCredit == "D" ? "€ " + e.Amount.ToString("F2") : string.Empty)</td>
+            <td style="text-align:right;">@(e.DebitCredit == "A" ? "€ " + e.Amount.ToString("F2") : string.Empty)</td></tr>
     }
-
     <tr style="border-top:2px solid #000000;">
         <td style="padding-top:6px;">ULTIMO</td>
-        <td colspan="3" style="padding-top:6px;">Totale: </td>
+        <td colspan="4" style="padding-top:6px;text-align:right;">Totale: </td>
         <td style="padding-left:12px;text-align:right;padding-top:6px;">@Html.Raw("€ " + debitPeriodTotal.ToString("F2"))</td>
         <td style="padding-left:12px;text-align:right;padding-top:6px;">@Html.Raw("€ " + creditPeriodTotal.ToString("F2"))</td>
     </tr>
     <tr>
-        <td colspan="4"></td>
+        <td colspan="5"></td>
         <td style="padding-left:12px;padding-top:6px;text-align:right;border-top:1px solid #000000;">@Html.Raw((debitPeriodTotal - creditPeriodTotal) > 0 ? "€ " + (debitPeriodTotal - creditPeriodTotal).ToString("F2") : string.Empty)</td>
         <td style="padding-left:12px;padding-top:6px;text-align:right;border-top:1px solid #000000;">@Html.Raw((debitPeriodTotal - creditPeriodTotal) < 0 ? "€ " + (creditPeriodTotal - debitPeriodTotal).ToString("F2") : string.Empty)</td>
     </tr>

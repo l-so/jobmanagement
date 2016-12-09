@@ -8,6 +8,13 @@ namespace Job.EFDataModel
 {
     public partial class Person
     {
+        public string RegisterCode
+        {
+            get
+            {
+                return PeopleId.ToString().PadLeft(4,'0');
+            }
+        }
         public string FullName
         {
             get

@@ -33,9 +33,10 @@ namespace Job.EFDataModel
         public string Country { get; set; }
         public string FiscalCode { get; set; }
         public string VATNumber { get; set; }
-        public Nullable<byte> Status { get; set; }
         public string Salutation { get; set; }
         public string CustomerBusinessGroupId { get; set; }
+        public bool IsInternal { get; set; }
+        public bool IsActive { get; set; }
     
         public virtual CustomerBusinessGroup CustomerBusinessGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,16 +1,51 @@
 ﻿@model Job.WebMvc.Models.Person.PersonEditModalModel
+<div id="modalMainDialog" class="w3-modal">
+    <div class="w3-modal-content">
+        <header class="w3-container w3-teal">
+            <span onclick="close_ModalMainDialog()" class="w3-closebtn">&times;</span>
+            <h4><span id="modalMainDialogTitle"></span></h4>
+        </header>
+        <div class="w3-container" style="padding-top:6px;">
+            <input type="hidden" value="@Html.Raw(Model.People.PeopleId)" id="dlgpeopleeditmodalpeopleid" name="dlgpeopleeditmodalpeopleid" />
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Codice</label> @Html.Raw(Model.People.PeopleId) - @Html.TextBox("dlgpeopleeditmodalcode", Model.People.Code, new { @class = "z-inputField" })
+            </div>
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Cognome</label> @Html.TextBox("dlgpeopleeditmodallastname", Model.People.LastName, new { @class = "z-inputField" })
+            </div>
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Nome</label> @Html.TextBox("dlgpeopleeditmodalfisrtname", Model.People.FirstName, new { @class = "z-inputField" })
+            </div>
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Società</label> @Html.TextBox("dlgpeopleeditmodalcompany", Model.People.CompanyName, new { @class = "z-inputField" })
+            </div>
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Utente</label> @Html.CheckBox("dlgpeopleeditmodalidentitydefault", Model.People.IdentityDefault, new { @class = "z-inputField" }) @Html.DropDownList("dlgpeopleeditmodalidentity", Model.DDLAppUsers, new { @class = "z-inputField" })
+            </div>
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Attivo</label>  @Html.CheckBox("dlgpeopleeditmodalactivestate", Model.People.ActiveState, new { @class = "z-inputField" })
+            </div>
+            <div class="w3-row" style="padding-top:4px;">
+                <label style="min-width:130px;">Macchina</label> @Html.TextBox("dlgpeopleeditmodalcarplate", Model.People.CarPlate, new { @class = "z-inputField", @style="width:100px;" }) @Html.TextBox("dlgpeopleeditmodalcardescription", Model.People.CarDescription, new { @class = "z-inputField"}) € @Html.TextBox("dlgpeopleeditmodalcarkmcost", Model.People.CarKmCost, new { @class = "z-inputField", @style = "width:80px;" }) 
+            </div>
+        </div>
+        <footer class="w3-container w3-border-top w3-light-grey" style="margin-top:12px;padding-top:6px;padding-bottom:12px;">
+            <button onclick="delete_ModalMainDialog();" type="button" class="w3-left w3-btn w3-red">Cancella</button>
+            <button onclick="save_ModalMainDialog();" type="button" class="w3-right w3-btn w3-green" style="margin-left:24px;">Salva</button>
+            <button onclick="close_ModalMainDialog();" type="button" class="w3-right w3-btn w3-yellow">Annulla</button>
+        </footer>
+    </div>
+</div>
 <script type="text/javascript">
-    $(function () {
-        $('#dlgPeopleEditModal').modal({
-            backdrop: true,
-            keyboard: true,
-            show: true
-        });
-        $('#dlgPeopleEditModal').on('hidden.bs.modal', function () {
-            $('#modal-placeholder').empty();
-        })
-    });
-    function dlgpeopleeditmodal_save() {
+    function open_ModalMainDialog() {
+        $('#modalMainDialogTitle').html('Modifica dati della persona');
+        document.getElementById('modalMainDialog').style.display = 'block';
+    }
+    function close_ModalMainDialog() {
+        document.getElementById('modalMainDialog').style.display = 'none';
+        $('#modal-placeholder').empty();
+    }
+    function save_ModalMainDialog() {
         var sendData = new Object();
         sendData.Operation = "Update";
         sendData.PeopleId = $('#dlgpeopleeditmodalpeopleid').val();
@@ -34,8 +69,7 @@
                 alert(response.responseText);
             },
             success: function (result) {
-                if (result.ResultStatus == "OK")
-                {
+                if (result.ResultStatus == "OK") {
                     $('#dlgPeopleEditModal').modal('hide');
                 } else {
                     alert(result.Error);
@@ -44,48 +78,8 @@
             }
         });
     }
-    function dlgpeopleeditmodal_delete() {
-
+    function delete_ModalMainDialog() {
+        alert('Non serve a nulla...ma vedremo!');
     }
+    open_ModalMainDialog();
 </script>
-<div id="dlgPeopleEditModal" class="modal fade" role="dialog">
-    <div class="modal-header">
-        Creazione/Modifica commessa
-    </div>
-    <div class="modal-body">
-        <input type="hidden" value="@Html.Raw(Model.People.PeopleId)" id="dlgpeopleeditmodalpeopleid" name="dlgpeopleeditmodalpeopleid" />
-        <table>
-            <tr><td>Codice</td><td><span>@Html.Raw(Model.People.PeopleId)</span> @Html.CheckBox("dlgpeopleeditmodalactivestate", Model.People.ActiveState) @Html.TextBox("dlgpeopleeditmodalcode", Model.People.Code)</td></tr>
-            <tr><td>Cognome</td><td>@Html.TextBox("dlgpeopleeditmodallastname", Model.People.LastName)</td></tr>
-            <tr><td>Nome</td><td>@Html.TextBox("dlgpeopleeditmodalfisrtname", Model.People.FirstName)</td></tr>
-            <tr><td>Società</td><td>@Html.TextBox("dlgpeopleeditmodalcompany", Model.People.CompanyName)</td></tr>
-            <tr><td>Utente</td><td>@Html.CheckBox("dlgpeopleeditmodalidentitydefault", Model.People.IdentityDefault) @Html.DropDownList("dlgpeopleeditmodalidentity", Model.DDLAppUsers)</td></tr>
-            <tr>
-                <td colspan="2">
-                    <table>
-                        <tr><td colspan="3">Macchina per rimborso (Trga - Descrizione - Costo a Km)</td></tr>
-                        <tr><td>@Html.TextBox("dlgpeopleeditmodalcarplate", Model.People.CarPlate)</td><td>@Html.TextBox("dlgpeopleeditmodalcardescription", Model.People.CarDescription)</td><td>€ @Html.TextBox("dlgpeopleeditmodalcarkmcost", Model.People.CarKmCost)</td></tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <div style="float:left;">
-            <div class="btn-group">
-                <button class="btn btn-warning" type="button" onclick="dlgpeopleeditmodal_delete();">
-                    <i class=" fa fa-times">
-                    </i> Delete
-                </button>
-            </div>
-        </div>
-        <div class="btn-group">
-            <button class="btn btn-danger" type="button" data-dismiss="modal">
-                <i class="fa fa-times"></i> Annulla
-            </button>
-            <button class="btn btn-success" id="dlgpeopleeditmodal_confirm" type="button" onclick="dlgpeopleeditmodal_save();">
-                <i class="fa fa-check"></i> Salva
-            </button>
-        </div>
-    </div>
-</div>

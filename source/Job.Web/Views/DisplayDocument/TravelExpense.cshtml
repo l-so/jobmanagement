@@ -23,11 +23,11 @@
             <tr><td>@Html.Raw(t.Date.ToString("d"))</td><td style="padding-left:8px;">@Html.Raw(t.TravelExpenseLineCategories.Description)</td><td style="padding-left:8px;">@Html.Raw(t.Amount.ToString("C"))</td></tr>
             if (t.TravelExpenseLineCategoryId == Job.EFDataModel.TravelExpenses.CATEGORY_RIMBKM)
             {
-            <tr><td></td><td colspan="2"  style="padding-left:8px;">@Html.Raw(t.CarPlate + " " + t.CarDescription + " €/KM " + t.CarKmCost + " KM " + t.CarKm)</td></tr>
+            <tr><td></td><td style="padding-left:8px;">@Html.Raw(t.CarPlate + " " + t.CarDescription + " €/KM " + t.CarKmCost + " KM " + t.CarKm)</td><td></td></tr>
             }
             if (!string.IsNullOrWhiteSpace(t.Note))
             {
-            <tr><td></td><td colspan="2" style="padding-left:8px;">@Html.Raw(t.Note.Replace(System.Environment.NewLine,"<br />"))</td></tr>
+            <tr><td></td><td style="padding-left:8px;">@Html.Raw(t.Note.Replace(System.Environment.NewLine,"<br />"))</td><td></td></tr>
             }
         }
     </table>

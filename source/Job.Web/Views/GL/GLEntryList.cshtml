@@ -1,0 +1,51 @@
+﻿@model Job.WebMvc.Models.GL.GLEntryListModel
+
+@{
+    ViewBag.Title = "GLEntryList";
+    Layout = "~/Views/Shared/_SpaceLayout.cshtml";
+}
+
+@using (Html.BeginForm("GLEntryList", "GL", FormMethod.Get))
+{
+    @Html.AntiForgeryToken()
+    <input id="filterYear" name="filterYear" value="@Html.Raw(Model.FilterYear)" style="width:80px;text-align:right;padding-right:4px;height:26px;" />
+    <select id="filterPeriod" name="filterPeriod" style="height:26px;padding-right:4px;padding-left:4px;">
+        <option value="99" @Html.Raw(Model.FilterPeriod == 99 ? "selected" : string.Empty)>Intero anno</option>
+        <option value="1" @Html.Raw(Model.FilterPeriod == 1 ? "selected" : string.Empty)>I Trimestre (GENNAIO - MARZO)</option>
+        <option value="2" @Html.Raw(Model.FilterPeriod == 2 ? "selected" : string.Empty)>II Trimestre (APRILE - GIUGNO)</option>
+        <option value="3" @Html.Raw(Model.FilterPeriod == 3 ? "selected" : string.Empty)>III Trimestre (LUGLIO - SETTEMBRE)</option>
+        <option value="4" @Html.Raw(Model.FilterPeriod == 4 ? "selected" : string.Empty)>IV Trimestre (OTTOBRE - DICEMBRE)</option>
+    </select>
+    <input type="submit" value="Filtra" id="filterSubmit" name="filterSubmit" />
+}
+
+<div class="w3-container">
+    <div class="w3-row w3-border-bottom" style="margin-top:12px;">
+        <div class="w3-col l1">Data</div><div class="w3-col l6">Descrizione</div><div class="w3-col l1">Codice documento</div><div class="w3-col l1">Tipo documento</div>
+    </div>
+        @foreach (var e in Model.GLEntries)
+        {
+            <div class="w3-row" style="margin-top:6px;">
+                <div class="w3-col l1">@Html.Raw(e.Date.ToShortDateString())</div><div class="w3-col l6">@Html.Raw(e.Description)</div><div class="w3-col l1">@Html.Raw(e.EntryDocCode)</div><div class="w3-col l1">@Html.Raw(e.EntryDocType)</div>
+            </div>
+            <div class="w3-row" style="margin-top:6px;">
+                <div class="w3-col l1">&nbsp;</div>
+                <div class="w3-col l10">
+                    <div class="w3-row" style="font-weight:700;">
+                        <div class="w3-col l5">Conto</div>
+                        <div class="w3-col l1">Dare</div>
+                        <div class="w3-col l1">Avere</div>
+                    </div>
+                @foreach (var e1 in e.GeneralJournalLineEntries.OrderBy(o => o.Position))
+                {
+                        <div class="w3-row">
+                            <div class="w3-col l1">@Html.Raw(e1.GLAccountCode)</div>
+                            <div class="w3-col l4">@Html.Raw(e1.GLAccount.Name)</div>
+                            <div class="w3-col l1">@Html.Raw(e1.DebitCredit == "D" ? e1.Amount.ToString("c") : "&nbsp;")</div>
+                            <div class="w3-col l1">@Html.Raw(e1.DebitCredit == "A" ? e1.Amount.ToString("c") : "&nbsp;")</div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+</div>

@@ -24,6 +24,7 @@
         sendData.Date = $('#dialogExpensePaymentRefoundDate').val();
         sendData.Amount = $('#dialogExpensePaymentRefoundAmount').val();
         sendData.GLAccount = $('#dialogExpensePaymentRefoundGLAccount').val();
+        sendData.JobId = $('#dialogExpensePaymentRefoundJob').val();
         sendData.Note = $('#dialogExpensePaymentRefoundNote').val();
         $.ajax({
             method: "POST",
@@ -64,6 +65,9 @@
             </div>
             <div style="margin-top:6px;">
                 <div style="float:left;width:80px;">Causale:</div><div>@Html.DropDownList("dialogExpensePaymentRefoundGLAccount", Model.DDLGLAccount, new { @style="height:26px;" })</div>
+            </div>
+            <div style="margin-top:6px;">
+                <div style="float:left;width:80px;">Commessa:</div><div>@Html.DropDownList("dialogExpensePaymentRefoundJob", Model.DDLJob, new { @style = "height:26px;" })</div>
             </div>
             <div style="margin-top:6px;">
                 <div style="float:left;width:80px;">Note:</div><div><textarea id="dialogExpensePaymentRefoundNote" name="dialogExpensePaymentRefoundNote" style="width:320px;">@Html.Raw(Model.Payment.Note)</textarea></div>

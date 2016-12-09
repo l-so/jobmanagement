@@ -2,51 +2,49 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Job.DataAccessLayer
 {
     public class DBCustomers
     {
-        public static IEnumerable<EFDataModel.Customers> getCustomerList(short status)
+        public static IEnumerable<EFDataModel.Customers> getCustomerList()
         {
             List<EFDataModel.Customers> result = new List<EFDataModel.Customers>();
             using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
             {
-                switch (status)
-                {
-                    case -1:
-                        result = db.Customers.OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
-                        break;
-                    case EFDataModel.Customers.STATUS_ACTIVE:
-                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ACTIVE).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
-                        break;
-                    case EFDataModel.Customers.STATUS_ARCHIVED:
-                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ARCHIVED).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
-                        break;
-                    case EFDataModel.Customers.STATUS_INTERNAL:
-                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_INTERNAL).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
-                        break;
-                    case 200:
-                        result = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ACTIVE || c.Status == EFDataModel.Customers.STATUS_ARCHIVED).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
-                        break;
-
-                }
-
+                result = db.Customers.OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
             }
             return result;
         }
-        public static IEnumerable<EFDataModel.Customers> getCustomerList(string custFullName, short status)
+        public static IEnumerable<EFDataModel.Customers> getCustomerList(bool isActive)
         {
             List<EFDataModel.Customers> result = new List<EFDataModel.Customers>();
             using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
             {
-                result = db.Customers.Where(c => (c.Status == status || status == -1) && c.FullName.StartsWith(custFullName)).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                result = db.Customers.Where(c => c.IsActive == isActive && c.IsInternal == false).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
             }
             return result;
         }
+        public static IEnumerable<EFDataModel.Customers> getCustomerList(string filterFullName)
+        {
+            List<EFDataModel.Customers> result = new List<EFDataModel.Customers>();
+            using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+            {
+                result = db.Customers.Where(c => c.IsInternal == false && c.FullName.StartsWith(filterFullName)).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+            }
+            return result;
+        }
+        public static IEnumerable<EFDataModel.Customers> getInternalCustomerList()
+        {
+            List<EFDataModel.Customers> result = new List<EFDataModel.Customers>();
+            using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
+            {
+                result = db.Customers.Where(c => c.IsInternal == true).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+            }
+            return result;
+        }
+
         public static IEnumerable<SelectListItem> getCustomerSelectListItem(long currentCustomer)
         {
             List<SelectListItem> list = new List<SelectListItem>();
@@ -55,7 +53,7 @@ namespace Job.DataAccessLayer
                 List<EFDataModel.Customers> cust = null;
                 using (EFDataModel.JobEntities db = new EFDataModel.JobEntities())
                 {
-                    cust = db.Customers.Where(c => c.Status == EFDataModel.Customers.STATUS_ACTIVE || c.CustomerId == currentCustomer).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
+                    cust = db.Customers.Where(c => (c.IsInternal == false && c.IsActive == true) || c.CustomerId == currentCustomer).OrderBy(c => c.FullName).ToList<EFDataModel.Customers>();
                 }
                 if (cust != null)
                 {
@@ -68,23 +66,6 @@ namespace Job.DataAccessLayer
                             Selected = (c.CustomerId == currentCustomer)
                         };
                         list.Add(item);
-                    }
-                    if (currentCustomer < 1)
-                    {
-                        list.Insert(0, new SelectListItem()
-                        {
-                            Value = "-1",
-                            Text = "<Selezionare il cliente>",
-                            Selected = true
-                        });
-                    }
-                    else {
-                        list.Insert(0, new SelectListItem()
-                        {
-                            Value = "-1",
-                            Text = "<Selezionare il cliente>",
-                            Selected = false
-                        });
                     }
                 }
             }
@@ -156,7 +137,8 @@ namespace Job.DataAccessLayer
                 {
                     if (customer.CustomerId < 1)
                     {
-                        customer.Status = EFDataModel.Customers.STATUS_ACTIVE;
+                        customer.IsActive = true;
+                        customer.IsInternal = false;
                         db.Entry(customer).State = EntityState.Added;
                     }
                     else

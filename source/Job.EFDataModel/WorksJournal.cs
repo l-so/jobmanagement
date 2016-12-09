@@ -24,7 +24,7 @@ namespace Job.EFDataModel
         public int PeopleId { get; set; }
     
         public virtual Jobs Jobs { get; set; }
-        public virtual JobTasks JobTasks { get; set; }
         public virtual Person Person { get; set; }
+        public virtual JobTasks JobTasks { get; set; }
     }
 }

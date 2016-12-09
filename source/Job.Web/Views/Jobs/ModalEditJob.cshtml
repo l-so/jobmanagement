@@ -25,13 +25,6 @@
         sendData.Status = $('#dialogEditJobStatus').val();
         sendData.Year = $('#dialogEdiJobYear').val();
         sendData.Description = $('#dialogEdiJobDescription').val();
-        sendData.ExpectedWorkHours = $('#dialogEdiJobExpectedWorkHours').val();
-        if (sendData.ExpectedWorkHours == null) {
-            alert("Devi inserire il tempo che pensi sia necessario.");
-            return false;
-        }
-        sendData.ExpectedCost = $('#dialogEdiJobExpectedCost').val();
-        sendData.ExpectedIncome = $('#dialogEdiJobExpectedIncome').val();
         $.ajax({
             method: "POST",
             url: '@Url.Action("ModalEditJob", "Jobs")',
@@ -44,34 +37,12 @@
             success: function (result) {
                 if ((result.ErrorResult == "OK") || (result.ErrorResult == undefined)) {
                     $('#dialogEditJob').modal('hide');
+                    window.location.reload(false);
                 } else {
                     alert(result.ErrorMessage);
                 }
             }
         });
-    }
-    function update_Profitability() {
-        var co = 30;
-        var eo = parseFloat($('#dialogEdiJobExpectedWorkHours').val());
-        if (eo == null) eo = 0;
-        if (isNaN(eo)) {
-            alert("Ore lavoro previste non è un numero");
-            eo = 0;
-        }
-        var ec = parseFloat($('#dialogEdiJobExpectedCost').val());
-        if (ec == null) ec = 0;
-        if (isNaN(ec)) {
-            alert("Costi previsti non è un numero");
-            ec = 0;
-        }
-        var ei = parseFloat($('#dialogEdiJobExpectedIncome').val());
-        if (ei == null) ei = 0;
-        if (isNaN(ei)) {
-            alert("Fatturato previsto non è un numero");
-            ei = 0;
-        }
-        var r = ei - ((eo * co) + ec);
-        $('#spanExpectedProfitability').html('[30 &#8364;/ora = ' + (eo * co).toFixed(2) + '] &#8364; ' + r.toFixed(2));
     }
 </script>
 <style>
@@ -114,7 +85,8 @@
                     else
                     { 
                         @Html.TextBox("dialogEdiJobYear", Model.Job.Year, new { @class = "myTextBox", @style = "width:80px;" })
-                    } @Html.TextBox("dialogEdiJobDescription", Model.Job.Description, new { @class = "myTextBox", @style = "width:85%;", @placeholder = "Descrizione" })
+                    } 
+                    @Html.TextBox("dialogEdiJobDescription", Model.Job.Description, new { @class = "myTextBox", @style = "width:85%;", @placeholder = "Descrizione" })
                 </div>
             </div>
             <div class="row row-margin-6top">
@@ -123,24 +95,6 @@
                 </div>
                 <div class="col-md-6">@Html.DropDownList("dialogEditJobStatus", Model.DDLStatusList, new { @class = "myTextBox" })</div>
             </div>
-            <div class="row row-margin-6top">
-                <table style="margin-left:16px;">
-                    <thead>
-                        <tr style="border-bottom:1px solid;"><th colspan="7" style="padding-left:16px;text-align:center;">PREVISIONE</th></tr>
-                        <tr><th style="padding-left:12px;">Ore</th><th colspan="2" style="padding-left:12px;">Costi</th><th colspan="2" style="padding-left:12px;">Fatturato</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedWorkHours", Model.Job.ExpectedWorkHours)</td>
-                            <td style="padding-left:12px;">&#8364;</td>
-                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedCost", string.Format("{0:f2}", Model.Job.ExpectedCost))</td>
-                            <td style="padding-left:12px;">&#8364;</td>
-                            <td style="padding-left:12px;">@Html.TextBox("dialogEdiJobExpectedIncome", string.Format("{0:f2}", Model.Job.ExpectedIncome), new { @class = "form-control" })</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
         <div class="modal-footer">
             <div style="float:left;">
                 <div class="btn-group">

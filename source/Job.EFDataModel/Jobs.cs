@@ -17,28 +17,25 @@ namespace Job.EFDataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Jobs()
         {
-            this.JobTravelExpenses = new HashSet<JobTravelExpenses>();
             this.WorksJournal = new HashSet<WorksJournal>();
-            this.JobCosts = new HashSet<JobCosts>();
+            this.JobBalance = new HashSet<JobBalance>();
+            this.JobTasks = new HashSet<JobTasks>();
         }
     
         public long JobId { get; set; }
         public long CustomerId { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
-        public decimal ExpectedIncome { get; set; }
-        public decimal ExpectedCost { get; set; }
-        public int ExpectedWorkHours { get; set; }
         public byte Status { get; set; }
-        public Nullable<int> Year { get; set; }
+        public int Year { get; set; }
     
-        public virtual Customers Customers { get; set; }
         public virtual JobStatus JobStatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JobTravelExpenses> JobTravelExpenses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorksJournal> WorksJournal { get; set; }
+        public virtual Customers Customers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JobCosts> JobCosts { get; set; }
+        public virtual ICollection<JobBalance> JobBalance { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<JobTasks> JobTasks { get; set; }
     }
 }

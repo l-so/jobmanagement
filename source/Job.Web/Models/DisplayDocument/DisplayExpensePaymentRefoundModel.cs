@@ -9,7 +9,7 @@ namespace Job.WebMvc.Models.DisplayDocument
     {
         internal void loadData(string id)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

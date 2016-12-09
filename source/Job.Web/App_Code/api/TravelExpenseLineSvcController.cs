@@ -113,7 +113,6 @@ namespace Job.WebMvc.Controllers.api
                 tel.CarDescription = values["CarDescription"];
                 tel.CarKmCost = (string.IsNullOrWhiteSpace(values["CarKmCost"]) ? decimal.Zero : decimal.Parse(values["CarKmCost"]));
                 tel.CarKm = (string.IsNullOrWhiteSpace(values["CarKm"]) ? 0 : int.Parse(values["CarKm"]));
-                tel.Description = values["Description"];
                 tel.Note = values["Note"];
                 DataAccessLayer.DBTravelExpenseLineUpdateResult r = DataAccessLayer.DBTravelExpense.LineUpdate(tel);
                 string s = Newtonsoft.Json.JsonConvert.SerializeObject(r);

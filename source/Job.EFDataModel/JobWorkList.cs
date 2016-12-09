@@ -14,12 +14,12 @@ namespace Job.EFDataModel
     
     public partial class JobWorkList
     {
+        public Nullable<int> YearMonth { get; set; }
         public Nullable<int> Year { get; set; }
         public Nullable<int> Month { get; set; }
         public long JobId { get; set; }
         public Nullable<decimal> WorkedHour { get; set; }
         public string TaskWhere { get; set; }
         public int PeopleId { get; set; }
-        public Nullable<int> YearMonth { get; set; }
     }
 }

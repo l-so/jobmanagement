@@ -14,8 +14,8 @@ namespace Job.WebMvc.Models.Jobs
         public EFDataModel.Customers Customer { get; private set;}
         public List<EFDataModel.WorksJournal> WorkJournalList { get; private set;}
         public List<WorkJournalListElement> WorkList { get; private set; }
-        public IEnumerable<SelectListItem> DDLPeopleList { get; private set; }
-        public IEnumerable<SelectListItem> DDLCustomerList { get; private set; }
+        public List<SelectListItem> DDLPeopleList { get; private set; }
+        public List<SelectListItem> DDLCustomerList { get; private set; }
         public void LoadModelData(EFDataModel.Person people, long? filterCustomerId, DateTime? fromDate, DateTime? toDate)
         {
             int a = System.DateTime.Now.Year;
@@ -32,8 +32,20 @@ namespace Job.WebMvc.Models.Jobs
                 this.Customer = null;
             }
 
-            this.DDLCustomerList = DataAccessLayer.DBCustomers.getCustomerSelectListItem((filterCustomerId.HasValue ? filterCustomerId.Value : -1));
+            this.DDLCustomerList = DataAccessLayer.DBCustomers.getCustomerSelectListItem((filterCustomerId.HasValue ? filterCustomerId.Value : -1)).ToList();
+            this.DDLCustomerList.Insert(0, new System.Web.Mvc.SelectListItem()
+            {
+                Value = "-1",
+                Text = "Tutti clienti",
+                Selected = (this.Customer == null)
+            });
             this.DDLPeopleList = DataAccessLayer.DBPerson.getDDLPerson((this.People == null ? -1 : this.People.PeopleId));
+            this.DDLPeopleList.Insert(0, new System.Web.Mvc.SelectListItem()
+            {
+                Value = "-1",
+                Text = "Tutte le persone",
+                Selected = (this.People == null)
+            });
             LoadWorks();
         }
         private void LoadWorks()

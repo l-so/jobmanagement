@@ -12,14 +12,14 @@ namespace Job.WebMvc.Models.Person
 
         public IEnumerable<System.Web.Mvc.SelectListItem> DDLPerson { get; private set; }
         public IEnumerable<System.Web.Mvc.SelectListItem> DDLGLAccount { get; private set; }
-
-        public EFDataModel.ExpensePaymentRefound Payment { get; private set; }
+        
+        public EFDataModel.PrePaymentRefound Payment { get; private set; }
         
         public void loadData(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                this.Payment = new EFDataModel.ExpensePaymentRefound();
+                this.Payment = new EFDataModel.PrePaymentRefound();
                 this.Payment.Id = -1;
                 this.Payment.PeopleId = LoggedPeople.PeopleId;
             } else
@@ -27,7 +27,7 @@ namespace Job.WebMvc.Models.Person
                 this.Payment = DataAccessLayer.DBPerson.getExpensePaymentRefound(long.Parse(id));
             }
             this.DDLGLAccount = DataAccessLayer.DBGeneralLedger.getDDLPurchaseGLAccount(this.Payment.GLAccountCode);
-            this.DDLPerson = DataAccessLayer.DBPerson.getDDLPerson(this.Payment.PeopleId.Value);
+            this.DDLPerson = DataAccessLayer.DBPerson.getDDLPerson(this.Payment.PeopleId);
         }
     }
 }

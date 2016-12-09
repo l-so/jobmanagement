@@ -17,8 +17,6 @@ namespace Job.EFDataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TravelExpenses()
         {
-            this.GLTravelExpense = new HashSet<GLTravelExpense>();
-            this.JobTravelExpenses = new HashSet<JobTravelExpenses>();
             this.TravelExpensesLines = new HashSet<TravelExpensesLines>();
         }
     
@@ -28,14 +26,11 @@ namespace Job.EFDataModel
         public byte Status { get; set; }
         public int PeopleId { get; set; }
         public Nullable<System.DateTime> PostDate { get; set; }
-        public Nullable<int> PostGeneralJournalLineId { get; set; }
-        public Nullable<decimal> PaidAmount { get; set; }
-        public Nullable<byte> PaidStatus { get; set; }
+        public Nullable<decimal> InvoiceAmount { get; set; }
+        public Nullable<System.DateTime> FromDate { get; set; }
+        public Nullable<System.DateTime> ToDate { get; set; }
+        public decimal Amount { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GLTravelExpense> GLTravelExpense { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<JobTravelExpenses> JobTravelExpenses { get; set; }
         public virtual Person Person { get; set; }
         public virtual TravelExpenseStatus TravelExpenseStatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

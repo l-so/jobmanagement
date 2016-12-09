@@ -27,6 +27,7 @@ namespace Job.WebMvc.Controllers
         [HttpPost]
         public JsonResult ModalEditCustomer(EFDataModel.Customers customer)
         {
+            customer.IsInternal = false;
             JsonResult _result = null;
             _result = DataAccessLayer.DBCustomers.Update(customer);
             return _result;

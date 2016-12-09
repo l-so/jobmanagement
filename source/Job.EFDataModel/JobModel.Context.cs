@@ -36,17 +36,12 @@ namespace Job.EFDataModel
         public virtual DbSet<BankAccounts> BankAccounts { get; set; }
         public virtual DbSet<CustomerBusinessGroup> CustomerBusinessGroup { get; set; }
         public virtual DbSet<Customers> Customers { get; set; }
-        public virtual DbSet<ExpensePaymentRefound> ExpensePaymentRefound { get; set; }
         public virtual DbSet<GeneralJournalLineEntries> GeneralJournalLineEntries { get; set; }
         public virtual DbSet<GeneralJournalLines> GeneralJournalLines { get; set; }
         public virtual DbSet<GLAccount> GLAccount { get; set; }
-        public virtual DbSet<GLExpensePaymentRefound> GLExpensePaymentRefound { get; set; }
-        public virtual DbSet<GLPerson> GLPerson { get; set; }
-        public virtual DbSet<GLTravelExpense> GLTravelExpense { get; set; }
         public virtual DbSet<Jobs> Jobs { get; set; }
         public virtual DbSet<JobStatus> JobStatus { get; set; }
         public virtual DbSet<JobTasks> JobTasks { get; set; }
-        public virtual DbSet<JobTravelExpenses> JobTravelExpenses { get; set; }
         public virtual DbSet<Person> Person { get; set; }
         public virtual DbSet<TravelExpenseLineCategories> TravelExpenseLineCategories { get; set; }
         public virtual DbSet<TravelExpenses> TravelExpenses { get; set; }
@@ -54,47 +49,17 @@ namespace Job.EFDataModel
         public virtual DbSet<TravelExpenseStatus> TravelExpenseStatus { get; set; }
         public virtual DbSet<UnitOfMeasure> UnitOfMeasure { get; set; }
         public virtual DbSet<WorksJournal> WorksJournal { get; set; }
-        public virtual DbSet<JobList> JobList { get; set; }
         public virtual DbSet<JobTotalPeopleWorkedHours> JobTotalPeopleWorkedHours { get; set; }
-        public virtual DbSet<JobTotalWorkedHours> JobTotalWorkedHours { get; set; }
-        public virtual DbSet<JobTravelExpenseList> JobTravelExpenseList { get; set; }
-        public virtual DbSet<TravelExpenseList> TravelExpenseList { get; set; }
         public virtual DbSet<JobWorkList> JobWorkList { get; set; }
-        public virtual DbSet<JobCosts> JobCosts { get; set; }
-    
-        public virtual ObjectResult<spReportCustomerWork_Result> spReportCustomerWork(Nullable<int> customerId, Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
-        {
-            var customerIdParameter = customerId.HasValue ?
-                new ObjectParameter("CustomerId", customerId) :
-                new ObjectParameter("CustomerId", typeof(int));
-    
-            var beginDateParameter = beginDate.HasValue ?
-                new ObjectParameter("BeginDate", beginDate) :
-                new ObjectParameter("BeginDate", typeof(System.DateTime));
-    
-            var endDateParameter = endDate.HasValue ?
-                new ObjectParameter("EndDate", endDate) :
-                new ObjectParameter("EndDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spReportCustomerWork_Result>("spReportCustomerWork", customerIdParameter, beginDateParameter, endDateParameter);
-        }
-    
-        public virtual ObjectResult<spReportPeopleWork_Result> spReportPeopleWork(Nullable<int> peopleId, Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
-        {
-            var peopleIdParameter = peopleId.HasValue ?
-                new ObjectParameter("PeopleId", peopleId) :
-                new ObjectParameter("PeopleId", typeof(int));
-    
-            var beginDateParameter = beginDate.HasValue ?
-                new ObjectParameter("BeginDate", beginDate) :
-                new ObjectParameter("BeginDate", typeof(System.DateTime));
-    
-            var endDateParameter = endDate.HasValue ?
-                new ObjectParameter("EndDate", endDate) :
-                new ObjectParameter("EndDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<spReportPeopleWork_Result>("spReportPeopleWork", peopleIdParameter, beginDateParameter, endDateParameter);
-        }
+        public virtual DbSet<TravelExpenseList> TravelExpenseList { get; set; }
+        public virtual DbSet<PersonBusinessAccount> PersonBusinessAccount { get; set; }
+        public virtual DbSet<JobBalance> JobBalance { get; set; }
+        public virtual DbSet<JobBusinessGroup> JobBusinessGroup { get; set; }
+        public virtual DbSet<JobList> JobList { get; set; }
+        public virtual DbSet<PrePaymentRefound> PrePaymentRefound { get; set; }
+        public virtual DbSet<DocumentType> DocumentType { get; set; }
+        public virtual DbSet<JobActual> JobActual { get; set; }
+        public virtual DbSet<JobExpected> JobExpected { get; set; }
     
         public virtual int upCustomerDelete(Nullable<int> customerId)
         {
@@ -105,7 +70,20 @@ namespace Job.EFDataModel
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upCustomerDelete", customerIdParameter);
         }
     
-        public virtual ObjectResult<upJobAdd_Result> upJobAdd(Nullable<long> customerId, string code, string description, Nullable<int> expectedWorkHours, Nullable<decimal> expectedIncome, Nullable<decimal> expectedCost, Nullable<int> year, Nullable<byte> status)
+        public virtual int upGetElementNumber(string element, Nullable<int> year, ObjectParameter resultId)
+        {
+            var elementParameter = element != null ?
+                new ObjectParameter("Element", element) :
+                new ObjectParameter("Element", typeof(string));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upGetElementNumber", elementParameter, yearParameter, resultId);
+        }
+    
+        public virtual ObjectResult<upJobAdd_Result> upJobAdd(Nullable<long> customerId, string code, string description, Nullable<int> year, Nullable<byte> status)
         {
             var customerIdParameter = customerId.HasValue ?
                 new ObjectParameter("CustomerId", customerId) :
@@ -119,18 +97,6 @@ namespace Job.EFDataModel
                 new ObjectParameter("Description", description) :
                 new ObjectParameter("Description", typeof(string));
     
-            var expectedWorkHoursParameter = expectedWorkHours.HasValue ?
-                new ObjectParameter("ExpectedWorkHours", expectedWorkHours) :
-                new ObjectParameter("ExpectedWorkHours", typeof(int));
-    
-            var expectedIncomeParameter = expectedIncome.HasValue ?
-                new ObjectParameter("ExpectedIncome", expectedIncome) :
-                new ObjectParameter("ExpectedIncome", typeof(decimal));
-    
-            var expectedCostParameter = expectedCost.HasValue ?
-                new ObjectParameter("ExpectedCost", expectedCost) :
-                new ObjectParameter("ExpectedCost", typeof(decimal));
-    
             var yearParameter = year.HasValue ?
                 new ObjectParameter("Year", year) :
                 new ObjectParameter("Year", typeof(int));
@@ -139,7 +105,7 @@ namespace Job.EFDataModel
                 new ObjectParameter("Status", status) :
                 new ObjectParameter("Status", typeof(byte));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upJobAdd_Result>("upJobAdd", customerIdParameter, codeParameter, descriptionParameter, expectedWorkHoursParameter, expectedIncomeParameter, expectedCostParameter, yearParameter, statusParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upJobAdd_Result>("upJobAdd", customerIdParameter, codeParameter, descriptionParameter, yearParameter, statusParameter);
         }
     
         public virtual int upJobDelete(Nullable<int> jobId)
@@ -226,59 +192,6 @@ namespace Job.EFDataModel
                 new ObjectParameter("PeopleId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<upTravelExpenseAdd_Result>("upTravelExpenseAdd", dateParameter, annotationParameter, peopleIdParameter);
-        }
-    
-        public virtual int upTravelExpenseAddPurchase(string travelExpenseCode, Nullable<int> peopleId, string buyFromName, string buyFromCity, string buyFromCountry, Nullable<int> buyFromDocType, string buyFromDocNumber, Nullable<System.DateTime> buyFromDocDate, Nullable<decimal> amount, Nullable<decimal> amountNoVat, Nullable<decimal> vat, Nullable<decimal> total)
-        {
-            var travelExpenseCodeParameter = travelExpenseCode != null ?
-                new ObjectParameter("TravelExpenseCode", travelExpenseCode) :
-                new ObjectParameter("TravelExpenseCode", typeof(string));
-    
-            var peopleIdParameter = peopleId.HasValue ?
-                new ObjectParameter("PeopleId", peopleId) :
-                new ObjectParameter("PeopleId", typeof(int));
-    
-            var buyFromNameParameter = buyFromName != null ?
-                new ObjectParameter("BuyFromName", buyFromName) :
-                new ObjectParameter("BuyFromName", typeof(string));
-    
-            var buyFromCityParameter = buyFromCity != null ?
-                new ObjectParameter("BuyFromCity", buyFromCity) :
-                new ObjectParameter("BuyFromCity", typeof(string));
-    
-            var buyFromCountryParameter = buyFromCountry != null ?
-                new ObjectParameter("BuyFromCountry", buyFromCountry) :
-                new ObjectParameter("BuyFromCountry", typeof(string));
-    
-            var buyFromDocTypeParameter = buyFromDocType.HasValue ?
-                new ObjectParameter("BuyFromDocType", buyFromDocType) :
-                new ObjectParameter("BuyFromDocType", typeof(int));
-    
-            var buyFromDocNumberParameter = buyFromDocNumber != null ?
-                new ObjectParameter("BuyFromDocNumber", buyFromDocNumber) :
-                new ObjectParameter("BuyFromDocNumber", typeof(string));
-    
-            var buyFromDocDateParameter = buyFromDocDate.HasValue ?
-                new ObjectParameter("BuyFromDocDate", buyFromDocDate) :
-                new ObjectParameter("BuyFromDocDate", typeof(System.DateTime));
-    
-            var amountParameter = amount.HasValue ?
-                new ObjectParameter("Amount", amount) :
-                new ObjectParameter("Amount", typeof(decimal));
-    
-            var amountNoVatParameter = amountNoVat.HasValue ?
-                new ObjectParameter("AmountNoVat", amountNoVat) :
-                new ObjectParameter("AmountNoVat", typeof(decimal));
-    
-            var vatParameter = vat.HasValue ?
-                new ObjectParameter("Vat", vat) :
-                new ObjectParameter("Vat", typeof(decimal));
-    
-            var totalParameter = total.HasValue ?
-                new ObjectParameter("Total", total) :
-                new ObjectParameter("Total", typeof(decimal));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("upTravelExpenseAddPurchase", travelExpenseCodeParameter, peopleIdParameter, buyFromNameParameter, buyFromCityParameter, buyFromCountryParameter, buyFromDocTypeParameter, buyFromDocNumberParameter, buyFromDocDateParameter, amountParameter, amountNoVatParameter, vatParameter, totalParameter);
         }
     }
 }

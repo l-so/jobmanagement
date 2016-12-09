@@ -32,6 +32,10 @@ namespace Job.DataAccessLayer
             {
                 throw;
             }
+            catch (System.Data.SqlClient.SqlException)
+            {
+                throw;
+            }
             catch (System.NotSupportedException)
             {
                 throw;
@@ -50,6 +54,16 @@ namespace Job.DataAccessLayer
             }
         }
 
+        public static void PeoplePayment(DateTime date, int peopleId, decimal amount, string bankAccount)
+        {
+            // REgistro il pagamento
+        }
+        public static void PartnerTaxPayment(DateTime date, int partnerId, decimal tax, decimal inps, decimal other, string bankAccount)
+        {
+            // Genero il documento di rimborso TAX,INPS,INVOICE,VOUCHER,OTHER
+            // Registro le tasse come debito
+            // Registro il pagamento
+        }
         public static List<SelectListItem> getBankAccount()
         {
             List<SelectListItem> _result = new List<SelectListItem>();

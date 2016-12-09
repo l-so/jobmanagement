@@ -4,17 +4,41 @@
     Layout = "~/Views/Shared/_SpaceLayout.cshtml";
 }
 <div>
-    @foreach (var m in Model.GLAccounts)
-    {
-        <div>
-            @if (m.SubType.Trim() == "C" || m.SubType.Trim() == "R" || m.SubType.Trim() == "CS")
+    <table class="w3-table">
+        <thead>
+            <tr><th>Codice</th><th>Descrizione</th><th>E/P</th><th>T/A</th><th>C/R</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model.GLAccounts)
             {
-                <div style="width:100px;display:inline-block;">@Html.Raw("<a href=\"" + Url.Action("ShowAccount", "GL") + "?filterAccountCode=" + m.GLAccountCode + "\">" + m.GLAccountCode + "</a>")</div><div style="width:400px;display:inline-block;padding-left:@Html.Raw(Model.Indent(m))px;@Html.Raw((m.SubType == "TT" ? "font-weight:600;" : string.Empty))">@Html.Raw(m.Name)</div><div style="display:inline-block;padding-left:12px;">@Html.Raw(m.Type)</div>
+                <tr>
+                @if (m.TotaleAnalitico == "A")
+                {
+                    <td>
+                        @Html.Raw("<a href=\"" + Url.Action("ShowAccount", "GL") + "?filterAccountCode=" + m.GLAccountCode + "\">" + m.GLAccountCode + "</a>")
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.Raw(m.GLAccountCode)
+                    </td>
+                }
+                    <td>
+                        @Html.Raw(m.Name)
+                    </td>
+                    <td>
+                        @Html.Raw(m.EconomicoPatrimoniale)
+                    </td>
+                    <td>
+                        @Html.Raw(m.TotaleAnalitico)
+                    </td>
+                    <td>
+                        @Html.Raw(m.CostoRicavo)
+                    </td>
+                </tr>
             }
-            else
-            {
-                <div style="width:100px;display:inline-block;">@Html.Raw(m.GLAccountCode)</div><div style="width:400px;display:inline-block;padding-left:@Html.Raw(Model.Indent(m))px;@Html.Raw((m.SubType == "TT" ? "font-weight:600;" : string.Empty))">@Html.Raw(m.Name)</div><div style="display:inline-block;padding-left:12px;">@Html.Raw(m.Type)</div>
-            }
-        </div>
-    }
+        </tbody>
+    </table>
+
 </div>

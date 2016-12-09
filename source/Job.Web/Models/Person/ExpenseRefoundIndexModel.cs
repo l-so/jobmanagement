@@ -10,7 +10,8 @@ namespace Job.WebMvc.Models.Person
         public int FilterPeopleId { get; set; }
         public EFDataModel.Person LoggedPeople { get; internal set; }
         public IEnumerable<System.Web.Mvc.SelectListItem> DDLPerson { get; private set; }
-        public List<EFDataModel.ExpensePaymentRefound> ExpensePaymentRefoundList { get; private set; }
+        public List<EFDataModel.PrePaymentRefound> ExpensePaymentRefoundList { get; private set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> DDLJobsList { get; private set; }
 
         internal void loadData(int year, int month, int peopleId)
         {
@@ -28,6 +29,7 @@ namespace Job.WebMvc.Models.Person
             }
             ExpensePaymentRefoundList = DataAccessLayer.DBPerson.getExpensePaymentRefound(peopleId, fromDate, toDate);
             this.DDLPerson = DataAccessLayer.DBPerson.getDDLPerson(peopleId);
+            this.DDLJobsList = DataAccessLayer.DBJobs.getJobForDDL(-1, new short[1] { 20 });
         }
     }
 }

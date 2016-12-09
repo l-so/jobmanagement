@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<div class="w3-container w3-display-topmiddle" style="width:480px;">
+    <div class="w3-card-4">
+        @using (@Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "w3-center" }))
+        {
+            <h3 style="margin-top:12px;margin-bottom:6px;">Parametri di accesso</h3>
+            <input class="w3-input" type="text" id="userName" name="userName">
+            <label>Utente</label>
+            <input class="w3-input" type="password" id="userPasswd" name="userPasswd">
+            <label>Parola per passaggio (Password)</label>
+            <div style="margin-top:12px;margin-bottom:12px;">
+                <button type="submit" class="w3-btn w3-green">Accedi</button>
+            </div>
+        }
+    </div>
+</div>

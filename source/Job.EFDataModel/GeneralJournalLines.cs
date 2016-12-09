@@ -18,9 +18,6 @@ namespace Job.EFDataModel
         public GeneralJournalLines()
         {
             this.GeneralJournalLineEntries = new HashSet<GeneralJournalLineEntries>();
-            this.GLExpensePaymentRefound = new HashSet<GLExpensePaymentRefound>();
-            this.GLPerson = new HashSet<GLPerson>();
-            this.GLTravelExpense = new HashSet<GLTravelExpense>();
         }
     
         public long GeneralJournalLineId { get; set; }
@@ -29,14 +26,11 @@ namespace Job.EFDataModel
         public string Description { get; set; }
         public string DocumentReference { get; set; }
         public string Type { get; set; }
+        public string EntryDocCode { get; set; }
+        public Nullable<int> EntryDocType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GeneralJournalLineEntries> GeneralJournalLineEntries { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GLExpensePaymentRefound> GLExpensePaymentRefound { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GLPerson> GLPerson { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<GLTravelExpense> GLTravelExpense { get; set; }
+        public virtual DocumentType DocumentType { get; set; }
     }
 }

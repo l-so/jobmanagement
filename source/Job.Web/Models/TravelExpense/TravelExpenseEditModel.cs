@@ -16,8 +16,7 @@ namespace Job.WebMvc.Models.TravelExpense
         public List<EFDataModel.TravelExpensesLines> TravelExpenseLine { get; private set; }
         public IEnumerable<System.Web.Mvc.SelectListItem> DDLCategoryList { get; private set; }
         public EFDataModel.TravelExpenseLineCategories CarLineCategory { get; private set;}
-        public IEnumerable<System.Web.Mvc.SelectListItem> DDLJobsList { get; private set; }
-        
+        public List<EFDataModel.WorksJournal> Works { get; private set; }
         internal void LoadData(string id)
         {
             this.TravelExpense = DataAccessLayer.DBTravelExpense.getOne(id);
@@ -25,7 +24,10 @@ namespace Job.WebMvc.Models.TravelExpense
             this.TravelExpenseLine = DataAccessLayer.DBTravelExpense.getLines(id);
             this.DDLCategoryList = DataAccessLayer.DBTravelExpense.getLineCategory();
             this.CarLineCategory = DataAccessLayer.DBTravelExpense.getCarLineCategory();
-            this.DDLJobsList = DataAccessLayer.DBJobs.getJobForDDL(-1, new short[2] {10,20});
+            if (this.TravelExpenseList.BeginDate.HasValue)
+            {
+                this.Works = DataAccessLayer.DBTravelExpense.getPeopleWork(this.TravelExpenseList.PeopleId.Value, this.TravelExpenseList.BeginDate.Value, this.TravelExpenseList.EndDate.Value);
+            }
         }
     }
 }

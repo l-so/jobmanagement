@@ -1,0 +1,121 @@
+﻿@model Job.WebMvc.Models.Person.EditDialogPrePaymentRefoundModel
+<style>
+    .inputField {
+        background-color: #ffffff;
+        border-width: 1px;
+        border-color: #cccccc;
+        border-radius: 3px;
+        border-style: solid;
+        box-sizing: border-box;
+        color: #000000;
+        height: 26px;
+        padding: 3px 6px 3px 6px;
+    }
+    .field {
+        align-items: flex-start;
+        height: 34px;
+        padding: 4px 3px 4px 3px;
+        font-size: .9em;
+    }
+</style>
+<div id="modalMainDialog" class="w3-modal">
+    <div class="w3-modal-content">
+        <header class="w3-container w3-teal">
+            <span onclick="close_ModalMainDialog()" class="w3-closebtn">&times;</span>
+            <h4><span id="modalMainDialogTitle"></span></h4>
+        </header>
+        <div class="w3-container" style="padding-top:6px;">
+            @Html.Hidden("dialogPrePaymentRefoundId", Model.Refound.Id)
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Persona</span>@Html.DropDownList("dialogPrePaymentPeopleId", Model.DDLPerson, new { @class = "inputField" })
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Data</span><input type="date" class="inputField" id="dialogPrePaymentDate" name="dialogPrePaymentDate">
+            </div>
+            <div class="field">
+                <span style="display:inline-block;width:80px;">Motivo</span>@Html.DropDownList("dialogPrePaymentAccount", Model.DDLMotivo, new { @class = "inputField" })
+            </div>
+            <div>
+               <textarea class="inputField" style="width:100%;height:72px;"></textarea>
+            </div>
+        </div>
+        <footer class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+            <button onclick="delete_ModalMainDialog();" type="button" class="w3-left w3-btn w3-red">Cancella</button>
+            <button onclick="save_ModalMainDialog();" type="button" class="w3-right w3-btn w3-green" style="margin-left:24px;">Salva</button>
+            <button onclick="close_ModalMainDialog();" type="button" class="w3-right w3-btn w3-yellow">Annulla</button>
+        </footer>
+    </div>
+</div>
+<script type="text/javascript">
+    function open_ModalMainDialog() {
+        $('#modalMainDialogTitle').html('Rimborso anticipato pagamento di una fattura');
+        document.getElementById('modalMainDialog').style.display = 'block';
+    }
+    function close_ModalMainDialog() {
+        document.getElementById('modalMainDialog').style.display = 'none';
+        $('#modal-placeholder').empty();
+        window.location.reload(true);
+    }
+    function save_ModalMainDialog() {
+        if (check_ModalMainDialogData()) {
+            var sendData = new Object();
+            sendData.Operation = 'UpdateRefoundRequest'
+            @*sendData.WorkJournalId = $('#dialogWorkJournalId').val();
+            sendData.PeopleId = $('#dialogPeopleId').val();
+            sendData.JobId = $('#dialogJobId').val();
+            sendData.TaskId = $('#dialogTaskId').val();
+            sendData.Date = $('#dialogWorkDate').val();
+            sendData.Hours = $('#dialogWorkedHours').val();
+            sendData.Where = $('#dialogWorkWhere').val();
+            sendData.Note = $('#dialogNote').val();
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/JobSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus == "OK") {
+                        close_ModalMainDialog();
+                    } else {
+                        alert(result.ErrorMessage);
+                    }
+                }
+            });*@
+        }
+    }
+    function delete_ModalMainDialog() {
+        if (confirm('Sei certo di volermi cancellare?')) {
+            var sendData = new Object();
+            sendData.Operation = 'DeleteRefoundRequest'
+            @*sendData.WorkJournalId = $('#dialogWorkJournalId').val();
+            $.ajax({
+                method: "POST",
+                url: '@Url.Content("~/api/JobSvc")',
+                data: JSON.stringify(sendData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                success: function (result) {
+                    if (result.ResultStatus == "OK") {
+                        close_ModalMainDialog();
+                    } else {
+                        alert(result.ErrorMessage);
+                    }
+                }
+            });*@
+        }
+    }
+    function check_ModalMainDialogData() {
+        return true;
+    }
+   
+   
+    open_ModalMainDialog();
+</script>
+

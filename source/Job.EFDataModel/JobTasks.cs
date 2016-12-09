@@ -22,9 +22,15 @@ namespace Job.EFDataModel
     
         public string JobTaskId { get; set; }
         public string Description { get; set; }
-        public bool NoWorkTask { get; set; }
+        public long JobId { get; set; }
+        public Nullable<decimal> ExpectedInvoice { get; set; }
+        public Nullable<decimal> ExpectedCost { get; set; }
+        public string TaskBusinessGroup { get; set; }
+        public Nullable<int> ExpectedHoursOfWork { get; set; }
+        public Nullable<decimal> IncomePerHour { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WorksJournal> WorksJournal { get; set; }
+        public virtual Jobs Jobs { get; set; }
     }
 }

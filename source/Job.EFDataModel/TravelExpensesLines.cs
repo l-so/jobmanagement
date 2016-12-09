@@ -19,7 +19,6 @@ namespace Job.EFDataModel
         public System.DateTime Date { get; set; }
         public int TravelExpenseLineCategoryId { get; set; }
         public decimal Amount { get; set; }
-        public string Description { get; set; }
         public string Note { get; set; }
         public string CarPlate { get; set; }
         public string CarDescription { get; set; }
